@@ -1,0 +1,21 @@
+﻿# Dependensi & build
+node_modules/
+dist/
+.next/
+.DS_Store
+
+# Rahasia & environment (JANGAN commit file ini)
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# Template env boleh di-commit (tanpa password asli)
+!.env.example
+!**/.env.example
+!**/.env.local.example
+
+# Database lokal
+*.db
+*.db-journal
