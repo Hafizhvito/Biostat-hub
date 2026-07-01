@@ -1,6 +1,7 @@
 /** Halaman daftar video dalam satu materi + blok kuis. Ganti design: comment/uncomment export default. */
 
 import Link from "next/link";
+import { RichTextContent } from "@/components/editor/RichTextContent";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SectionQuizBlock } from "@/components/section/SectionQuizBlock";
 import { VideoGrid } from "@/components/section/VideoGrid";
@@ -44,9 +45,10 @@ export default async function SectionPage({ params }: PageProps) {
       </nav>
       <header className="space-y-2">
         <h1 className="text-3xl font-bold text-brand-navy">{section.name}</h1>
-        {section.description ? (
-          <p className="max-w-3xl text-sm text-gray-600">{section.description}</p>
-        ) : null}
+        <RichTextContent
+          html={section.description}
+          className="max-w-3xl text-gray-600 rich-text-content--teal"
+        />
       </header>
       {section.videos.length === 0 ? (
         <EmptyState message="Belum ada video di materi ini." />
@@ -84,11 +86,10 @@ export default async function SectionPage({ params }: PageProps) {
         <header className="space-y-2 border-b border-gray-100 pb-6">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-d2-blue">Detail Materi</p>
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">{section.name}</h1>
-          {section.description ? (
-            <p className="max-w-3xl text-sm leading-relaxed text-gray-500 md:text-base">
-              {section.description}
-            </p>
-          ) : null}
+          <RichTextContent
+            html={section.description}
+            className="max-w-3xl text-gray-500 md:text-base rich-text-content--blue"
+          />
         </header>
         {section.videos.length === 0 ? (
           <EmptyState message="Belum ada video di materi ini." />
@@ -129,9 +130,10 @@ export default async function SectionPage({ params }: PageProps) {
       <header className="mt-4 space-y-2 border-b border-d3-coral/20 pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-d3-coral">Materi</p>
         <h1 className="font-serif text-3xl font-semibold text-d3-ink">{section.name}</h1>
-        {section.description ? (
-          <p className="max-w-3xl text-sm leading-relaxed text-d3-muted">{section.description}</p>
-        ) : null}
+        <RichTextContent
+          html={section.description}
+          className="max-w-3xl text-d3-muted rich-text-content--coral"
+        />
       </header>
       <div className="mt-6">
         {section.videos.length === 0 ? (

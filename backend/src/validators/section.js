@@ -2,10 +2,11 @@
 
 import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
+import { normalizeRichTextDescription } from '../utils/richText.js';
 
 const sectionBodySchema = z.object({
   name: z.string().trim().min(1, 'Nama section wajib diisi.'),
-  description: z.string().trim().default(''),
+  description: z.string().default('').transform(normalizeRichTextDescription),
 });
 
 const sectionIdParamSchema = z.object({

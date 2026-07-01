@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Play } from "lucide-react";
 import { Card } from "@/components/ui/Card";
+import { truncateRichText } from "@/lib/rich-text";
 
 interface SectionItem {
   id: number;
@@ -49,7 +50,7 @@ export function SectionGrid({ sections }: SectionGridProps) {
               {section.name}
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-gray-700">
-              {section.description || "Deskripsi materi belum tersedia."}
+              {truncateRichText(section.description, 140, "Deskripsi materi belum tersedia.")}
             </p>
             <p className="mt-4 text-sm font-medium text-brand-teal">{getVideoCount(section)} video</p>
           </Card>
@@ -79,7 +80,7 @@ export function SectionGrid({ sections }: SectionGridProps) {
             {section.name}
           </h2>
           <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">
-            {section.description || "Deskripsi materi belum tersedia."}
+            {truncateRichText(section.description, 140, "Deskripsi materi belum tersedia.")}
           </p>
           <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-gray-400">
             <Play className="h-3.5 w-3.5" />
@@ -112,7 +113,7 @@ export function SectionGrid({ sections }: SectionGridProps) {
               {section.name}
             </h2>
             <p className="mt-1 text-sm text-d3-muted">
-              {section.description || "Deskripsi materi belum tersedia."}
+              {truncateRichText(section.description, 140, "Deskripsi materi belum tersedia.")}
             </p>
           </div>
           <ArrowUpRight className="h-5 w-5 shrink-0 text-d3-coral transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { RichTextEditor } from "@/components/editor/RichTextEditor";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
 import { getToken } from "@/lib/auth";
 import { apiWithAuth } from "@/lib/api";
+import { normalizeRichText, stripHtml } from "@/lib/rich-text";
 
 interface SectionItem {
   id: number;
@@ -73,7 +74,10 @@ export default function AdminSectionsPage() {
     try {
       await authApi("/admin/sections", {
         method: "POST",
-        body: JSON.stringify(createForm),
+        body: JSON.stringify({
+          ...createForm,
+          description: normalizeRichText(createForm.description),
+        }),
       });
       setCreateForm(initialFormState);
       setIsCreateOpen(false);
@@ -100,7 +104,10 @@ export default function AdminSectionsPage() {
     try {
       await authApi(`/admin/sections/${sectionId}`, {
         method: "PUT",
-        body: JSON.stringify(editForm),
+        body: JSON.stringify({
+          ...editForm,
+          description: normalizeRichText(editForm.description),
+        }),
       });
       setEditingId(null);
       await loadSections();
@@ -165,10 +172,10 @@ export default function AdminSectionsPage() {
               onChange={(event) => setCreateForm((prev) => ({ ...prev, name: event.target.value }))}
               required
             />
-            <Textarea
+            <RichTextEditor
               label="Deskripsi"
               value={createForm.description}
-              onChange={(event) => setCreateForm((prev) => ({ ...prev, description: event.target.value }))}
+              onChange={(description) => setCreateForm((prev) => ({ ...prev, description }))}
             />
             <div className="flex items-center gap-2">
               <Button type="submit" disabled={isSaving}>
@@ -206,10 +213,10 @@ export default function AdminSectionsPage() {
                       value={editForm.name}
                       onChange={(event) => setEditForm((prev) => ({ ...prev, name: event.target.value }))}
                     />
-                    <Textarea
+                    <RichTextEditor
                       label="Deskripsi"
                       value={editForm.description}
-                      onChange={(event) => setEditForm((prev) => ({ ...prev, description: event.target.value }))}
+                      onChange={(description) => setEditForm((prev) => ({ ...prev, description }))}
                     />
                     <div className="flex flex-wrap gap-2">
                       <Button onClick={() => handleUpdate(section.id)} disabled={isSaving}>
@@ -225,7 +232,9 @@ export default function AdminSectionsPage() {
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <h2 className="text-lg font-semibold text-brand-navy">{section.name}</h2>
-                        <p className="text-sm text-gray-600">{section.description || "Belum ada deskripsi."}</p>
+                        <p className="text-sm text-gray-600">
+                          {stripHtml(section.description) || "Belum ada deskripsi."}
+                        </p>
                         {section._count ? (
                           <p className="mt-1 text-xs text-gray-500">Total video: {section._count.videos}</p>
                         ) : null}

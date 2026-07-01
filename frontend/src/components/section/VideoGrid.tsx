@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Play } from "lucide-react";
 import { Card } from "@/components/ui/Card";
+import { truncateRichText } from "@/lib/rich-text";
 import { extractYouTubeId } from "@/lib/youtube";
 
 interface VideoItem {
@@ -18,9 +19,8 @@ interface VideoGridProps {
   videos: VideoItem[];
 }
 
-function truncate(text: string, maxLength = 140) {
-  if (text.length <= maxLength) return text;
-  return `${text.slice(0, maxLength).trimEnd()}...`;
+function truncateDescription(html: string | null, fallback: string) {
+  return truncateRichText(html, 140, fallback);
 }
 
 /* ==========================================================================
@@ -47,7 +47,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
         <div className="p-4">
           <h3 className="text-lg font-semibold text-brand-navy">{video.title}</h3>
           <p className="mt-2 text-sm leading-relaxed text-gray-700">
-            {truncate(video.description || "Deskripsi video belum tersedia.")}
+            {truncateDescription(video.description, "Deskripsi video belum tersedia.")}
           </p>
         </div>
       </Card>
@@ -96,7 +96,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-base font-bold text-gray-900 group-hover:text-d2-blue">{video.title}</h3>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">
-          {truncate(video.description || "Deskripsi video belum tersedia.")}
+          {truncateDescription(video.description, "Deskripsi video belum tersedia.")}
         </p>
       </div>
     </Link>
@@ -142,7 +142,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
           {video.title}
         </h3>
         <p className="mt-1 line-clamp-2 text-sm text-d3-muted">
-          {truncate(video.description || "Deskripsi video belum tersedia.")}
+          {truncateDescription(video.description, "Deskripsi video belum tersedia.")}
         </p>
       </div>
       <ArrowUpRight className="h-5 w-5 shrink-0 self-center text-d3-coral" />

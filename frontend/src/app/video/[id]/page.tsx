@@ -1,6 +1,7 @@
 /** Halaman putar video YouTube. Ganti design: comment/uncomment export default. */
 
 import Link from "next/link";
+import { RichTextContent } from "@/components/editor/RichTextContent";
 import { YouTubePlayer } from "@/components/video/YouTubePlayer";
 import { api } from "@/lib/api";
 import { extractYouTubeId } from "@/lib/youtube";
@@ -63,9 +64,11 @@ export default async function VideoPage({ params }: PageProps) {
             {video.section.name}
           </Link>
         </p>
-        <p className="max-w-3xl text-sm leading-relaxed text-gray-700 md:text-base">
-          {video.description || "Deskripsi video belum tersedia."}
-        </p>
+        <RichTextContent
+          html={video.description}
+          className="max-w-3xl text-gray-700 md:text-base rich-text-content--teal"
+          fallback={<p className="max-w-3xl text-sm leading-relaxed text-gray-700 md:text-base">Deskripsi video belum tersedia.</p>}
+        />
       </div>
     </div>
   );
@@ -116,9 +119,11 @@ export default async function VideoPage({ params }: PageProps) {
               {video.section.name}
             </Link>
           </p>
-          <p className="max-w-3xl text-sm leading-relaxed text-gray-500 md:text-base">
-            {video.description || "Deskripsi video belum tersedia."}
-          </p>
+          <RichTextContent
+            html={video.description}
+            className="max-w-3xl text-gray-500 md:text-base rich-text-content--blue"
+            fallback={<p className="max-w-3xl text-sm leading-relaxed text-gray-500 md:text-base">Deskripsi video belum tersedia.</p>}
+          />
         </div>
       </div>
     </div>
@@ -171,9 +176,11 @@ export default async function VideoPage({ params }: PageProps) {
             {video.section.name}
           </Link>
         </p>
-        <p className="max-w-3xl text-sm leading-relaxed text-d3-muted md:text-base">
-          {video.description || "Deskripsi video belum tersedia."}
-        </p>
+        <RichTextContent
+          html={video.description}
+          className="max-w-3xl text-d3-muted md:text-base rich-text-content--coral"
+          fallback={<p className="max-w-3xl text-sm leading-relaxed text-d3-muted md:text-base">Deskripsi video belum tersedia.</p>}
+        />
       </div>
     </Design3PageShell>
   );

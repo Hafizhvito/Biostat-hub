@@ -2,12 +2,13 @@
 
 import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
+import { normalizeRichTextDescription } from '../utils/richText.js';
 
 const videoBodySchema = z.object({
   sectionId: z.coerce.number().int().positive('sectionId tidak valid.'),
   title: z.string().trim().min(1, 'Judul video wajib diisi.'),
   youtubeUrl: z.string().trim().url('youtubeUrl harus berupa URL valid.'),
-  description: z.string().trim().default(''),
+  description: z.string().default('').transform(normalizeRichTextDescription),
 });
 
 const videoIdParamSchema = z.object({

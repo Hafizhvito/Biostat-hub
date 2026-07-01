@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { RichTextEditor } from "@/components/editor/RichTextEditor";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
 import { getToken } from "@/lib/auth";
 import { apiWithAuth } from "@/lib/api";
+import { normalizeRichText, stripHtml } from "@/lib/rich-text";
 
 interface SectionItem {
   id: number;
@@ -124,7 +125,7 @@ export default function AdminVideosPage() {
       title: form.title,
       youtubeUrl: form.youtubeUrl,
       sectionId: Number(form.sectionId),
-      description: form.description,
+      description: normalizeRichText(form.description),
     };
 
     try {
@@ -222,10 +223,10 @@ export default function AdminVideosPage() {
             placeholder="Pilih materi"
             required
           />
-          <Textarea
+          <RichTextEditor
             label="Deskripsi"
             value={form.description}
-            onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
+            onChange={(description) => setForm((prev) => ({ ...prev, description }))}
           />
           {formError ? <p className="text-sm text-red-600">{formError}</p> : null}
           <div className="flex flex-wrap gap-2">
@@ -260,7 +261,9 @@ export default function AdminVideosPage() {
                 <div>
                   <h2 className="text-lg font-semibold text-brand-navy">{video.title}</h2>
                   <p className="text-sm text-gray-600">Materi: {video.section.name}</p>
-                  <p className="mt-1 text-sm text-gray-600">{video.description || "Belum ada deskripsi."}</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    {stripHtml(video.description) || "Belum ada deskripsi."}
+                  </p>
                 </div>
                 <ReorderButtons onReorder={(direction) => handleReorder(video.id, direction)} />
               </div>
