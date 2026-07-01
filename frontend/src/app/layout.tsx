@@ -1,4 +1,4 @@
-/** Layout global: header + footer untuk seluruh halaman publik. */
+/** Layout global: header + footer. Design 3 butuh Design3LayoutEffect (lihat block comment). */
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   description: "Portal pembelajaran biostatistika FK YARSI",
 };
 
+/* ==========================================================================
+ * DESIGN 1 & 2 (aktif)
+ * ========================================================================== */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,7 +34,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         <SiteHeader />
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">{children}</main>
         <SiteFooter />
@@ -39,3 +42,29 @@ export default function RootLayout({
     </html>
   );
 }
+
+/* ==========================================================================
+ * DESIGN 3 — uncomment block ini & comment block DESIGN 1&2 di atas
+ * ==========================================================================
+import { Design3LayoutEffect } from "@/components/layout/Design3LayoutEffect";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="flex min-h-full flex-col">
+        <Design3LayoutEffect />
+        <SiteHeader />
+        <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6">{children}</main>
+        <SiteFooter />
+      </body>
+    </html>
+  );
+}
+*/

@@ -1,5 +1,5 @@
 /**
- * API publik: detail satu video + info materi induk + flag ada/tidak kuis.
+ * API publik: detail satu video + info materi induk.
  */
 
 import prisma from '../../lib/prisma.js';
@@ -23,9 +23,6 @@ export async function getById(req, res, next) {
         section: {
           select: { id: true, name: true },
         },
-        quiz: {
-          select: { id: true },
-        },
       },
     });
 
@@ -33,11 +30,9 @@ export async function getById(req, res, next) {
       throw createError(404, 'Video tidak ditemukan.');
     }
 
-    const { quiz, ...videoData } = video;
     res.json({
-      ...videoData,
+      ...video,
       youtube_id: extractYouTubeId(video.youtubeUrl),
-      has_quiz: Boolean(quiz),
     });
   } catch (err) {
     next(err);

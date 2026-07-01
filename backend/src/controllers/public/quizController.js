@@ -9,7 +9,7 @@ import { gradeQuiz } from '../../services/quizGrading.js';
 function parseId(value) {
   const id = Number.parseInt(value, 10);
   if (Number.isNaN(id) || id <= 0) {
-    throw createError(400, 'ID video tidak valid.');
+    throw createError(400, 'ID materi tidak valid.');
   }
   return id;
 }
@@ -40,39 +40,81 @@ function validateAnswers(answers) {
   return normalized;
 }
 
-export async function getByVideoId(req, res, next) {
-  try {
-    const videoId = parseId(req.params.id);
-    const quiz = await prisma.quiz.findUnique({
-      where: { videoId },
-      include: {
-        questions: {
-          orderBy: { sortOrder: 'asc' },
-          include: {
-            options: {
-              orderBy: { sortOrder: 'asc' },
-            },
+async function getQuizWithQuestions(sectionId) {
+  return prisma.quiz.findUnique({
+    where: { sectionId },
+    include: {
+      section: {
+        select: { id: true, name: true },
+      },
+      questions: {
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          options: {
+            orderBy: { sortOrder: 'asc' },
           },
         },
       },
+    },
+  });
+}
+
+function sanitizeQuiz(quiz) {
+  const sanitizedQuestions = quiz.questions.map((question) => ({
+    id: question.id,
+    questionText: question.questionText,
+    imageUrl: question.imageUrl || null,
+    sortOrder: question.sortOrder,
+    options: question.options.map(({ isCorrect, ...option }) => option),
+  }));
+
+  return {
+    id: quiz.id,
+    sectionId: quiz.sectionId,
+    section: quiz.section,
+    questions: sanitizedQuestions,
+  };
+}
+
+export async function list(req, res, next) {
+  try {
+    const quizzes = await prisma.quiz.findMany({
+      include: {
+        section: {
+          select: { id: true, name: true, description: true, sortOrder: true },
+        },
+        _count: {
+          select: { questions: true },
+        },
+      },
     });
+
+    quizzes.sort((a, b) => a.section.sortOrder - b.section.sortOrder);
+
+    res.json(
+      quizzes.map((quiz) => ({
+        id: quiz.id,
+        section_id: quiz.sectionId,
+        section_name: quiz.section.name,
+        section_description: quiz.section.description,
+        question_count: quiz._count.questions,
+      }))
+    );
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getBySectionId(req, res, next) {
+  try {
+    const sectionId = parseId(req.params.id);
+    const quiz = await getQuizWithQuestions(sectionId);
 
     if (!quiz) {
       throw createError(404, 'Quiz tidak ditemukan.');
     }
 
-    const sanitizedQuestions = quiz.questions.map((question) => ({
-      id: question.id,
-      questionText: question.questionText,
-      imageUrl: question.imageUrl || null,
-      sortOrder: question.sortOrder,
-      options: question.options.map(({ isCorrect, ...option }) => option),
-    }));
-
-    res.json({
-      ...quiz,
-      questions: sanitizedQuestions,
-    });
+    res.json(sanitizeQuiz(quiz));
   } catch (err) {
     next(err);
   }
@@ -80,22 +122,10 @@ export async function getByVideoId(req, res, next) {
 
 export async function submit(req, res, next) {
   try {
-    const videoId = parseId(req.params.id);
+    const sectionId = parseId(req.params.id);
     const answers = validateAnswers(req.body?.answers);
 
-    const quiz = await prisma.quiz.findUnique({
-      where: { videoId },
-      include: {
-        questions: {
-          orderBy: { sortOrder: 'asc' },
-          include: {
-            options: {
-              orderBy: { sortOrder: 'asc' },
-            },
-          },
-        },
-      },
-    });
+    const quiz = await getQuizWithQuestions(sectionId);
 
     if (!quiz) {
       throw createError(404, 'Quiz tidak ditemukan.');

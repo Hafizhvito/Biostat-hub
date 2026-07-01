@@ -1,16 +1,16 @@
 /**
- * Admin: kelola kuis per video (simpan/hapus seluruh soal sekaligus).
+ * Admin: kelola kuis per materi (simpan/hapus seluruh soal sekaligus).
  * Termasuk image_url opsional per soal (link gambar eksternal).
  */
 
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
-import { validateQuizReplace, validateQuizVideoParam } from '../../validators/quiz.js';
+import { validateQuizReplace, validateQuizSectionParam } from '../../validators/quiz.js';
 
 function formatQuiz(quiz) {
   return {
     id: quiz.id,
-    video_id: quiz.videoId,
+    section_id: quiz.sectionId,
     created_at: quiz.createdAt,
     updated_at: quiz.updatedAt,
     questions: quiz.questions.map((question) => ({
@@ -28,19 +28,19 @@ function formatQuiz(quiz) {
   };
 }
 
-async function ensureVideoExists(videoId) {
-  const video = await prisma.video.findUnique({
-    where: { id: videoId },
+async function ensureSectionExists(sectionId) {
+  const section = await prisma.section.findUnique({
+    where: { id: sectionId },
     select: { id: true },
   });
-  if (!video) {
-    throw createError(404, 'Video tidak ditemukan.');
+  if (!section) {
+    throw createError(404, 'Materi tidak ditemukan.');
   }
 }
 
-async function getQuizWithQuestions(videoId) {
+async function getQuizWithQuestions(sectionId) {
   return prisma.quiz.findUnique({
-    where: { videoId },
+    where: { sectionId },
     include: {
       questions: {
         orderBy: { sortOrder: 'asc' },
@@ -54,10 +54,10 @@ async function getQuizWithQuestions(videoId) {
   });
 }
 
-export async function getByVideoId(req, res, next) {
+export async function getBySectionId(req, res, next) {
   try {
-    const { videoId } = validateQuizVideoParam(req.params);
-    const quiz = await getQuizWithQuestions(videoId);
+    const { sectionId } = validateQuizSectionParam(req.params);
+    const quiz = await getQuizWithQuestions(sectionId);
 
     if (!quiz) {
       throw createError(404, 'Quiz tidak ditemukan.');
@@ -69,15 +69,15 @@ export async function getByVideoId(req, res, next) {
   }
 }
 
-export async function replaceByVideoId(req, res, next) {
+export async function replaceBySectionId(req, res, next) {
   try {
-    const { videoId } = validateQuizVideoParam(req.params);
+    const { sectionId } = validateQuizSectionParam(req.params);
     const payload = validateQuizReplace(req.body ?? {});
-    await ensureVideoExists(videoId);
+    await ensureSectionExists(sectionId);
 
     const quiz = await prisma.$transaction(async (tx) => {
       const existing = await tx.quiz.findUnique({
-        where: { videoId },
+        where: { sectionId },
         select: { id: true },
       });
 
@@ -89,7 +89,7 @@ export async function replaceByVideoId(req, res, next) {
 
       return tx.quiz.create({
         data: {
-          videoId,
+          sectionId,
           questions: {
             create: payload.questions.map((question, questionIndex) => ({
               questionText: question.questionText,
@@ -124,12 +124,12 @@ export async function replaceByVideoId(req, res, next) {
   }
 }
 
-export async function removeByVideoId(req, res, next) {
+export async function removeBySectionId(req, res, next) {
   try {
-    const { videoId } = validateQuizVideoParam(req.params);
+    const { sectionId } = validateQuizSectionParam(req.params);
 
     const existing = await prisma.quiz.findUnique({
-      where: { videoId },
+      where: { sectionId },
       select: { id: true },
     });
     if (!existing) {
@@ -137,7 +137,7 @@ export async function removeByVideoId(req, res, next) {
     }
 
     await prisma.quiz.delete({
-      where: { videoId },
+      where: { sectionId },
     });
 
     res.status(204).send();

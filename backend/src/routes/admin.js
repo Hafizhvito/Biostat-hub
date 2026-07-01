@@ -21,9 +21,9 @@ import {
   reorder as reorderVideo,
 } from '../controllers/admin/videoController.js';
 import {
-  getByVideoId as getQuizByVideoId,
-  replaceByVideoId as replaceQuizByVideoId,
-  removeByVideoId as removeQuizByVideoId,
+  getBySectionId as getQuizBySectionId,
+  replaceBySectionId as replaceQuizBySectionId,
+  removeBySectionId as removeQuizBySectionId,
 } from '../controllers/admin/quizController.js';
 
 const router = Router();
@@ -46,8 +46,8 @@ router.put('/videos/:id', updateVideo);
 router.delete('/videos/:id', removeVideo);
 router.patch('/videos/:id/reorder', reorderVideo);
 
-router.get('/videos/:videoId/quiz', getQuizByVideoId);
-router.put('/videos/:videoId/quiz', replaceQuizByVideoId);
-router.delete('/videos/:videoId/quiz', removeQuizByVideoId);
+router.get('/sections/:sectionId/quiz', getQuizBySectionId);
+router.put('/sections/:sectionId/quiz', replaceQuizBySectionId);
+router.delete('/sections/:sectionId/quiz', removeQuizBySectionId);
 
 export default router;

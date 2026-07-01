@@ -15,6 +15,18 @@
   --color-brand-mint: #1fb6a6;
   --color-brand-teal-soft: #e3f3f1;
   --color-brand-bg-light: #f7faf9;
+  /* Design 2 — mockup beranda */
+  --color-d2-blue: #3b82f6;
+  --color-d2-blue-dark: #2563eb;
+  /* Design 3 — plum + terracotta */
+  --color-d3-plum: #5c4d6d;
+  --color-d3-plum-dark: #3d3349;
+  --color-d3-coral: #d4715c;
+  --color-d3-coral-soft: #f5ddd6;
+  --color-d3-sand: #ece6df;
+  --color-d3-surface: #faf8f6;
+  --color-d3-ink: #2a2520;
+  --color-d3-muted: #7a7268;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,4 +38,13 @@
 
 body {
   @apply bg-brand-bg-light text-gray-800 antialiased;
+}
+
+/* Design 3 — hilangkan gap putih antara konten dan footer */
+body.design-3 {
+  @apply bg-d3-sand;
+}
+
+body.design-3 main {
+  @apply flex flex-col py-0;
 }

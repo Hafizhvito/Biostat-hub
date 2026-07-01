@@ -3,8 +3,8 @@
 import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
 
-const quizVideoParamSchema = z.object({
-  videoId: z.coerce.number().int().positive('ID video tidak valid.'),
+const quizSectionParamSchema = z.object({
+  sectionId: z.coerce.number().int().positive('ID materi tidak valid.'),
 });
 
 const quizOptionSchema = z.object({
@@ -49,8 +49,8 @@ function parseOrThrow(schema, payload) {
   return parsed.data;
 }
 
-export function validateQuizVideoParam(params) {
-  return parseOrThrow(quizVideoParamSchema, params);
+export function validateQuizSectionParam(params) {
+  return parseOrThrow(quizSectionParamSchema, params);
 }
 
 export function validateQuizReplace(body) {

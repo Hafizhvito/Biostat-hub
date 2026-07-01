@@ -1,8 +1,8 @@
 "use client";
 
-/** Admin: editor kuis per video (soal, gambar opsional, 4 pilihan). */
+/** Admin: editor kuis per materi (soal, gambar opsional, 4 pilihan). */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -15,12 +15,6 @@ import { apiWithAuth } from "@/lib/api";
 interface SectionItem {
   id: number;
   name: string;
-}
-
-interface VideoItem {
-  id: number;
-  title: string;
-  sectionId: number;
 }
 
 interface QuizApiOption {
@@ -38,7 +32,7 @@ interface QuizApiQuestion {
 
 interface QuizApiResponse {
   id: number;
-  video_id: number;
+  section_id: number;
   questions: QuizApiQuestion[];
 }
 
@@ -72,8 +66,7 @@ function normalizeQuizQuestion(question: QuizApiQuestion): QuizEditorQuestion {
 
 export default function AdminQuizzesPage() {
   const [sections, setSections] = useState<SectionItem[]>([]);
-  const [videos, setVideos] = useState<VideoItem[]>([]);
-  const [selectedVideoId, setSelectedVideoId] = useState<string>("");
+  const [selectedSectionId, setSelectedSectionId] = useState<string>("");
   const [questions, setQuestions] = useState<QuizEditorQuestion[]>([emptyQuestion()]);
   const [loading, setLoading] = useState(true);
   const [loadingQuiz, setLoadingQuiz] = useState(false);
@@ -84,25 +77,14 @@ export default function AdminQuizzesPage() {
 
   const authApi = apiWithAuth(getToken() ?? "");
 
-  const videosBySection = useMemo(() => {
-    return sections.map((section) => ({
-      ...section,
-      videos: videos.filter((video) => video.sectionId === section.id),
-    }));
-  }, [sections, videos]);
-
   async function loadData() {
     setLoading(true);
     setErrorMessage("");
     try {
-      const [sectionData, videoData] = await Promise.all([
-        authApi<SectionItem[]>("/admin/sections"),
-        authApi<VideoItem[]>("/admin/videos"),
-      ]);
+      const sectionData = await authApi<SectionItem[]>("/admin/sections");
       setSections(sectionData);
-      setVideos(videoData);
-      if (videoData.length > 0) {
-        setSelectedVideoId(String(videoData[0].id));
+      if (sectionData.length > 0) {
+        setSelectedSectionId(String(sectionData[0].id));
       }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Gagal memuat data kuis.");
@@ -117,7 +99,7 @@ export default function AdminQuizzesPage() {
   }, []);
 
   useEffect(() => {
-    if (!selectedVideoId) return;
+    if (!selectedSectionId) return;
 
     let cancelled = false;
     setLoadingQuiz(true);
@@ -126,7 +108,7 @@ export default function AdminQuizzesPage() {
 
     async function loadQuiz() {
       try {
-        const data = await authApi<QuizApiResponse>(`/admin/videos/${selectedVideoId}/quiz`);
+        const data = await authApi<QuizApiResponse>(`/admin/sections/${selectedSectionId}/quiz`);
         if (cancelled) return;
         setQuestions(data.questions.map(normalizeQuizQuestion));
       } catch (error) {
@@ -147,7 +129,7 @@ export default function AdminQuizzesPage() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedVideoId]);
+  }, [selectedSectionId]);
 
   function updateQuestionText(index: number, value: string) {
     setQuestions((prev) => prev.map((question, i) => (i === index ? { ...question, questionText: value } : question)));
@@ -185,7 +167,7 @@ export default function AdminQuizzesPage() {
   }
 
   async function saveQuiz() {
-    if (!selectedVideoId) return;
+    if (!selectedSectionId) return;
 
     setErrorMessage("");
     setActionMessage("");
@@ -203,7 +185,7 @@ export default function AdminQuizzesPage() {
 
     setIsSaving(true);
     try {
-      await authApi(`/admin/videos/${selectedVideoId}/quiz`, {
+      await authApi(`/admin/sections/${selectedSectionId}/quiz`, {
         method: "PUT",
         body: JSON.stringify({
           questions: questions.map((question) => ({
@@ -225,13 +207,13 @@ export default function AdminQuizzesPage() {
   }
 
   async function deleteQuiz() {
-    if (!selectedVideoId) return;
+    if (!selectedSectionId) return;
 
     setIsSaving(true);
     setErrorMessage("");
     setActionMessage("");
     try {
-      await authApi(`/admin/videos/${selectedVideoId}/quiz`, { method: "DELETE" });
+      await authApi(`/admin/sections/${selectedSectionId}/quiz`, { method: "DELETE" });
       setQuestions([emptyQuestion()]);
       setActionMessage("Kuis berhasil dihapus.");
       setConfirmDeleteOpen(false);
@@ -243,38 +225,34 @@ export default function AdminQuizzesPage() {
   }
 
   if (loading) return <p className="py-8 text-sm text-gray-500">Memuat data kuis...</p>;
-  if (errorMessage && videos.length === 0) {
+  if (errorMessage && sections.length === 0) {
     return <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{errorMessage}</div>;
   }
-  if (videos.length === 0) {
-    return <EmptyState message="Belum ada video. Tambahkan video terlebih dahulu sebelum membuat kuis." />;
+  if (sections.length === 0) {
+    return <EmptyState message="Belum ada materi. Tambahkan materi terlebih dahulu sebelum membuat kuis." />;
   }
 
   return (
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold text-brand-navy">Kelola Kuis</h1>
-        <p className="text-sm text-gray-600">Pilih video lalu atur soal kuis dengan 4 opsi jawaban.</p>
+        <p className="text-sm text-gray-600">Pilih materi lalu atur soal kuis dengan 4 opsi jawaban.</p>
       </div>
 
       <Card>
-        <label htmlFor="video-select" className="text-sm font-medium text-brand-navy">
-          Pilih Video
+        <label htmlFor="section-select" className="text-sm font-medium text-brand-navy">
+          Pilih Materi
         </label>
         <select
-          id="video-select"
+          id="section-select"
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-brand-teal focus:ring-2 focus:ring-brand-teal-soft"
-          value={selectedVideoId}
-          onChange={(event) => setSelectedVideoId(event.target.value)}
+          value={selectedSectionId}
+          onChange={(event) => setSelectedSectionId(event.target.value)}
         >
-          {videosBySection.map((section) => (
-            <optgroup key={section.id} label={section.name}>
-              {section.videos.map((video) => (
-                <option key={video.id} value={video.id}>
-                  {video.title}
-                </option>
-              ))}
-            </optgroup>
+          {sections.map((section) => (
+            <option key={section.id} value={section.id}>
+              {section.name}
+            </option>
           ))}
         </select>
       </Card>
@@ -353,7 +331,7 @@ export default function AdminQuizzesPage() {
       <ConfirmDialog
         open={confirmDeleteOpen}
         title="Hapus Kuis"
-        message="Kuis untuk video ini akan dihapus permanen. Lanjutkan?"
+        message="Kuis untuk materi ini akan dihapus permanen. Lanjutkan?"
         confirmText="Ya, Hapus"
         cancelText="Batal"
         onCancel={() => setConfirmDeleteOpen(false)}

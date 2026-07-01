@@ -1,6 +1,7 @@
 /** Grid kartu video + thumbnail YouTube. */
 
 import Link from "next/link";
+import { ArrowUpRight, Play } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { extractYouTubeId } from "@/lib/youtube";
 
@@ -11,8 +12,6 @@ interface VideoItem {
   youtube_url?: string | null;
   youtubeUrl?: string | null;
   youtube_id?: string | null;
-  has_quiz?: boolean;
-  quiz?: { id: number } | null;
 }
 
 interface VideoGridProps {
@@ -24,10 +23,12 @@ function truncate(text: string, maxLength = 140) {
   return `${text.slice(0, maxLength).trimEnd()}...`;
 }
 
+/* ==========================================================================
+ * DESIGN 1 (aktif) — grid 3 kolom teal
+ * ========================================================================== */
 export function VideoCard({ video }: { video: VideoItem }) {
   const sourceUrl = video.youtube_url ?? video.youtubeUrl ?? "";
   const videoId = video.youtube_id ?? extractYouTubeId(sourceUrl);
-  const hasQuiz = Boolean(video.has_quiz ?? video.quiz);
 
   return (
     <Link href={`/video/${video.id}`} className="group">
@@ -44,14 +45,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
           </div>
         )}
         <div className="p-4">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="text-lg font-semibold text-brand-navy">{video.title}</h3>
-            {hasQuiz ? (
-              <span className="rounded-full bg-brand-teal-soft px-2 py-1 text-xs font-semibold text-brand-teal">
-                Ada Kuis
-              </span>
-            ) : null}
-          </div>
+          <h3 className="text-lg font-semibold text-brand-navy">{video.title}</h3>
           <p className="mt-2 text-sm leading-relaxed text-gray-700">
             {truncate(video.description || "Deskripsi video belum tersedia.")}
           </p>
@@ -70,3 +64,99 @@ export function VideoGrid({ videos }: VideoGridProps) {
     </section>
   );
 }
+
+/* ==========================================================================
+ * DESIGN 2 — kartu video grid vertikal
+ * ==========================================================================
+export function VideoCard({ video }: { video: VideoItem }) {
+  const sourceUrl = video.youtube_url ?? video.youtubeUrl ?? "";
+  const videoId = video.youtube_id ?? extractYouTubeId(sourceUrl);
+
+  return (
+    <Link
+      href={`/video/${video.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-shadow hover:shadow-md"
+    >
+      <div className="relative">
+        {videoId ? (
+          <img
+            src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+            alt={`Thumbnail ${video.title}`}
+            className="h-44 w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-44 w-full items-center justify-center bg-gray-100 text-sm text-gray-500">
+            Thumbnail tidak tersedia
+          </div>
+        )}
+        <span className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-d2-blue/90 text-white shadow-sm">
+          <Play className="h-4 w-4 fill-white" />
+        </span>
+      </div>
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="text-base font-bold text-gray-900 group-hover:text-d2-blue">{video.title}</h3>
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">
+          {truncate(video.description || "Deskripsi video belum tersedia.")}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+export function VideoGrid({ videos }: VideoGridProps) {
+  return (
+    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {videos.map((video) => (
+        <VideoCard key={video.id} video={video} />
+      ))}
+    </section>
+  );
+}
+*/
+
+/* ==========================================================================
+ * DESIGN 3 — kartu horizontal
+ * ==========================================================================
+export function VideoCard({ video }: { video: VideoItem }) {
+  const sourceUrl = video.youtube_url ?? video.youtubeUrl ?? "";
+  const videoId = video.youtube_id ?? extractYouTubeId(sourceUrl);
+
+  return (
+    <Link
+      href={`/video/${video.id}`}
+      className="group flex gap-4 rounded-2xl border border-d3-coral/20 bg-d3-surface p-4 transition-colors hover:bg-d3-sand/50"
+    >
+      {videoId ? (
+        <img
+          src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+          alt={`Thumbnail ${video.title}`}
+          className="h-24 w-40 shrink-0 rounded-lg object-cover"
+        />
+      ) : (
+        <div className="flex h-24 w-40 shrink-0 items-center justify-center rounded-lg bg-d3-sand text-xs text-d3-muted">
+          Thumbnail tidak tersedia
+        </div>
+      )}
+      <div className="min-w-0 flex-1">
+        <h3 className="font-serif text-lg font-semibold text-d3-ink group-hover:text-d3-plum">
+          {video.title}
+        </h3>
+        <p className="mt-1 line-clamp-2 text-sm text-d3-muted">
+          {truncate(video.description || "Deskripsi video belum tersedia.")}
+        </p>
+      </div>
+      <ArrowUpRight className="h-5 w-5 shrink-0 self-center text-d3-coral" />
+    </Link>
+  );
+}
+
+export function VideoGrid({ videos }: VideoGridProps) {
+  return (
+    <section className="space-y-3">
+      {videos.map((video) => (
+        <VideoCard key={video.id} video={video} />
+      ))}
+    </section>
+  );
+}
+*/
