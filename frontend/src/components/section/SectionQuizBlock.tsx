@@ -16,15 +16,15 @@ export function SectionQuizBlock({ sectionId, sectionName, questionCount }: Sect
   if (questionCount === 0) return null;
 
   return (
-    <section className="mt-10 space-y-4 border-t border-brand-teal/20 pt-8">
+    <section className="mt-10 space-y-4 border-t border-brand-peach pt-8">
       <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-teal">Latihan Kuis</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-warm">Latihan Kuis</p>
         <h2 className="mt-1 text-xl font-semibold text-brand-navy">Uji pemahaman materi ini</h2>
       </header>
-      <div className="rounded-xl border border-brand-teal/25 bg-brand-teal-soft p-6">
+      <div className="rounded-xl border border-brand-warm/25 bg-brand-peach/50 p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-teal text-white">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-warm text-white">
               <ClipboardList className="h-5 w-5" />
             </span>
             <div>
@@ -34,7 +34,7 @@ export function SectionQuizBlock({ sectionId, sectionName, questionCount }: Sect
           </div>
           <Link
             href={`/quiz/${sectionId}`}
-            className="inline-flex shrink-0 justify-center rounded-lg bg-brand-teal px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+            className="inline-flex shrink-0 justify-center rounded-lg bg-brand-warm px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-warm/90"
           >
             Mulai Kuis
           </Link>

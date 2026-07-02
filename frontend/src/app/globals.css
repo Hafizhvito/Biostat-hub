@@ -10,11 +10,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-brand-navy: #0b2e3d;
-  --color-brand-teal: #0f6e6e;
-  --color-brand-mint: #1fb6a6;
-  --color-brand-teal-soft: #e3f3f1;
-  --color-brand-bg-light: #f7faf9;
+  --color-brand-powder: #bfd8d2;
+  --color-brand-peach: #fedcd2;
+  --color-brand-warm: #df744a;
+  --color-brand-lemon: #dcb239;
+  /* Design 1 — powder / peach / warm / lemon */
+  --color-brand-navy: #2c2420;
+  --color-brand-teal: #df744a;
+  --color-brand-mint: #dcb239;
+  --color-brand-teal-soft: #fedcd2;
+  --color-brand-bg-light: #f9fbfa;
   /* Design 2 — mockup beranda */
   --color-d2-blue: #3b82f6;
   --color-d2-blue-dark: #2563eb;
@@ -115,7 +120,7 @@ body.design-3 main {
 }
 
 .rich-text-content--teal a {
-  color: var(--color-brand-teal);
+  color: var(--color-brand-warm);
 }
 
 .rich-text-content--blue a {

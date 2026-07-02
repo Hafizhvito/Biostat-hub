@@ -14,7 +14,7 @@ export function HomeKuisSection({ quizzes }: HomeKuisSectionProps) {
   if (quizzes.length === 0) return null;
 
   return (
-    <section id="latihan-kuis" className="space-y-4 border-t border-brand-teal/20 pt-8">
+    <section id="latihan-kuis" className="space-y-4 border-t border-brand-peach pt-8">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold text-brand-navy">Latihan Kuis</h2>
@@ -22,7 +22,7 @@ export function HomeKuisSection({ quizzes }: HomeKuisSectionProps) {
             Uji pemahaman setelah menonton video di setiap materi.
           </p>
         </div>
-        <Link href="/kuis" className="text-sm font-medium text-brand-teal hover:underline">
+        <Link href="/kuis" className="text-sm font-medium text-brand-warm hover:underline">
           Lihat semua →
         </Link>
       </header>

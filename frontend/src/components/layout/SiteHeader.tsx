@@ -13,8 +13,8 @@ function isPublicPath(pathname: string) {
 function navLinkClass(active: boolean, design: 1 | 2 | 3) {
   if (design === 1) {
     return active
-      ? "rounded-md bg-brand-teal/40 px-3 py-2 text-sm font-medium text-white"
-      : "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-brand-teal/40";
+      ? "rounded-md bg-brand-peach px-3 py-2 text-sm font-medium text-brand-warm"
+      : "rounded-md px-3 py-2 text-sm font-medium text-brand-navy transition-colors hover:bg-brand-peach/70";
   }
   if (design === 3) {
     return active
@@ -35,10 +35,10 @@ function SiteHeaderDesign1() {
   const isKuis = pathname === "/kuis" || pathname.startsWith("/quiz/");
 
   return (
-    <header className="bg-brand-navy text-white shadow-sm">
+    <header className="border-b border-brand-powder/80 bg-white shadow-sm">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="inline-flex items-center gap-2 text-lg font-bold">
-          <GraduationCap className="h-5 w-5 text-brand-mint" />
+        <Link href="/" className="inline-flex items-center gap-2 text-lg font-bold text-brand-navy">
+          <GraduationCap className="h-5 w-5 text-brand-warm" />
           <span>Biostat Hub</span>
         </Link>
         <nav className="flex items-center gap-1">

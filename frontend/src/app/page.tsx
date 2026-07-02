@@ -24,6 +24,9 @@ interface SectionsResponse {
   stats: { total_sections: number; total_videos: number };
 }
 
+const HERO_DESCRIPTION =
+  "Platform pembelajaran mandiri Biostatistik dan Pengolahan Data Penelitian Kesehatan dengan SPSS";
+
 /* ==========================================================================
  * DESIGN 1 (aktif)
  * ========================================================================== */
@@ -38,10 +41,7 @@ export default async function HomePage() {
     <div className="space-y-8">
       <HeroSection
         title={settings.hero_title || "Biostat Hub"}
-        description={
-          settings.hero_description ||
-          "Belajar biostatistika jadi lebih mudah, sistematis, dan aplikatif."
-        }
+        description={settings.hero_description || HERO_DESCRIPTION}
         totalSections={sectionResponse.stats.total_sections}
         totalVideos={sectionResponse.stats.total_videos}
       />
@@ -80,10 +80,7 @@ export default async function HomePage() {
       <div className="mx-auto w-full max-w-6xl px-4 pb-4 pt-2">
         <HeroSection
           title={settings.hero_title || "Biostat Hub"}
-          description={
-            settings.hero_description ||
-            "Belajar biostatistika jadi lebih mudah, sistematis, dan aplikatif."
-          }
+          description={settings.hero_description || HERO_DESCRIPTION}
           totalSections={sectionResponse.stats.total_sections}
           totalVideos={sectionResponse.stats.total_videos}
         />
@@ -125,10 +122,7 @@ export default async function HomePage() {
     <Design3PageShell className="pb-4 pt-2">
       <HeroSection
         title={settings.hero_title || "Biostat Hub"}
-        description={
-          settings.hero_description ||
-          "Belajar biostatistika jadi lebih mudah, sistematis, dan aplikatif."
-        }
+        description={settings.hero_description || HERO_DESCRIPTION}
         totalSections={sectionResponse.stats.total_sections}
         totalVideos={sectionResponse.stats.total_videos}
       />

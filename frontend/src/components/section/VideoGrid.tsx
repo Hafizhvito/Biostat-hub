@@ -32,7 +32,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
 
   return (
     <Link href={`/video/${video.id}`} className="group">
-      <Card className="h-full overflow-hidden border-brand-teal/20 p-0 group-hover:border-brand-teal">
+      <Card className="h-full overflow-hidden border-brand-warm/25 p-0 group-hover:border-brand-warm">
         {videoId ? (
           <img
             src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}

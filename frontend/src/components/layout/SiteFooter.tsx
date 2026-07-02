@@ -14,10 +14,10 @@ function isPublicPath(pathname: string) {
  * ========================================================================== */
 function SiteFooterDesign1() {
   return (
-    <footer className="border-t border-brand-teal/20 bg-brand-bg-light">
+    <footer className="border-t border-brand-peach bg-brand-peach/40">
       <div className="mx-auto w-full max-w-6xl px-4 py-8">
-        <p className="flex items-center justify-center gap-2 text-center text-sm text-gray-600">
-          <GraduationCap className="h-4 w-4 shrink-0 text-brand-teal" />
+        <p className="flex items-center justify-center gap-2 text-center text-sm text-gray-700">
+          <GraduationCap className="h-4 w-4 shrink-0 text-brand-warm" />
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
         </p>
         <p className="mt-4 text-center text-xs text-gray-500">

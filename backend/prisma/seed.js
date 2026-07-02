@@ -22,12 +22,15 @@ async function main() {
 
   await prisma.siteSettings.upsert({
     where: { id: 1 },
-    update: {},
+    update: {
+      heroDescription:
+        'Platform pembelajaran mandiri Biostatistik dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
+    },
     create: {
       id: 1,
       heroTitle: 'Biostat Hub',
       heroDescription:
-        'Platform pembelajaran mandiri uji statistik dan pengolahan data SPSS — Fakultas Kedokteran YARSI.',
+        'Platform pembelajaran mandiri Biostatistik dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
     },
   });
 

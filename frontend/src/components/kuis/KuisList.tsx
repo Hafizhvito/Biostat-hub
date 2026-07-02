@@ -32,15 +32,15 @@ export function KuisList({ quizzes }: KuisListProps) {
     <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       {quizzes.map((quiz) => (
         <Link key={quiz.id} href={`/quiz/${quiz.section_id}`} className="group">
-          <Card className="h-full border-brand-teal/20 p-5 group-hover:border-brand-teal">
-            <ClipboardList className="h-6 w-6 text-brand-teal" />
-            <h2 className="mt-4 text-lg font-semibold text-brand-navy group-hover:text-brand-teal">
+          <Card className="h-full border-brand-warm/25 bg-brand-peach/20 p-5 group-hover:border-brand-warm">
+            <ClipboardList className="h-6 w-6 text-brand-warm" />
+            <h2 className="mt-4 text-lg font-semibold text-brand-navy group-hover:text-brand-warm">
               {quiz.section_name}
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               {quiz.section_description || "Latihan pemahaman materi."}
             </p>
-            <p className="mt-4 text-sm font-medium text-brand-teal">{quiz.question_count} pertanyaan</p>
+            <p className="mt-4 text-sm font-medium text-brand-warm">{quiz.question_count} pertanyaan</p>
           </Card>
         </Link>
       ))}
