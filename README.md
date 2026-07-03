@@ -8,6 +8,8 @@ Platform pembelajaran biostatistik & SPSS (video + kuis). Monorepo:
 
 **Pertanyaan untuk klien (pengisian konten & launch):** [docs/DAFTAR-PERTANYAAN-KLIEN.md](docs/DAFTAR-PERTANYAAN-KLIEN.md)
 
+**Estimasi biaya hosting (untuk klien):** [docs/ESTIMASI-BIAYA-HOSTING.md](docs/ESTIMASI-BIAYA-HOSTING.md)
+
 ## Prerequisites
 
 - Node.js 20+ and npm
@@ -50,6 +52,7 @@ Default admin values come from your backend `.env`:
 
 ## Deployment Notes
 
+- **Panduan lengkap VPS (step-by-step):** [docs/PANDUAN-DEPLOY-VPS.md](docs/PANDUAN-DEPLOY-VPS.md)
 - Frontend: deploy to Vercel or Netlify
 - Backend: deploy to a VPS (or any Node-capable server) and configure environment variables + database access
 

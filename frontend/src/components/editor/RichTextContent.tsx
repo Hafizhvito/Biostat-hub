@@ -1,8 +1,11 @@
-/** Sanitized HTML output for section/video descriptions. */
+"use client";
 
-import type { ReactNode } from "react";
+/** Render deskripsi rich text — teks + gambar (link Drive/imgbb, sama seperti kuis). */
+
 import DOMPurify from "isomorphic-dompurify";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 
+import { parseRichTextHtmlToReact } from "@/components/editor/richTextDom";
 import { isEmptyRichText } from "@/lib/rich-text";
 
 const SANITIZE_CONFIG = {
@@ -23,8 +26,9 @@ const SANITIZE_CONFIG = {
     "ol",
     "li",
     "a",
+    "img",
   ],
-  ALLOWED_ATTR: ["href", "target", "rel", "style"],
+  ALLOWED_ATTR: ["href", "target", "rel", "style", "src", "alt", "data-original-src", "class"],
 };
 
 interface RichTextContentProps {
@@ -34,19 +38,32 @@ interface RichTextContentProps {
 }
 
 export function RichTextContent({ html, className = "", fallback = null }: RichTextContentProps) {
+  const [mounted, setMounted] = useState(false);
+
+  const cleanHtml = useMemo(() => {
+    if (isEmptyRichText(html)) return "";
+    return DOMPurify.sanitize(html!, {
+      ...SANITIZE_CONFIG,
+      ADD_ATTR: ["target", "rel", "data-original-src"],
+    });
+  }, [html]);
+
+  const nodes = useMemo(() => {
+    if (!mounted || !cleanHtml) return null;
+    return parseRichTextHtmlToReact(cleanHtml);
+  }, [mounted, cleanHtml]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (isEmptyRichText(html)) {
     return fallback ? <>{fallback}</> : null;
   }
 
-  const clean = DOMPurify.sanitize(html!, {
-    ...SANITIZE_CONFIG,
-    ADD_ATTR: ["target", "rel"],
-  });
-
   return (
-    <div
-      className={`rich-text-content text-sm leading-relaxed ${className}`}
-      dangerouslySetInnerHTML={{ __html: clean }}
-    />
+    <div className={`rich-text-content text-sm leading-relaxed ${className}`}>
+      {nodes ?? <p className="text-xs text-gray-400">Memuat konten...</p>}
+    </div>
   );
 }

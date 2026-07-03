@@ -8,8 +8,13 @@ export function stripHtml(html: string): string {
     .trim();
 }
 
+function hasImageTag(html: string): boolean {
+  return /<img[\s>]/i.test(html);
+}
+
 export function isEmptyRichText(html: string | null | undefined): boolean {
   if (!html) return true;
+  if (hasImageTag(html)) return false;
   return stripHtml(html).length === 0;
 }
 

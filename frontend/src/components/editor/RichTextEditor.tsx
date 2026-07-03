@@ -13,6 +13,7 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
+  ImageIcon,
   Italic,
   Link2,
   List,
@@ -24,6 +25,8 @@ import {
   Unlink,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+
+import { RichTextImageExtension } from "@/components/editor/RichTextImageExtension";
 
 interface RichTextEditorProps {
   label: string;
@@ -103,6 +106,7 @@ export function RichTextEditor({
           target: "_blank",
         },
       }),
+      RichTextImageExtension,
     ],
     content: value,
     immediatelyRender: false,
@@ -135,6 +139,16 @@ export function RichTextEditor({
       editor.commands.setContent(value || "", { emitUpdate: false });
     }
   }, [value, editor]);
+
+  function insertImage() {
+    if (!editor) return;
+    const url = window.prompt(
+      "Link gambar (Google Drive atau imgbb Direct link):",
+      "https://drive.google.com/file/d/...",
+    );
+    if (url === null || !url.trim()) return;
+    editor.chain().focus().setImage({ src: url.trim() }).run();
+  }
 
   function setLink() {
     if (!editor) return;
@@ -297,8 +311,20 @@ export function RichTextEditor({
           >
             <Unlink className="h-4 w-4" />
           </ToolbarButton>
+
+          <ToolbarDivider />
+
+          <ToolbarButton title="Sisip gambar" disabled={!editor} onClick={insertImage}>
+            <ImageIcon className="h-4 w-4" />
+          </ToolbarButton>
         </div>
         <EditorContent id={fieldId} editor={editor} />
+        <p className="border-t border-gray-100 bg-gray-50 px-3 py-2 text-xs text-gray-500">
+          <strong>Gambar:</strong> klik ikon gambar di atas (bukan ikon link). Google Drive → Bagikan →
+          Siapa saja dengan link. ImgBB → salin <strong>Direct link</strong> (
+          <code className="rounded bg-gray-100 px-1">i.ibb.co/...</code>). Letakkan kursor di antara
+          paragraf untuk urutan teks → gambar → teks.
+        </p>
       </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </div>

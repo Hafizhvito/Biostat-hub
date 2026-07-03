@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight, ClipboardList } from "lucide-react";
 import { Card } from "@/components/ui/Card";
+import { truncateRichText } from "@/lib/rich-text";
 
 export interface KuisListItem {
   id: number;
@@ -38,7 +39,7 @@ export function KuisList({ quizzes }: KuisListProps) {
               {quiz.section_name}
             </h2>
             <p className="mt-2 text-sm text-gray-600">
-              {quiz.section_description || "Latihan pemahaman materi."}
+              {truncateRichText(quiz.section_description, 140, "Latihan pemahaman materi.")}
             </p>
             <p className="mt-4 text-sm font-medium text-brand-warm">{quiz.question_count} pertanyaan</p>
           </Card>
@@ -69,7 +70,7 @@ export function KuisList({ quizzes }: KuisListProps) {
             {quiz.section_name}
           </h2>
           <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">
-            {quiz.section_description || "Latihan pemahaman materi."}
+            {truncateRichText(quiz.section_description, 140, "Latihan pemahaman materi.")}
           </p>
           <p className="mt-4 text-sm text-gray-400">{quiz.question_count} pertanyaan</p>
         </Link>
@@ -99,7 +100,7 @@ export function KuisList({ quizzes }: KuisListProps) {
               {quiz.section_name}
             </h2>
             <p className="mt-1 text-sm text-d3-muted">
-              {quiz.section_description || "Latihan pemahaman materi."}
+              {truncateRichText(quiz.section_description, 140, "Latihan pemahaman materi.")}
             </p>
           </div>
           <ArrowUpRight className="h-5 w-5 shrink-0 text-d3-coral transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
