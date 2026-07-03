@@ -9,9 +9,7 @@ import { api } from "@/lib/api";
 
 interface QuizListItem {
   id: number;
-  section_id: number;
-  section_name: string;
-  section_description: string;
+  title: string;
   question_count: number;
 }
 
@@ -33,11 +31,11 @@ export default async function KuisPage() {
       <header className="space-y-2">
         <h1 className="text-3xl font-bold text-brand-navy">Latihan Kuis</h1>
         <p className="text-sm text-gray-600">
-          Kerjakan kuis setelah menonton video di setiap materi untuk menguji pemahaman Anda.
+          Kerjakan kuis pilihan ganda untuk menguji pemahaman Anda.
         </p>
       </header>
       {quizzes.length === 0 ? (
-        <EmptyState message="Belum ada kuis. Kuis akan ditambahkan bersama materi." />
+        <EmptyState message="Belum ada kuis. Kuis akan ditambahkan melalui panel admin." />
       ) : (
         <KuisList quizzes={quizzes} />
       )}

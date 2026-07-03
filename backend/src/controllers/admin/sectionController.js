@@ -5,16 +5,13 @@
 
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
+import { isNotFoundError } from '../../utils/prismaErrors.js';
 import {
   validateSectionCreate,
   validateSectionIdParam,
   validateSectionReorder,
   validateSectionUpdate,
 } from '../../validators/section.js';
-
-function isNotFoundError(err) {
-  return err?.code === 'P2025';
-}
 
 export async function list(req, res, next) {
   try {

@@ -1,20 +1,20 @@
 "use client";
 
-/** Admin: editor kuis per materi (soal, gambar opsional, 4 pilihan). */
+/** Admin: kelola kuis mandiri — judul + soal, tanpa kaitan ke materi. */
 
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Input";
 import { getToken } from "@/lib/auth";
 import { apiWithAuth } from "@/lib/api";
 
-interface SectionItem {
+interface QuizListItem {
   id: number;
-  name: string;
+  title: string;
+  question_count: number;
 }
 
 interface QuizApiOption {
@@ -32,7 +32,7 @@ interface QuizApiQuestion {
 
 interface QuizApiResponse {
   id: number;
-  section_id: number;
+  title: string;
   questions: QuizApiQuestion[];
 }
 
@@ -42,6 +42,8 @@ interface QuizEditorQuestion {
   options: string[];
   correctAnswerIndex: number;
 }
+
+const DEFAULT_TITLE = "Kuis";
 
 const emptyQuestion = (): QuizEditorQuestion => ({
   questionText: "",
@@ -64,9 +66,24 @@ function normalizeQuizQuestion(question: QuizApiQuestion): QuizEditorQuestion {
   };
 }
 
+function buildPayload(title: string, questions: QuizEditorQuestion[]) {
+  return {
+    title: title.trim() || DEFAULT_TITLE,
+    questions: questions.map((question) => ({
+      questionText: question.questionText,
+      imageUrl: question.imageUrl.trim(),
+      options: question.options.map((option, index) => ({
+        optionText: option,
+        isCorrect: index === question.correctAnswerIndex,
+      })),
+    })),
+  };
+}
+
 export default function AdminQuizzesPage() {
-  const [sections, setSections] = useState<SectionItem[]>([]);
-  const [selectedSectionId, setSelectedSectionId] = useState<string>("");
+  const [quizList, setQuizList] = useState<QuizListItem[]>([]);
+  const [selectedQuizId, setSelectedQuizId] = useState<number | null>(null);
+  const [title, setTitle] = useState(DEFAULT_TITLE);
   const [questions, setQuestions] = useState<QuizEditorQuestion[]>([emptyQuestion()]);
   const [loading, setLoading] = useState(true);
   const [loadingQuiz, setLoadingQuiz] = useState(false);
@@ -77,59 +94,67 @@ export default function AdminQuizzesPage() {
 
   const authApi = apiWithAuth(getToken() ?? "");
 
-  async function loadData() {
-    setLoading(true);
+  function resetNewQuizForm() {
+    setSelectedQuizId(null);
+    setTitle(DEFAULT_TITLE);
+    setQuestions([emptyQuestion()]);
     setErrorMessage("");
+    setActionMessage("");
+  }
+
+  async function loadQuizList(preferredId?: number | null) {
+    const list = await authApi<QuizListItem[]>("/admin/quizzes");
+    setQuizList(list);
+
+    if (list.length === 0) {
+      resetNewQuizForm();
+      return;
+    }
+
+    const nextId =
+      preferredId && list.some((quiz) => quiz.id === preferredId)
+        ? preferredId
+        : list[0].id;
+    setSelectedQuizId(nextId);
+  }
+
+  async function loadQuizDetail(quizId: number) {
+    setLoadingQuiz(true);
+    setErrorMessage("");
+    setActionMessage("");
     try {
-      const sectionData = await authApi<SectionItem[]>("/admin/sections");
-      setSections(sectionData);
-      if (sectionData.length > 0) {
-        setSelectedSectionId(String(sectionData[0].id));
-      }
+      const data = await authApi<QuizApiResponse>(`/admin/quizzes/${quizId}`);
+      setTitle(data.title);
+      setQuestions(data.questions.length > 0 ? data.questions.map(normalizeQuizQuestion) : [emptyQuestion()]);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Gagal memuat data kuis.");
+      setErrorMessage(error instanceof Error ? error.message : "Gagal memuat detail kuis.");
     } finally {
-      setLoading(false);
+      setLoadingQuiz(false);
     }
   }
 
   useEffect(() => {
-    loadData();
+    async function init() {
+      setLoading(true);
+      setErrorMessage("");
+      try {
+        await loadQuizList();
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "Gagal memuat data kuis.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    void init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!selectedSectionId) return;
-
-    let cancelled = false;
-    setLoadingQuiz(true);
-    setErrorMessage("");
-    setActionMessage("");
-
-    async function loadQuiz() {
-      try {
-        const data = await authApi<QuizApiResponse>(`/admin/sections/${selectedSectionId}/quiz`);
-        if (cancelled) return;
-        setQuestions(data.questions.map(normalizeQuizQuestion));
-      } catch (error) {
-        if (cancelled) return;
-        const message = error instanceof Error ? error.message : "Gagal memuat data kuis.";
-        if (message.toLowerCase().includes("quiz tidak ditemukan")) {
-          setQuestions([emptyQuestion()]);
-          return;
-        }
-        setErrorMessage(message);
-      } finally {
-        if (!cancelled) setLoadingQuiz(false);
-      }
-    }
-
-    loadQuiz();
-    return () => {
-      cancelled = true;
-    };
+    if (selectedQuizId === null) return;
+    void loadQuizDetail(selectedQuizId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSectionId]);
+  }, [selectedQuizId]);
 
   function updateQuestionText(index: number, value: string) {
     setQuestions((prev) => prev.map((question, i) => (i === index ? { ...question, questionText: value } : question)));
@@ -167,8 +192,6 @@ export default function AdminQuizzesPage() {
   }
 
   async function saveQuiz() {
-    if (!selectedSectionId) return;
-
     setErrorMessage("");
     setActionMessage("");
 
@@ -185,20 +208,23 @@ export default function AdminQuizzesPage() {
 
     setIsSaving(true);
     try {
-      await authApi(`/admin/sections/${selectedSectionId}/quiz`, {
-        method: "PUT",
-        body: JSON.stringify({
-          questions: questions.map((question) => ({
-            questionText: question.questionText,
-            imageUrl: question.imageUrl.trim(),
-            options: question.options.map((option, index) => ({
-              optionText: option,
-              isCorrect: index === question.correctAnswerIndex,
-            })),
-          })),
-        }),
-      });
-      setActionMessage("Kuis berhasil disimpan.");
+      const payload = buildPayload(title, questions);
+
+      if (selectedQuizId === null) {
+        const created = await authApi<QuizApiResponse>("/admin/quizzes", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        setActionMessage("Kuis berhasil dibuat.");
+        await loadQuizList(created.id);
+      } else {
+        await authApi(`/admin/quizzes/${selectedQuizId}`, {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        });
+        setActionMessage("Kuis berhasil disimpan.");
+        await loadQuizList(selectedQuizId);
+      }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Gagal menyimpan kuis.");
     } finally {
@@ -207,16 +233,16 @@ export default function AdminQuizzesPage() {
   }
 
   async function deleteQuiz() {
-    if (!selectedSectionId) return;
+    if (selectedQuizId === null) return;
 
     setIsSaving(true);
     setErrorMessage("");
     setActionMessage("");
     try {
-      await authApi(`/admin/sections/${selectedSectionId}/quiz`, { method: "DELETE" });
-      setQuestions([emptyQuestion()]);
-      setActionMessage("Kuis berhasil dihapus.");
+      await authApi(`/admin/quizzes/${selectedQuizId}`, { method: "DELETE" });
       setConfirmDeleteOpen(false);
+      setActionMessage("Kuis berhasil dihapus.");
+      await loadQuizList();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Gagal menghapus kuis.");
     } finally {
@@ -225,36 +251,43 @@ export default function AdminQuizzesPage() {
   }
 
   if (loading) return <p className="py-8 text-sm text-gray-500">Memuat data kuis...</p>;
-  if (errorMessage && sections.length === 0) {
-    return <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{errorMessage}</div>;
-  }
-  if (sections.length === 0) {
-    return <EmptyState message="Belum ada materi. Tambahkan materi terlebih dahulu sebelum membuat kuis." />;
-  }
 
   return (
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold text-brand-navy">Kelola Kuis</h1>
-        <p className="text-sm text-gray-600">Pilih materi lalu atur soal kuis dengan 4 opsi jawaban.</p>
+        <p className="text-sm text-gray-600">
+          Buat dan atur kuis secara mandiri. Judul dan soal kuis tidak terkait dengan materi pembelajaran.
+        </p>
       </div>
 
-      <Card>
-        <label htmlFor="section-select" className="text-sm font-medium text-brand-navy">
-          Pilih Materi
-        </label>
-        <select
-          id="section-select"
-          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none transition-colors focus:border-brand-teal focus:ring-2 focus:ring-brand-teal-soft"
-          value={selectedSectionId}
-          onChange={(event) => setSelectedSectionId(event.target.value)}
-        >
-          {sections.map((section) => (
-            <option key={section.id} value={section.id}>
-              {section.name}
-            </option>
+      {quizList.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {quizList.map((quiz) => (
+            <Button
+              key={quiz.id}
+              variant={selectedQuizId === quiz.id ? "primary" : "secondary"}
+              onClick={() => setSelectedQuizId(quiz.id)}
+            >
+              {quiz.title}
+            </Button>
           ))}
-        </select>
+        </div>
+      ) : null}
+
+      <div className="flex flex-wrap gap-2">
+        <Button variant="secondary" onClick={resetNewQuizForm}>
+          + Kuis Baru
+        </Button>
+      </div>
+
+      <Card className="space-y-3">
+        <Input
+          label="Judul Kuis"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          placeholder={DEFAULT_TITLE}
+        />
       </Card>
 
       {loadingQuiz ? <p className="text-sm text-gray-500">Memuat detail kuis...</p> : null}
@@ -321,17 +354,19 @@ export default function AdminQuizzesPage() {
           + Tambah Soal
         </Button>
         <Button onClick={saveQuiz} disabled={isSaving}>
-          {isSaving ? "Menyimpan..." : "Simpan Kuis"}
+          {isSaving ? "Menyimpan..." : selectedQuizId === null ? "Buat Kuis" : "Simpan Kuis"}
         </Button>
-        <Button variant="danger" onClick={() => setConfirmDeleteOpen(true)} disabled={isSaving}>
-          Hapus Kuis
-        </Button>
+        {selectedQuizId !== null ? (
+          <Button variant="danger" onClick={() => setConfirmDeleteOpen(true)} disabled={isSaving}>
+            Hapus Kuis
+          </Button>
+        ) : null}
       </div>
 
       <ConfirmDialog
         open={confirmDeleteOpen}
         title="Hapus Kuis"
-        message="Kuis untuk materi ini akan dihapus permanen. Lanjutkan?"
+        message="Kuis ini akan dihapus permanen. Lanjutkan?"
         confirmText="Ya, Hapus"
         cancelText="Batal"
         onCancel={() => setConfirmDeleteOpen(false)}

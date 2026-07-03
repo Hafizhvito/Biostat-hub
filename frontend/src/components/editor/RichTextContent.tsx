@@ -27,6 +27,7 @@ const SANITIZE_CONFIG = {
     "li",
     "a",
     "img",
+    "span",
   ],
   ALLOWED_ATTR: ["href", "target", "rel", "style", "src", "alt", "data-original-src", "class"],
 };

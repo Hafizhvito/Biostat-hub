@@ -38,6 +38,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
             src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
             alt={`Thumbnail ${video.title}`}
             className="h-44 w-full object-cover"
+            loading="lazy"
           />
         ) : (
           <div className="flex h-44 w-full items-center justify-center bg-gray-100 text-sm text-gray-500">

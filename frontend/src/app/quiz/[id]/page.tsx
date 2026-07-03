@@ -1,9 +1,8 @@
 "use client";
 
 /**
- * Halaman kuis per materi.
+ * Halaman kerjakan kuis.
  * Ganti design: comment/uncomment block QuizPageLayout + sesuaikan className di JSX bawah.
- * Atau pakai block export default penuh di bagian bawah file (D2/D3).
  */
 
 import Link from "next/link";
@@ -14,8 +13,7 @@ import { api } from "@/lib/api";
 
 interface QuizResponse {
   id: number;
-  sectionId: number;
-  section: { id: number; name: string };
+  title: string;
   questions: QuizQuestion[];
 }
 
@@ -31,7 +29,7 @@ interface QuizSubmitResponse {
 }
 
 interface QuizPageProps {
-  params: Promise<{ sectionId: string }>;
+  params: Promise<{ id: string }>;
 }
 
 /* ==========================================================================
@@ -64,8 +62,8 @@ function QuizPageLayout({ children }: { children: React.ReactNode }) {
 */
 
 export default function QuizPage({ params }: QuizPageProps) {
-  const [sectionId, setSectionId] = useState<string>("");
-  const [sectionName, setSectionName] = useState<string>("");
+  const [quizId, setQuizId] = useState<string>("");
+  const [quizTitle, setQuizTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [quiz, setQuiz] = useState<QuizResponse | null>(null);
@@ -81,11 +79,11 @@ export default function QuizPage({ params }: QuizPageProps) {
       try {
         const resolvedParams = await params;
         if (cancelled) return;
-        setSectionId(resolvedParams.sectionId);
-        const data = await api<QuizResponse>(`/sections/${resolvedParams.sectionId}/quiz`);
+        setQuizId(resolvedParams.id);
+        const data = await api<QuizResponse>(`/quizzes/${resolvedParams.id}`);
         if (cancelled) return;
         setQuiz(data);
-        setSectionName(data.section.name);
+        setQuizTitle(data.title);
       } catch (error) {
         if (cancelled) return;
         const message = error instanceof Error ? error.message : "Gagal memuat kuis.";
@@ -106,11 +104,11 @@ export default function QuizPage({ params }: QuizPageProps) {
   }, [params]);
 
   async function handleSubmit(answers: Array<{ question_id: number; option_id: number }>) {
-    if (!sectionId) return;
+    if (!quizId) return;
     setSubmitError("");
     setIsSubmitting(true);
     try {
-      const submission = await api<QuizSubmitResponse>(`/sections/${sectionId}/quiz/submit`, {
+      const submission = await api<QuizSubmitResponse>(`/quizzes/${quizId}/submit`, {
         method: "POST",
         body: JSON.stringify({ answers }),
       });
@@ -134,7 +132,7 @@ export default function QuizPage({ params }: QuizPageProps) {
     return (
       <QuizPageLayout>
         <div className="rounded-xl border border-gray-200 bg-white p-6 text-gray-700">
-          Kuis belum tersedia untuk materi ini.
+          Kuis tidak ditemukan.
         </div>
       </QuizPageLayout>
     );
@@ -158,18 +156,18 @@ export default function QuizPage({ params }: QuizPageProps) {
           Beranda
         </Link>
         <span className="mx-2">›</span>
-        <Link href={`/section/${sectionId}`} className="hover:text-brand-teal">
-          {sectionName || "Materi"}
+        <Link href="/kuis" className="hover:text-brand-teal">
+          Kuis
         </Link>
         <span className="mx-2">›</span>
-        <span className="font-medium text-brand-navy">Kuis</span>
+        <span className="font-medium text-brand-navy">{quizTitle || "Kuis"}</span>
       </nav>
       <header>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-teal">Latihan Kuis</p>
-        <h1 className="mt-2 text-3xl font-bold text-brand-navy">Kuis: {sectionName}</h1>
+        <h1 className="mt-2 text-3xl font-bold text-brand-navy">{quizTitle || "Kuis"}</h1>
         <p className="mt-2 text-sm text-gray-600">
-          <Link href={`/section/${sectionId}`} className="font-medium text-brand-teal hover:underline">
-            Kembali ke materi
+          <Link href="/kuis" className="font-medium text-brand-teal hover:underline">
+            Kembali ke daftar kuis
           </Link>
         </p>
       </header>
@@ -178,18 +176,16 @@ export default function QuizPage({ params }: QuizPageProps) {
       <nav className="text-sm text-gray-500">
         <Link href="/" className="transition-colors hover:text-d2-blue">Beranda</Link>
         <span className="mx-2 text-gray-300">›</span>
-        <Link href={`/section/${sectionId}`} className="transition-colors hover:text-d2-blue">
-          {sectionName || "Materi"}
-        </Link>
+        <Link href="/kuis" className="transition-colors hover:text-d2-blue">Kuis</Link>
         <span className="mx-2 text-gray-300">›</span>
-        <span className="font-medium text-gray-900">Kuis</span>
+        <span className="font-medium text-gray-900">{quizTitle || "Kuis"}</span>
       </nav>
       <header>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-d2-blue">Latihan Kuis</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">Kuis: {sectionName}</h1>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">{quizTitle || "Kuis"}</h1>
         <p className="mt-2 text-sm text-gray-500">
-          <Link href={`/section/${sectionId}`} className="font-medium text-d2-blue hover:underline">
-            Kembali ke materi
+          <Link href="/kuis" className="font-medium text-d2-blue hover:underline">
+            Kembali ke daftar kuis
           </Link>
         </p>
       </header>
@@ -199,18 +195,16 @@ export default function QuizPage({ params }: QuizPageProps) {
       <nav className="text-sm text-d3-muted">
         <Link href="/" className="hover:text-d3-coral">Beranda</Link>
         <span className="mx-2">›</span>
-        <Link href={`/section/${sectionId}`} className="hover:text-d3-coral">
-          {sectionName || "Materi"}
-        </Link>
+        <Link href="/kuis" className="hover:text-d3-coral">Kuis</Link>
         <span className="mx-2">›</span>
-        <span className="font-medium text-d3-ink">Kuis</span>
+        <span className="font-medium text-d3-ink">{quizTitle || "Kuis"}</span>
       </nav>
       <header className="mt-4">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-d3-coral">Latihan Kuis</p>
-        <h1 className="mt-2 font-serif text-3xl font-semibold text-d3-ink">Kuis: {sectionName}</h1>
+        <h1 className="mt-2 font-serif text-3xl font-semibold text-d3-ink">{quizTitle || "Kuis"}</h1>
         <p className="mt-2 text-sm text-d3-muted">
-          <Link href={`/section/${sectionId}`} className="font-medium text-d3-coral hover:underline">
-            Kembali ke materi
+          <Link href="/kuis" className="font-medium text-d3-coral hover:underline">
+            Kembali ke daftar kuis
           </Link>
         </p>
       </header>

@@ -1,4 +1,4 @@
-/** Blok kuis di beranda — di bawah Jelajahi Materi, link ke /quiz/[sectionId]. */
+/** Blok kuis di beranda — di bawah Jelajahi Materi, link ke /quiz/[id]. */
 
 import Link from "next/link";
 import { KuisList, KuisListItem } from "@/components/kuis/KuisList";
@@ -11,22 +11,24 @@ interface HomeKuisSectionProps {
  * DESIGN 1 (aktif)
  * ========================================================================== */
 export function HomeKuisSection({ quizzes }: HomeKuisSectionProps) {
-  if (quizzes.length === 0) return null;
-
   return (
     <section id="latihan-kuis" className="space-y-4 border-t border-brand-peach pt-8">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold text-brand-navy">Latihan Kuis</h2>
           <p className="mt-1 text-sm text-gray-600">
-            Uji pemahaman setelah menonton video di setiap materi.
+            Pilih kuis untuk mulai latihan pilihan ganda.
           </p>
         </div>
         <Link href="/kuis" className="text-sm font-medium text-brand-warm hover:underline">
           Lihat semua →
         </Link>
       </header>
-      <KuisList quizzes={quizzes} />
+      {quizzes.length === 0 ? (
+        <p className="text-sm text-gray-500">Belum ada kuis. Kuis akan ditambahkan melalui panel admin.</p>
+      ) : (
+        <KuisList quizzes={quizzes} />
+      )}
     </section>
   );
 }

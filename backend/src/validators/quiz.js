@@ -1,10 +1,10 @@
-/** Validasi Zod untuk simpan kuis (soal, opsi, tepat 1 jawaban benar). */
+/** Validasi Zod untuk simpan kuis (judul, soal, opsi, tepat 1 jawaban benar). */
 
 import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
 
-const quizSectionParamSchema = z.object({
-  sectionId: z.coerce.number().int().positive('ID materi tidak valid.'),
+const quizIdParamSchema = z.object({
+  id: z.coerce.number().int().positive('ID kuis tidak valid.'),
 });
 
 const quizOptionSchema = z.object({
@@ -38,6 +38,7 @@ const quizQuestionSchema = z
   });
 
 const quizReplaceSchema = z.object({
+  title: z.string().trim().min(1, 'Judul kuis wajib diisi.').default('Kuis'),
   questions: z.array(quizQuestionSchema).min(1, 'questions minimal berisi 1 pertanyaan.'),
 });
 
@@ -49,8 +50,8 @@ function parseOrThrow(schema, payload) {
   return parsed.data;
 }
 
-export function validateQuizSectionParam(params) {
-  return parseOrThrow(quizSectionParamSchema, params);
+export function validateQuizIdParam(params) {
+  return parseOrThrow(quizIdParamSchema, params);
 }
 
 export function validateQuizReplace(body) {

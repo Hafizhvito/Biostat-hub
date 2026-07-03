@@ -44,12 +44,12 @@ export function SectionGrid({ sections }: SectionGridProps) {
   return (
     <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       {sections.map((section) => (
-        <Link key={section.id} href={`/section/${section.id}`} className="group">
-          <Card className="h-full border-brand-warm/25 bg-brand-peach/35 p-5 transition-colors group-hover:border-brand-warm">
+        <Link key={section.id} href={`/section/${section.id}`} className="group min-w-0">
+          <Card className="h-full overflow-hidden border-brand-warm/25 bg-brand-peach/35 p-5 transition-colors group-hover:border-brand-warm">
             <h2 className="text-lg font-semibold text-brand-navy group-hover:text-brand-warm">
               {section.name}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-gray-700">
+            <p className="mt-2 line-clamp-3 break-words text-sm leading-relaxed text-gray-700">
               {truncateRichText(section.description, 140, "Deskripsi materi belum tersedia.")}
             </p>
             <p className="mt-4 text-sm font-medium text-brand-warm">{getVideoCount(section)} video</p>

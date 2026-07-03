@@ -4,6 +4,7 @@
 
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
+import { isNotFoundError } from '../../utils/prismaErrors.js';
 import { extractYouTubeId } from '../../utils/youtube.js';
 import {
   validateVideoCreate,
@@ -11,10 +12,6 @@ import {
   validateVideoReorder,
   validateVideoUpdate,
 } from '../../validators/video.js';
-
-function isNotFoundError(err) {
-  return err?.code === 'P2025';
-}
 
 async function ensureSectionExists(sectionId) {
   const section = await prisma.section.findUnique({

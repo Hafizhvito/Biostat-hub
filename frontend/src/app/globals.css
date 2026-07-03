@@ -34,13 +34,6 @@
   --color-d3-muted: #7a7268;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   @apply bg-brand-bg-light text-gray-800 antialiased;
 }
@@ -69,6 +62,11 @@ body.design-3 main {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+.rich-text-content {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .rich-text-content p + p {

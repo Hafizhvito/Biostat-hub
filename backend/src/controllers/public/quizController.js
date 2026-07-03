@@ -1,5 +1,5 @@
 /**
- * API publik: ambil soal kuis (tanpa jawaban benar) & submit jawaban untuk grading.
+ * API publik: daftar kuis, ambil soal (tanpa jawaban benar) & submit untuk grading.
  */
 
 import prisma from '../../lib/prisma.js';
@@ -9,7 +9,7 @@ import { gradeQuiz } from '../../services/quizGrading.js';
 function parseId(value) {
   const id = Number.parseInt(value, 10);
   if (Number.isNaN(id) || id <= 0) {
-    throw createError(400, 'ID materi tidak valid.');
+    throw createError(400, 'ID kuis tidak valid.');
   }
   return id;
 }
@@ -40,13 +40,10 @@ function validateAnswers(answers) {
   return normalized;
 }
 
-async function getQuizWithQuestions(sectionId) {
+async function getQuizWithQuestions(id) {
   return prisma.quiz.findUnique({
-    where: { sectionId },
+    where: { id },
     include: {
-      section: {
-        select: { id: true, name: true },
-      },
       questions: {
         orderBy: { sortOrder: 'asc' },
         include: {
@@ -70,8 +67,7 @@ function sanitizeQuiz(quiz) {
 
   return {
     id: quiz.id,
-    sectionId: quiz.sectionId,
-    section: quiz.section,
+    title: quiz.title,
     questions: sanitizedQuestions,
   };
 }
@@ -79,24 +75,18 @@ function sanitizeQuiz(quiz) {
 export async function list(req, res, next) {
   try {
     const quizzes = await prisma.quiz.findMany({
+      orderBy: { sortOrder: 'asc' },
       include: {
-        section: {
-          select: { id: true, name: true, description: true, sortOrder: true },
-        },
         _count: {
           select: { questions: true },
         },
       },
     });
 
-    quizzes.sort((a, b) => a.section.sortOrder - b.section.sortOrder);
-
     res.json(
       quizzes.map((quiz) => ({
         id: quiz.id,
-        section_id: quiz.sectionId,
-        section_name: quiz.section.name,
-        section_description: quiz.section.description,
+        title: quiz.title,
         question_count: quiz._count.questions,
       }))
     );
@@ -105,10 +95,10 @@ export async function list(req, res, next) {
   }
 }
 
-export async function getBySectionId(req, res, next) {
+export async function getById(req, res, next) {
   try {
-    const sectionId = parseId(req.params.id);
-    const quiz = await getQuizWithQuestions(sectionId);
+    const id = parseId(req.params.id);
+    const quiz = await getQuizWithQuestions(id);
 
     if (!quiz) {
       throw createError(404, 'Quiz tidak ditemukan.');
@@ -122,10 +112,10 @@ export async function getBySectionId(req, res, next) {
 
 export async function submit(req, res, next) {
   try {
-    const sectionId = parseId(req.params.id);
+    const id = parseId(req.params.id);
     const answers = validateAnswers(req.body?.answers);
 
-    const quiz = await getQuizWithQuestions(sectionId);
+    const quiz = await getQuizWithQuestions(id);
 
     if (!quiz) {
       throw createError(404, 'Quiz tidak ditemukan.');

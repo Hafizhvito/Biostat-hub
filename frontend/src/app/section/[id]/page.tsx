@@ -1,9 +1,8 @@
-/** Halaman daftar video dalam satu materi + blok kuis. Ganti design: comment/uncomment export default. */
+/** Halaman daftar video dalam satu materi. Ganti design: comment/uncomment export default. */
 
 import Link from "next/link";
 import { RichTextContent } from "@/components/editor/RichTextContent";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { SectionQuizBlock } from "@/components/section/SectionQuizBlock";
 import { VideoGrid } from "@/components/section/VideoGrid";
 import { api } from "@/lib/api";
 
@@ -19,8 +18,6 @@ interface SectionDetail {
   name: string;
   description: string | null;
   videos: SectionVideo[];
-  has_quiz: boolean;
-  question_count: number;
 }
 
 interface PageProps {
@@ -55,13 +52,6 @@ export default async function SectionPage({ params }: PageProps) {
       ) : (
         <VideoGrid videos={section.videos} />
       )}
-      {section.has_quiz ? (
-        <SectionQuizBlock
-          sectionId={section.id}
-          sectionName={section.name}
-          questionCount={section.question_count}
-        />
-      ) : null}
     </div>
   );
 }
@@ -96,13 +86,6 @@ export default async function SectionPage({ params }: PageProps) {
         ) : (
           <VideoGrid videos={section.videos} />
         )}
-        {section.has_quiz ? (
-          <SectionQuizBlock
-            sectionId={section.id}
-            sectionName={section.name}
-            questionCount={section.question_count}
-          />
-        ) : null}
       </div>
     </div>
   );
@@ -142,13 +125,6 @@ export default async function SectionPage({ params }: PageProps) {
           <VideoGrid videos={section.videos} />
         )}
       </div>
-      {section.has_quiz ? (
-        <SectionQuizBlock
-          sectionId={section.id}
-          sectionName={section.name}
-          questionCount={section.question_count}
-        />
-      ) : null}
     </Design3PageShell>
   );
 }

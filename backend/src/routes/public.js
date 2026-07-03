@@ -9,7 +9,7 @@ import { list as listSections, getById as getSectionById } from '../controllers/
 import { getById as getVideoById } from '../controllers/public/videoController.js';
 import {
   list as listQuizzes,
-  getBySectionId as getQuizBySectionId,
+  getById as getQuizById,
   submit as submitQuiz,
 } from '../controllers/public/quizController.js';
 
@@ -18,9 +18,9 @@ const router = Router();
 router.get('/settings', getSettings);
 router.get('/sections', listSections);
 router.get('/sections/:id', getSectionById);
-router.get('/sections/:id/quiz', getQuizBySectionId);
-router.post('/sections/:id/quiz/submit', submitQuiz);
 router.get('/quizzes', listQuizzes);
+router.get('/quizzes/:id', getQuizById);
+router.post('/quizzes/:id/submit', submitQuiz);
 router.get('/videos/:id', getVideoById);
 
 export default router;

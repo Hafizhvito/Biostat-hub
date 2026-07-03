@@ -17,7 +17,6 @@ model Section {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   videos      Video[]
-  quiz        Quiz?
 
   @@map("sections")
 }
@@ -38,10 +37,10 @@ model Video {
 
 model Quiz {
   id        Int            @id @default(autoincrement())
-  sectionId Int            @unique @map("section_id")
+  title     String         @default("Kuis")
+  sortOrder Int            @default(0) @map("sort_order")
   createdAt DateTime       @default(now()) @map("created_at")
   updatedAt DateTime       @updatedAt @map("updated_at")
-  section   Section        @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   questions QuizQuestion[]
 
   @@map("quizzes")

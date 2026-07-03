@@ -148,7 +148,7 @@ DATABASE_URL="file:./prod.db"
 JWT_SECRET="buat-string-panjang-random-minimal-32-karakter"
 JWT_EXPIRES_IN="7d"
 ADMIN_USERNAME="admin"
-ADMIN_PASSWORD="PasswordKuatProduction2026!"
+ADMIN_PASSWORD="<GANTI_DENGAN_PASSWORD_KUAT>"
 CORS_ORIGIN="https://biostat.yarsi.ac.id"
 PORT=3001
 ```

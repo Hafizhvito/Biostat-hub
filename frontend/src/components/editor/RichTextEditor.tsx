@@ -27,6 +27,10 @@ import {
 import { useEffect, useState } from "react";
 
 import { RichTextImageExtension } from "@/components/editor/RichTextImageExtension";
+import {
+  FONT_SIZE_OPTIONS,
+  richTextStyleExtensions,
+} from "@/components/editor/RichTextFontSizeExtension";
 
 interface RichTextEditorProps {
   label: string;
@@ -77,6 +81,12 @@ function getHeadingValue(editor: Editor | null) {
   return "p";
 }
 
+function getFontSizeValue(editor: Editor | null) {
+  if (!editor) return "";
+  const fontSize = editor.getAttributes("textStyle").fontSize as string | undefined;
+  return fontSize ?? "";
+}
+
 export function RichTextEditor({
   label,
   value,
@@ -107,6 +117,7 @@ export function RichTextEditor({
         },
       }),
       RichTextImageExtension,
+      ...richTextStyleExtensions,
     ],
     content: value,
     immediatelyRender: false,
@@ -171,6 +182,15 @@ export function RichTextEditor({
     editor.chain().focus().setHeading({ level: level === "h2" ? 2 : 3 }).run();
   }
 
+  function setFontSize(fontSize: string) {
+    if (!editor) return;
+    if (!fontSize) {
+      editor.chain().focus().unsetFontSize().run();
+      return;
+    }
+    editor.chain().focus().setFontSize(fontSize).run();
+  }
+
   const fieldId = `rich-text-${label.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
@@ -211,6 +231,21 @@ export function RichTextEditor({
             <option value="p">Paragraf</option>
             <option value="h2">Judul 2</option>
             <option value="h3">Judul 3</option>
+          </select>
+
+          <select
+            title="Ukuran huruf"
+            disabled={!editor}
+            value={getFontSizeValue(editor)}
+            onChange={(event) => setFontSize(event.target.value)}
+            className="h-7 rounded border border-gray-300 bg-white px-1.5 text-xs text-gray-700 outline-none focus:border-brand-teal disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <option value="">Ukuran</option>
+            {FONT_SIZE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
 
           <ToolbarDivider />

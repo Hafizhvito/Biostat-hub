@@ -1,10 +1,24 @@
 /** Ubah HTML aman menjadi React nodes — gambar pakai logika yang sama dengan kuis. */
 
-import { createElement, type ReactNode } from "react";
+import { createElement, type CSSProperties, type ReactNode } from "react";
 
 import { QuizQuestionImage } from "@/components/quiz/QuizQuestionImage";
 
 const VOID_TAGS = new Set(["br", "img"]);
+
+function parseInlineStyle(style: string): CSSProperties {
+  const result: Record<string, string> = {};
+  style.split(";").forEach((rule) => {
+    const colonIndex = rule.indexOf(":");
+    if (colonIndex === -1) return;
+    const prop = rule.slice(0, colonIndex).trim();
+    const value = rule.slice(colonIndex + 1).trim();
+    if (!prop || !value) return;
+    const camelProp = prop.replace(/-([a-z])/g, (_, char: string) => char.toUpperCase());
+    result[camelProp] = value;
+  });
+  return result as CSSProperties;
+}
 
 function domNodeToReact(node: ChildNode, key: number): ReactNode {
   if (node.nodeType === Node.TEXT_NODE) {
@@ -35,7 +49,7 @@ function domNodeToReact(node: ChildNode, key: number): ReactNode {
     .map((child, childIndex) => domNodeToReact(child, childIndex))
     .filter((child) => child !== null);
 
-  const props: Record<string, string | number> = { key };
+  const props: Record<string, string | number | CSSProperties> = { key };
 
   if (element.className) {
     props.className = element.className;
@@ -43,7 +57,7 @@ function domNodeToReact(node: ChildNode, key: number): ReactNode {
 
   const style = element.getAttribute("style");
   if (style) {
-    props.style = style;
+    props.style = parseInlineStyle(style);
   }
 
   if (tag === "a") {

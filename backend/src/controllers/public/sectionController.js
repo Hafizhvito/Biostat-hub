@@ -21,23 +21,13 @@ export async function list(req, res, next) {
         _count: {
           select: { videos: true },
         },
-        quiz: {
-          select: {
-            id: true,
-            _count: { select: { questions: true } },
-          },
-        },
       },
     });
 
     const totalVideos = sections.reduce((acc, section) => acc + section._count.videos, 0);
 
     res.json({
-      sections: sections.map(({ quiz, ...section }) => ({
-        ...section,
-        has_quiz: Boolean(quiz),
-        question_count: quiz?._count.questions ?? 0,
-      })),
+      sections,
       stats: {
         total_sections: sections.length,
         total_videos: totalVideos,
@@ -57,12 +47,6 @@ export async function getById(req, res, next) {
         videos: {
           orderBy: { sortOrder: 'asc' },
         },
-        quiz: {
-          select: {
-            id: true,
-            _count: { select: { questions: true } },
-          },
-        },
       },
     });
 
@@ -70,13 +54,7 @@ export async function getById(req, res, next) {
       throw createError(404, 'Section tidak ditemukan.');
     }
 
-    const { quiz, ...sectionData } = section;
-
-    res.json({
-      ...sectionData,
-      has_quiz: Boolean(quiz),
-      question_count: quiz?._count.questions ?? 0,
-    });
+    res.json(section);
   } catch (err) {
     next(err);
   }
