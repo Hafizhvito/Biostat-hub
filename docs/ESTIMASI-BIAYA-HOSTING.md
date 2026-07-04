@@ -204,6 +204,7 @@ Database disimpan di server. Disarankan **backup berkala** file database (termas
 ## Dokumen terkait
 
 - **Panduan deploy teknis (untuk developer/IT):** [PANDUAN-DEPLOY-VPS.md](PANDUAN-DEPLOY-VPS.md)  
+- **Domain, VPS & onboarding klien:** [PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md](PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md)  
 - **Panduan developer project:** [PANDUAN-DEVELOPER.md](PANDUAN-DEVELOPER.md)  
 - **Pertanyaan untuk klien (konten & launch):** [DAFTAR-PERTANYAAN-KLIEN.md](DAFTAR-PERTANYAAN-KLIEN.md)
 

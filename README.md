@@ -53,6 +53,7 @@ Default admin values come from your backend `.env`:
 ## Deployment Notes
 
 - **Panduan lengkap VPS (step-by-step):** [docs/PANDUAN-DEPLOY-VPS.md](docs/PANDUAN-DEPLOY-VPS.md)
+- **Domain, VPS & onboarding klien non-IT:** [docs/PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md](docs/PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md)
 - Frontend: deploy to Vercel or Netlify
 - Backend: deploy to a VPS (or any Node-capable server) and configure environment variables + database access
 
