@@ -7,6 +7,7 @@ import { normalizeRichTextDescription } from '../utils/richText.js';
 const sectionBodySchema = z.object({
   name: z.string().trim().min(1, 'Nama section wajib diisi.'),
   description: z.string().default('').transform(normalizeRichTextDescription),
+  level: z.enum(['dasar', 'menengah', 'lanjut']).nullable().optional(),
 });
 
 const sectionIdParamSchema = z.object({

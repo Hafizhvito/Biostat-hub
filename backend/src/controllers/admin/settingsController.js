@@ -3,7 +3,7 @@
  */
 
 import prisma from '../../lib/prisma.js';
-import { validateSettingsUpdate } from '../../validators/settings.js';
+import { validateCalculatorUrlUpdate, validateSettingsUpdate } from '../../validators/settings.js';
 
 export async function get(req, res, next) {
   try {
@@ -12,12 +12,14 @@ export async function get(req, res, next) {
       select: {
         heroTitle: true,
         heroDescription: true,
+        calculatorUrl: true,
       },
     });
 
     res.json({
       heroTitle: settings?.heroTitle ?? '',
       heroDescription: settings?.heroDescription ?? '',
+      calculatorUrl: settings?.calculatorUrl ?? '',
     });
   } catch (err) {
     next(err);
@@ -38,11 +40,48 @@ export async function update(req, res, next) {
         id: 1,
         heroTitle: payload.heroTitle,
         heroDescription: payload.heroDescription,
+        calculatorUrl: '',
       },
       select: {
         heroTitle: true,
         heroDescription: true,
+        calculatorUrl: true,
       },
+    });
+
+    res.json(settings);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getCalculatorUrl(req, res, next) {
+  try {
+    const settings = await prisma.siteSettings.findUnique({
+      where: { id: 1 },
+      select: { calculatorUrl: true },
+    });
+
+    res.json({ calculatorUrl: settings?.calculatorUrl ?? '' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateCalculatorUrl(req, res, next) {
+  try {
+    const payload = validateCalculatorUrlUpdate(req.body ?? {});
+
+    const settings = await prisma.siteSettings.upsert({
+      where: { id: 1 },
+      update: { calculatorUrl: payload.calculatorUrl },
+      create: {
+        id: 1,
+        heroTitle: '',
+        heroDescription: '',
+        calculatorUrl: payload.calculatorUrl,
+      },
+      select: { calculatorUrl: true },
     });
 
     res.json(settings);

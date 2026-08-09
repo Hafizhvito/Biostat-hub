@@ -32,7 +32,10 @@ function navLinkClass(active: boolean, design: 1 | 2 | 3) {
 function SiteHeaderDesign1() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isMateri = pathname === "/materi" || pathname.startsWith("/section/");
   const isKuis = pathname === "/kuis" || pathname.startsWith("/quiz/");
+  const isGlossary = pathname === "/glosarium";
+  const isDownloads = pathname === "/unduhan";
 
   return (
     <header className="border-b border-brand-powder/80 bg-white shadow-sm">
@@ -45,8 +48,17 @@ function SiteHeaderDesign1() {
           <Link href="/" className={navLinkClass(isHome, 1)}>
             Beranda
           </Link>
+          <Link href="/materi" className={navLinkClass(isMateri, 1)}>
+            Materi
+          </Link>
           <Link href="/kuis" className={navLinkClass(isKuis, 1)}>
             Kuis
+          </Link>
+          <Link href="/glosarium" className={navLinkClass(isGlossary, 1)}>
+            Glosarium
+          </Link>
+          <Link href="/unduhan" className={navLinkClass(isDownloads, 1)}>
+            Unduhan
           </Link>
         </nav>
       </div>

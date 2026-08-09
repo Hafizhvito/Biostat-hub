@@ -1,6 +1,7 @@
 /** Beranda: hero + grid materi + kuis. Ganti design: comment/uncomment salah satu export default. */
 
 import { HeroSection } from "@/components/home/HeroSection";
+import { FeatureGrid } from "@/components/home/FeatureGrid";
 import { HomeKuisSection } from "@/components/home/HomeKuisSection";
 import { SectionGrid } from "@/components/home/SectionGrid";
 import { KuisListItem } from "@/components/kuis/KuisList";
@@ -10,6 +11,9 @@ import { api } from "@/lib/api";
 interface PublicSettingsResponse {
   hero_title: string;
   hero_description: string;
+  calculator_url: string;
+  glossary_count: number;
+  download_count: number;
 }
 
 interface SectionItem {
@@ -44,7 +48,10 @@ export default async function HomePage() {
         description={settings.hero_description || HERO_DESCRIPTION}
         totalSections={sectionResponse.stats.total_sections}
         totalVideos={sectionResponse.stats.total_videos}
+        totalGlossary={settings.glossary_count || 0}
+        totalDownloads={settings.download_count || 0}
       />
+      <FeatureGrid />
       {sectionResponse.sections.length === 0 ? (
         <div id="jelajahi-materi">
           <EmptyState message="Belum ada materi. Materi akan segera ditambahkan." />

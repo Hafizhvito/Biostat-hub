@@ -1,12 +1,15 @@
 /** Blok hero beranda: judul, deskripsi, statistik jumlah materi/video. */
 
 import { ArrowRight, Play } from "lucide-react";
+import { SearchBar } from "./SearchBar";
 
 interface HeroSectionProps {
   title: string;
   description: string;
   totalSections: number;
   totalVideos: number;
+  totalGlossary: number;
+  totalDownloads: number;
 }
 
 /* ==========================================================================
@@ -17,6 +20,8 @@ export function HeroSection({
   description,
   totalSections,
   totalVideos,
+  totalGlossary,
+  totalDownloads,
 }: HeroSectionProps) {
   return (
     <section className="mb-8 overflow-hidden rounded-2xl bg-brand-powder shadow-sm">
@@ -26,7 +31,8 @@ export function HeroSection({
         </p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand-warm md:text-4xl">{title}</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-700 md:text-base">{description}</p>
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <SearchBar />
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl bg-white/75 px-4 py-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-brand-lemon">Total Materi</p>
             <p className="mt-1 text-3xl font-bold text-brand-warm">{totalSections}</p>
@@ -34,6 +40,14 @@ export function HeroSection({
           <div className="rounded-xl bg-white/75 px-4 py-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-brand-lemon">Total Video</p>
             <p className="mt-1 text-3xl font-bold text-brand-warm">{totalVideos}</p>
+          </div>
+          <div className="rounded-xl bg-white/75 px-4 py-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-lemon">Istilah Glosarium</p>
+            <p className="mt-1 text-3xl font-bold text-brand-warm">{totalGlossary}</p>
+          </div>
+          <div className="rounded-xl bg-white/75 px-4 py-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-lemon">File Unduhan</p>
+            <p className="mt-1 text-3xl font-bold text-brand-warm">{totalDownloads}</p>
           </div>
         </div>
       </div>

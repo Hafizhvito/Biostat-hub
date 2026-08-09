@@ -5,7 +5,7 @@
 import { Router } from 'express';
 import { login } from '../controllers/admin/authController.js';
 import { requireAdmin } from '../middleware/auth.js';
-import { get as getSettings, update as updateSettings } from '../controllers/admin/settingsController.js';
+import { get as getSettings, getCalculatorUrl, update as updateSettings, updateCalculatorUrl } from '../controllers/admin/settingsController.js';
 import {
   list as listSections,
   create as createSection,
@@ -13,6 +13,10 @@ import {
   remove as removeSection,
   reorder as reorderSection,
 } from '../controllers/admin/sectionController.js';
+import { list as listGlossary, create as createGlossary, update as updateGlossary, remove as removeGlossary } from '../controllers/admin/glossaryController.js';
+import { list as listDownloads, create as createDownload, update as updateDownload, remove as removeDownload, uploadSingle as uploadDownload } from '../controllers/admin/downloadController.js';
+import { list as listWizard, create as createWizard, update as updateWizard, remove as removeWizard, reorder as reorderWizard, uploadSingle as uploadWizard } from '../controllers/admin/wizardController.js';
+import { list as listStatTests, create as createStatTest, update as updateStatTest, remove as removeStatTest } from '../controllers/admin/statTestController.js';
 import {
   list as listVideos,
   create as createVideo,
@@ -35,12 +39,35 @@ router.use(requireAdmin);
 
 router.get('/settings', getSettings);
 router.put('/settings', updateSettings);
+router.get('/settings/calculator-url', getCalculatorUrl);
+router.put('/settings/calculator-url', updateCalculatorUrl);
 
 router.get('/sections', listSections);
 router.post('/sections', createSection);
 router.put('/sections/:id', updateSection);
 router.delete('/sections/:id', removeSection);
 router.patch('/sections/:id/reorder', reorderSection);
+
+router.get('/glossary', listGlossary);
+router.post('/glossary', createGlossary);
+router.put('/glossary/:id', updateGlossary);
+router.delete('/glossary/:id', removeGlossary);
+
+router.get('/downloads', listDownloads);
+router.post('/downloads', uploadDownload, createDownload);
+router.put('/downloads/:id', updateDownload);
+router.delete('/downloads/:id', removeDownload);
+
+router.get('/wizard', listWizard);
+router.post('/wizard', uploadWizard, createWizard);
+router.put('/wizard/:id', uploadWizard, updateWizard);
+router.put('/wizard/reorder', reorderWizard);
+router.delete('/wizard/:id', removeWizard);
+
+router.get('/stat-tests', listStatTests);
+router.post('/stat-tests', createStatTest);
+router.put('/stat-tests/:id', updateStatTest);
+router.delete('/stat-tests/:id', removeStatTest);
 
 router.get('/videos', listVideos);
 router.post('/videos', createVideo);

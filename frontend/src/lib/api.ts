@@ -5,16 +5,20 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
+  const isFormData = options?.body instanceof FormData;
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...options?.headers,
     },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Terjadi kesalahan. Silakan coba lagi.');
-  return data;
+
+  const raw = await res.text();
+  const data = raw ? JSON.parse(raw) : null;
+
+  if (!res.ok) throw new Error(data?.error || 'Terjadi kesalahan. Silakan coba lagi.');
+  return data as T;
 }
 
 export function apiWithAuth(token: string) {

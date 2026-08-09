@@ -13,6 +13,7 @@ model Section {
   id          Int      @id @default(autoincrement())
   name        String
   description String   @default("")
+  level       SectionLevel?
   sortOrder   Int      @default(0) @map("sort_order")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -84,7 +85,63 @@ model SiteSettings {
   id              Int      @id @default(1)
   heroTitle       String   @map("hero_title")
   heroDescription String   @map("hero_description")
+  calculatorUrl   String   @default("") @map("calculator_url")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@map("site_settings")
+}
+
+model Glossary {
+  id         Int      @id @default(autoincrement())
+  term       String
+  definition String
+  example    String?  
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("glossary")
+}
+
+model Download {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String   @default("")
+  category      String
+  filename      String
+  originalName  String   @map("original_name")
+  fileSize      Int      @map("file_size")
+  downloadCount Int      @default(0) @map("download_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("downloads")
+}
+
+model WizardImage {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @default("")
+  filename    String
+  sortOrder   Int      @default(0) @map("order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("wizard_images")
+}
+
+model StatTest {
+  id              Int      @id @default(autoincrement())
+  name            String
+  function        String
+  dataType        String   @map("data_type")
+  dataDistribution String  @map("data_distribution")
+  useCase         String   @map("use_case")
+  spssMenu        String   @map("spss_menu")
+  notes           String   @default("")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("stat_tests")
+}
+
+enum SectionLevel {
+  dasar
+  menengah
+  lanjut
 }
