@@ -15,7 +15,7 @@ function isPublicPath(pathname: string) {
 function SiteFooterDesign1() {
   return (
     <footer className="border-t border-brand-peach bg-brand-peach/40">
-      <div className="mx-auto w-full max-w-6xl px-4 py-8">
+      <div className="site-container py-8">
         <p className="flex items-center justify-center gap-2 text-center text-sm text-gray-700">
           <GraduationCap className="h-4 w-4 shrink-0 text-brand-warm" />
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
@@ -34,7 +34,7 @@ function SiteFooterDesign1() {
 function SiteFooterDesign2() {
   return (
     <footer className="border-t border-gray-100 bg-white">
-      <div className="mx-auto w-full max-w-6xl px-4 py-8">
+      <div className="site-container py-8">
         <p className="flex items-center justify-center gap-2 text-center text-sm text-gray-500">
           <GraduationCap className="h-4 w-4 shrink-0 text-d2-blue" />
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
@@ -54,7 +54,7 @@ function SiteFooterDesign2() {
 function SiteFooterDesign3() {
   return (
     <footer className="border-t border-d3-plum/15 bg-d3-sand">
-      <div className="mx-auto w-full max-w-6xl px-4 py-8">
+      <div className="site-container py-8">
         <p className="flex items-center justify-center gap-2 text-center text-sm text-d3-muted">
           <BookOpen className="h-4 w-4 shrink-0 text-d3-coral" />
           Materi disusun ringkas, terstruktur, dan mudah dipahami.

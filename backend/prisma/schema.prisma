@@ -127,15 +127,12 @@ model WizardImage {
 }
 
 model StatTest {
-  id              Int      @id @default(autoincrement())
-  name            String
-  function        String
-  dataType        String   @map("data_type")
-  dataDistribution String  @map("data_distribution")
-  useCase         String   @map("use_case")
-  spssMenu        String   @map("spss_menu")
-  notes           String   @default("")
-  createdAt       DateTime @default(now()) @map("created_at")
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @default("")
+  filename    String
+  sortOrder   Int      @default(0) @map("order")
+  createdAt   DateTime @default(now()) @map("created_at")
 
   @@map("stat_tests")
 }

@@ -63,7 +63,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 md:flex-row md:gap-6">
+    <div className="site-container flex flex-col gap-4 py-6 md:flex-row md:gap-6">
       <aside className="w-full rounded-xl border border-brand-teal-soft bg-white p-4 md:w-64 md:self-start">
         <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-brand-navy">
           Menu Admin

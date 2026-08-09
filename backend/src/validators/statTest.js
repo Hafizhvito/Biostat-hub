@@ -2,17 +2,17 @@ import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
 
 const statTestSchema = z.object({
-  name: z.string().trim().min(1, 'Nama uji wajib diisi.'),
-  function: z.string().trim().min(1, 'Fungsi wajib diisi.'),
-  dataType: z.enum(['nominal', 'ordinal', 'interval', 'rasio']),
-  dataDistribution: z.enum(['parametrik', 'non-parametrik']),
-  useCase: z.string().trim().min(1, 'Kapan digunakan wajib diisi.'),
-  spssMenu: z.string().trim().min(1, 'Menu SPSS wajib diisi.'),
-  notes: z.string().default('').transform((value) => value.trim()),
+  title: z.string().trim().min(1, 'Judul wajib diisi.'),
+  description: z.string().default('').transform((value) => value.trim()),
 });
 
 const statTestIdSchema = z.object({
-  id: z.coerce.number().int().positive('ID uji tidak valid.'),
+  id: z.coerce.number().int().positive('ID ringkasan uji tidak valid.'),
+});
+
+const statTestReorderSchema = z.object({
+  id: z.coerce.number().int().positive('ID ringkasan uji tidak valid.'),
+  direction: z.enum(['up', 'down']),
 });
 
 function parseOrThrow(schema, payload) {
@@ -33,4 +33,8 @@ export function validateStatTestUpdate(body) {
 
 export function validateStatTestIdParam(params) {
   return parseOrThrow(statTestIdSchema, params);
+}
+
+export function validateStatTestReorder(body) {
+  return parseOrThrow(statTestReorderSchema, body);
 }

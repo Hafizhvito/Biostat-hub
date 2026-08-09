@@ -12,7 +12,7 @@ export function Design3PageShell({ children, className = "" }: Design3PageShellP
     <div
       className={`relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] flex w-screen flex-1 flex-col bg-d3-sand ${className}`}
     >
-      <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">{children}</div>
+      <div className="site-container flex-1 py-6">{children}</div>
     </div>
   );
 }

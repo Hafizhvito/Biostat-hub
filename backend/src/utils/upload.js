@@ -6,10 +6,12 @@ const uploadsRoot = path.join(process.cwd(), 'uploads');
 
 export const downloadUploadDir = path.join(uploadsRoot, 'downloads');
 export const wizardUploadDir = path.join(uploadsRoot, 'wizard');
+export const statTestUploadDir = path.join(uploadsRoot, 'stat-tests');
 
 export function ensureUploadDirs() {
   fs.mkdirSync(downloadUploadDir, { recursive: true });
   fs.mkdirSync(wizardUploadDir, { recursive: true });
+  fs.mkdirSync(statTestUploadDir, { recursive: true });
 }
 
 function sanitizeBaseName(value) {

@@ -31,7 +31,7 @@ const features = [
   {
     href: "/tabel-uji",
     title: "Tabel Ringkasan Uji",
-    description: "Bandingkan jenis uji statistik dalam satu tabel.",
+    description: "Lihat ringkasan uji statistik beserta pembahasan dan gambar.",
     icon: Table2,
   },
   {

@@ -16,7 +16,7 @@ import {
 import { list as listGlossary, create as createGlossary, update as updateGlossary, remove as removeGlossary } from '../controllers/admin/glossaryController.js';
 import { list as listDownloads, create as createDownload, update as updateDownload, remove as removeDownload, uploadSingle as uploadDownload } from '../controllers/admin/downloadController.js';
 import { list as listWizard, create as createWizard, update as updateWizard, remove as removeWizard, reorder as reorderWizard, uploadSingle as uploadWizard } from '../controllers/admin/wizardController.js';
-import { list as listStatTests, create as createStatTest, update as updateStatTest, remove as removeStatTest } from '../controllers/admin/statTestController.js';
+import { list as listStatTests, create as createStatTest, update as updateStatTest, remove as removeStatTest, reorder as reorderStatTests, uploadSingle as uploadStatTest } from '../controllers/admin/statTestController.js';
 import {
   list as listVideos,
   create as createVideo,
@@ -65,8 +65,9 @@ router.put('/wizard/reorder', reorderWizard);
 router.delete('/wizard/:id', removeWizard);
 
 router.get('/stat-tests', listStatTests);
-router.post('/stat-tests', createStatTest);
-router.put('/stat-tests/:id', updateStatTest);
+router.post('/stat-tests', uploadStatTest, createStatTest);
+router.put('/stat-tests/:id', uploadStatTest, updateStatTest);
+router.put('/stat-tests/reorder', reorderStatTests);
 router.delete('/stat-tests/:id', removeStatTest);
 
 router.get('/videos', listVideos);

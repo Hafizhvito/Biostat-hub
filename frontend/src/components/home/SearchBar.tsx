@@ -78,8 +78,8 @@ export function SearchBar() {
   }
 
   return (
-    <div className="relative mt-6 w-full max-w-xl">
-      <form onSubmit={handleSubmit} className="flex gap-2">
+    <div className="relative mt-6 w-full max-w-2xl">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
@@ -97,7 +97,7 @@ export function SearchBar() {
         </div>
         <button
           type="submit"
-          className="rounded-xl bg-brand-warm px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+          className="w-full rounded-xl bg-brand-warm px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-navy sm:w-auto"
         >
           Cari
         </button>

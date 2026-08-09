@@ -36,7 +36,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">{children}</main>
+        <main className="site-container flex-1 py-6">{children}</main>
         <SiteFooter />
       </body>
     </html>
@@ -61,7 +61,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <Design3LayoutEffect />
         <SiteHeader />
-        <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6">{children}</main>
+        <main className="site-container flex flex-1 flex-col py-6">{children}</main>
         <SiteFooter />
       </body>
     </html>

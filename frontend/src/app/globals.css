@@ -38,6 +38,10 @@ body {
   @apply bg-brand-bg-light text-gray-800 antialiased;
 }
 
+.site-container {
+  @apply mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 xl:px-10;
+}
+
 /* Design 3 — hilangkan gap putih antara konten dan footer */
 body.design-3 {
   @apply bg-d3-sand;
