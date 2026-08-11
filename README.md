@@ -1,62 +1,90 @@
 ﻿# Biostat Hub
 
-Platform pembelajaran biostatistik & SPSS (video + kuis). Monorepo:
-- `backend/` — Node.js + Express API (port `3001`)
-- `frontend/` — Next.js (port `3000`)
+Platform pembelajaran mandiri **Biostatistik & SPSS** — materi video, kuis interaktif, dan alat bantu statistik. Konten dikelola sepenuhnya lewat panel admin tanpa perlu deploy ulang.
 
-**Dokumentasi untuk developer:** lihat [docs/PANDUAN-DEVELOPER.md](docs/PANDUAN-DEVELOPER.md) — arsitektur, struktur folder, API, dan penjelasan tiap file.
+## Fitur
 
-**Pertanyaan untuk klien (pengisian konten & launch):** [docs/DAFTAR-PERTANYAAN-KLIEN.md](docs/DAFTAR-PERTANYAAN-KLIEN.md)
+| Area | Keterangan |
+|------|------------|
+| **Materi** | Topik video YouTube dengan filter level (dasar / menengah / lanjut) |
+| **Kuis** | Soal pilihan ganda per video, dengan dukungan gambar |
+| **Glosarium** | Kamus istilah biostatistik yang bisa dicari |
+| **Unduhan** | File pendukung (PDF, template, panduan) |
+| **Kalkulator** | Beberapa link kalkulator eksternal (atur dari admin) |
+| **Wizard Uji** | Flowchart pemilihan uji statistik + zoom |
+| **Tabel Ringkasan Uji** | Ringkasan uji statistik beserta gambar & pembahasan |
+| **Admin** | CRUD konten, pengaturan beranda, upload file & gambar |
 
-**Estimasi biaya hosting (untuk klien):** [docs/ESTIMASI-BIAYA-HOSTING.md](docs/ESTIMASI-BIAYA-HOSTING.md)
+## Struktur Project
 
-## Prerequisites
+```
+Biostat-Hub/
+├── backend/    # Node.js + Express API  →  http://localhost:3001
+├── frontend/   # Next.js               →  http://localhost:3000
+└── docs/       # Panduan developer & deploy
+```
 
-- Node.js 20+ and npm
+## Prasyarat
 
-## Backend Setup (`backend`, port 3001)
+- Node.js 20+
+- npm
+
+## Menjalankan di Lokal
+
+Buka **dua terminal** — backend dulu, lalu frontend.
+
+### 1. Backend (`backend/`)
 
 ```bash
 cd backend
 npm install
-# macOS/Linux
-cp .env.example .env
-# Windows PowerShell
-copy .env.example .env
+cp .env.example .env          # Windows: copy .env.example .env
 npm run db:migrate
 npm run db:seed
 npm run dev
 ```
 
-Backend runs at [http://localhost:3001](http://localhost:3001).
+Backend berjalan di [http://localhost:3001](http://localhost:3001).
 
-## Frontend Setup (`frontend`, port 3000)
+### 2. Frontend (`frontend/`)
 
 ```bash
 cd frontend
 npm install
-# macOS/Linux
-cp .env.local.example .env.local
-# Windows PowerShell
-copy .env.local.example .env.local
 npm run dev
 ```
 
-Frontend runs at [http://localhost:3000](http://localhost:3000).
+Frontend berjalan di [http://localhost:3000](http://localhost:3000).
 
-## Default Admin Credentials
+> Frontend otomatis terhubung ke `http://localhost:3001/api`. Untuk environment lain, buat `.env.local` dengan `NEXT_PUBLIC_API_URL=<url-backend>/api`.
 
-Default admin values come from your backend `.env`:
-- Username: `ADMIN_USERNAME` (in `.env.example`, default is `admin`)
-- Password: `ADMIN_PASSWORD` (set your own secure value in `.env`)
+## Login Admin
 
-## Deployment Notes
+Kredensial di `backend/.env`:
 
-- **Panduan lengkap VPS (step-by-step):** [docs/PANDUAN-DEPLOY-VPS.md](docs/PANDUAN-DEPLOY-VPS.md)
-- **Domain, VPS & onboarding klien non-IT:** [docs/PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md](docs/PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md)
-- Frontend: deploy to Vercel or Netlify
-- Backend: deploy to a VPS (or any Node-capable server) and configure environment variables + database access
+| Variabel | Keterangan |
+|----------|------------|
+| `ADMIN_USERNAME` | Username admin (default: `admin`) |
+| `ADMIN_PASSWORD` | Password — **wajib diisi** sebelum `db:seed` |
 
-## Notes
+Panel admin: [http://localhost:3000/admin](http://localhost:3000/admin)
 
-- Do not commit `.env` or `.env.local` files.
+## Deploy
+
+| Bagian | Rekomendasi |
+|--------|-------------|
+| Frontend | Vercel / Netlify — set `NEXT_PUBLIC_API_URL` |
+| Backend | VPS / server Node.js — set `CORS_ORIGIN` ke domain frontend |
+
+Panduan lengkap: [docs/PANDUAN-DEPLOY-VPS.md](docs/PANDUAN-DEPLOY-VPS.md)
+
+## Dokumentasi
+
+- [Panduan Developer](docs/PANDUAN-DEVELOPER.md) — arsitektur, struktur folder, API, dan penjelasan tiap file
+- [Panduan Deploy VPS](docs/PANDUAN-DEPLOY-VPS.md) — step-by-step deployment
+- [Domain & Onboarding](docs/PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md) — setup domain untuk klien non-IT
+
+## Catatan
+
+- Jangan commit file `.env` atau `.env.local`.
+- Upload file disimpan di `backend/uploads/` (stat-tests, wizard, downloads).

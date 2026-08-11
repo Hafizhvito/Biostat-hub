@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { api } from "@/lib/api";
+import { stripHtml } from "@/lib/rich-text";
 
 interface SectionItem {
   id: number;
@@ -73,7 +74,7 @@ export default function MateriPage() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-lg font-semibold text-brand-navy group-hover:text-brand-warm">{section.name}</h2>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-700">{section.description || "Deskripsi materi belum tersedia."}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-700">{stripHtml(section.description ?? "") || "Deskripsi materi belum tersedia."}</p>
                 </div>
                 {section.level ? (
                   <span className="rounded-full bg-brand-peach px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-warm">

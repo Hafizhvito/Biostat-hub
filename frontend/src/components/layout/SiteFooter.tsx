@@ -3,7 +3,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { BookOpen, GraduationCap } from "lucide-react";
+import { GraduationCap, Mail } from "lucide-react";
+
+const CONTACT_EMAIL = "contoh@gmail.com";
 
 function isPublicPath(pathname: string) {
   return !pathname.startsWith("/admin");
@@ -20,8 +22,17 @@ function SiteFooterDesign1() {
           <GraduationCap className="h-4 w-4 shrink-0 text-brand-warm" />
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
         </p>
+        <p className="mt-4 flex items-center justify-center gap-2 text-center text-sm text-gray-600">
+          <Mail className="h-4 w-4 shrink-0 text-brand-warm" />
+          <span>
+            Hubungi dosen:{" "}
+            <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-brand-warm hover:underline">
+              {CONTACT_EMAIL}
+            </a>
+          </span>
+        </p>
         <p className="mt-4 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} FK YARSI - Biostat Hub
+          © {new Date().getFullYear()} Biostat Hub
         </p>
       </div>
     </footer>

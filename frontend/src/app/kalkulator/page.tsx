@@ -1,17 +1,16 @@
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 import { api } from "@/lib/api";
 
-interface SettingsResponse {
-  calculatorUrl: string;
+interface CalculatorLinkItem {
+  id: number;
+  title: string;
+  url: string;
 }
 
 export default async function KalkulatorPage() {
-  const settings = await api<SettingsResponse>("/settings/calculator-url").catch(() => ({
-    calculatorUrl: "",
-  }));
-
-  const url = settings.calculatorUrl.trim();
+  const links = await api<CalculatorLinkItem[]>("/calculator-links").catch(() => []);
 
   return (
     <div className="space-y-6">
@@ -23,24 +22,28 @@ export default async function KalkulatorPage() {
         </p>
       </header>
 
-      {url ? (
-        <div className="space-y-4 rounded-2xl border border-brand-peach bg-white p-6 shadow-sm">
-          <p className="text-sm text-gray-600">
-            Klik tombol berikut untuk membuka kalkulator sampel pada tab baru.
-          </p>
-          <a
-            href={url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex rounded-xl bg-brand-warm px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
-          >
-            Buka Kalkulator Sampel
-          </a>
-          <p className="text-xs text-gray-500">URL aktif: {url}</p>
-        </div>
-      ) : (
+      {links.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
           Fitur ini sedang disiapkan. Silakan cek lagi nanti.
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {links.map((link) => (
+            <article key={link.id} className="rounded-2xl border border-brand-peach bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-brand-navy">{link.title}</h2>
+              <p className="mt-2 text-sm text-gray-600">Buka kalkulator ini pada tab baru.</p>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-warm px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+              >
+                Buka {link.title}
+                <ExternalLink className="h-4 w-4" />
+              </a>
+              <p className="mt-3 text-xs text-gray-500">URL: {link.url}</p>
+            </article>
+          ))}
         </div>
       )}
 
@@ -50,11 +53,11 @@ export default async function KalkulatorPage() {
           Tentukan parameter penelitian, buka kalkulator, lalu ikuti panduan dari layanan eksternal tersebut.
         </p>
         <p className="mt-2 leading-relaxed">
-          Kembali ke {" "}
+          Kembali ke{" "}
           <Link href="/" className="font-medium text-brand-warm hover:underline">
             beranda
-          </Link>
-          {" "}untuk memilih materi atau fitur lain.
+          </Link>{" "}
+          untuk memilih materi atau fitur lain.
         </p>
       </div>
     </div>
