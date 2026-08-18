@@ -29,7 +29,7 @@ interface SectionsResponse {
 }
 
 const HERO_DESCRIPTION =
-  "Platform pembelajaran mandiri Biostatistik dan Pengolahan Data Penelitian Kesehatan dengan SPSS";
+  "Platform pembelajaran mandiri Riset dan Pengolahan Data Penelitian Kesehatan dengan SPSS";
 
 /* ==========================================================================
  * DESIGN 1 (aktif)
@@ -44,7 +44,7 @@ export default async function HomePage() {
   return (
     <div className="space-y-8">
       <HeroSection
-        title={settings.hero_title || "Biostat Hub"}
+        title={settings.hero_title || "Riset Hub"}
         description={settings.hero_description || HERO_DESCRIPTION}
         totalSections={sectionResponse.stats.total_sections}
         totalVideos={sectionResponse.stats.total_videos}
@@ -86,7 +86,7 @@ export default async function HomePage() {
     <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] -mt-6 w-screen bg-white">
       <div className="mx-auto w-full max-w-6xl px-4 pb-4 pt-2">
         <HeroSection
-          title={settings.hero_title || "Biostat Hub"}
+          title={settings.hero_title || "Riset Hub"}
           description={settings.hero_description || HERO_DESCRIPTION}
           totalSections={sectionResponse.stats.total_sections}
           totalVideos={sectionResponse.stats.total_videos}
@@ -128,7 +128,7 @@ export default async function HomePage() {
   return (
     <Design3PageShell className="pb-4 pt-2">
       <HeroSection
-        title={settings.hero_title || "Biostat Hub"}
+        title={settings.hero_title || "Riset Hub"}
         description={settings.hero_description || HERO_DESCRIPTION}
         totalSections={sectionResponse.stats.total_sections}
         totalVideos={sectionResponse.stats.total_videos}

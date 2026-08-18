@@ -27,14 +27,15 @@ async function main() {
   await prisma.siteSettings.upsert({
     where: { id: 1 },
     update: {
+      heroTitle: 'Riset Hub',
       heroDescription:
-        'Platform pembelajaran mandiri Biostatistik dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
+        'Platform pembelajaran mandiri Riset dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
     },
     create: {
       id: 1,
-      heroTitle: 'Biostat Hub',
+      heroTitle: 'Riset Hub',
       heroDescription:
-        'Platform pembelajaran mandiri Biostatistik dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
+        'Platform pembelajaran mandiri Riset dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
     },
   });
 

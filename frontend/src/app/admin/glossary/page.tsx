@@ -116,7 +116,7 @@ export default function AdminGlossaryPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold text-brand-navy">Kelola Glosarium</h1>
-        <p className="text-sm text-gray-600">Tambah, ubah, dan hapus istilah biostatistik.</p>
+        <p className="text-sm text-gray-600">Tambah, ubah, dan hapus istilah riset.</p>
       </div>
 
       <Card>

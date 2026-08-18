@@ -32,7 +32,7 @@ function SiteFooterDesign1() {
           </span>
         </p>
         <p className="mt-4 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Biostat Hub
+          © {new Date().getFullYear()} Riset Hub
         </p>
       </div>
     </footer>
@@ -51,7 +51,7 @@ function SiteFooterDesign2() {
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
         </p>
         <p className="mt-4 text-center text-xs text-gray-400">
-          © {new Date().getFullYear()} FK YARSI - Biostat Hub
+          © {new Date().getFullYear()} FK YARSI - Riset Hub
         </p>
       </div>
     </footer>
@@ -71,7 +71,7 @@ function SiteFooterDesign3() {
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
         </p>
         <p className="mt-4 text-center text-xs text-d3-muted/70">
-          © {new Date().getFullYear()} FK YARSI - Biostat Hub
+          © {new Date().getFullYear()} FK YARSI - Riset Hub
         </p>
       </div>
     </footer>

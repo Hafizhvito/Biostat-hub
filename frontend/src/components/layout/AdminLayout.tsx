@@ -4,7 +4,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Calculator, Download, LayoutDashboard, LibraryBig, Settings, Table2, Video, Workflow } from "lucide-react";
+import { BookOpen, Calculator, Download, LayoutDashboard, LibraryBig, Settings, Video, Workflow } from "lucide-react";
 import { type ReactNode } from "react";
 
 interface AdminLayoutProps {
@@ -46,11 +46,6 @@ const adminLinks = [
     href: "/admin/glossary",
     label: "Kelola Glosarium",
     icon: LibraryBig,
-  },
-  {
-    href: "/admin/stat-tests",
-    label: "Kelola Tabel Uji",
-    icon: Table2,
   },
   {
     href: "/admin/tools",

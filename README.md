@@ -6,13 +6,12 @@ Platform pembelajaran mandiri **Biostatistik & SPSS** — materi video, kuis int
 
 | Area | Keterangan |
 |------|------------|
-| **Materi** | Topik video YouTube dengan filter level (dasar / menengah / lanjut) |
+| **Materi** | Topik video YouTube per section |
 | **Kuis** | Soal pilihan ganda per video, dengan dukungan gambar |
 | **Glosarium** | Kamus istilah biostatistik yang bisa dicari |
 | **Unduhan** | File pendukung (PDF, template, panduan) |
 | **Kalkulator** | Beberapa link kalkulator eksternal (atur dari admin) |
 | **Wizard Uji** | Flowchart pemilihan uji statistik + zoom |
-| **Tabel Ringkasan Uji** | Ringkasan uji statistik beserta gambar & pembahasan |
 | **Admin** | CRUD konten, pengaturan beranda, upload file & gambar |
 
 ## Struktur Project
@@ -87,4 +86,4 @@ Panduan lengkap: [docs/PANDUAN-DEPLOY-VPS.md](docs/PANDUAN-DEPLOY-VPS.md)
 ## Catatan
 
 - Jangan commit file `.env` atau `.env.local`.
-- Upload file disimpan di `backend/uploads/` (stat-tests, wizard, downloads).
+- Upload file disimpan di `backend/uploads/` (wizard, downloads).

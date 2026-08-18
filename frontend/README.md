@@ -1,4 +1,4 @@
-# Frontend — Biostat Hub
+# Frontend — Riset Hub
 
 Aplikasi Next.js untuk halaman publik dan panel admin.
 

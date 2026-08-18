@@ -13,7 +13,6 @@ model Section {
   id          Int      @id @default(autoincrement())
   name        String
   description String   @default("")
-  level       SectionLevel?
   sortOrder   Int      @default(0) @map("sort_order")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -126,17 +125,6 @@ model WizardImage {
   @@map("wizard_images")
 }
 
-model StatTest {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String   @default("")
-  filename    String
-  sortOrder   Int      @default(0) @map("order")
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  @@map("stat_tests")
-}
-
 model CalculatorLink {
   id        Int      @id @default(autoincrement())
   title     String
@@ -145,10 +133,4 @@ model CalculatorLink {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("calculator_links")
-}
-
-enum SectionLevel {
-  dasar
-  menengah
-  lanjut
 }

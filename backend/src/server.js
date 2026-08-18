@@ -1,5 +1,5 @@
 /**
- * Entry point backend Biostat Hub.
+ * Entry point backend Riset Hub.
  * Menjalankan server Express di port dari env (default 3001).
  */
 

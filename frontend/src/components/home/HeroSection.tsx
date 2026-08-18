@@ -27,7 +27,7 @@ export function HeroSection({
     <section className="mb-8 overflow-hidden rounded-2xl bg-brand-powder shadow-sm">
       <div className="px-6 py-10 md:px-8 md:py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-lemon">
-          Biostatistika Terstruktur
+          Riset Terstruktur
         </p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand-warm md:text-4xl">{title}</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-700 md:text-base">{description}</p>
@@ -93,7 +93,7 @@ export function HeroSection({
     <section className="mb-6 grid gap-0 overflow-hidden rounded-2xl md:grid-cols-2">
       <div className="bg-d3-plum-dark px-6 py-10 text-white md:px-8 md:py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-d3-coral-soft">
-          Biostatistika Terstruktur
+          Riset Terstruktur
         </p>
         <h1 className="mt-3 font-serif text-3xl font-semibold tracking-tight md:text-4xl">{title}</h1>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-d3-sand/90 md:text-base">{description}</p>

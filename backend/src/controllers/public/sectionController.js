@@ -15,9 +15,7 @@ function parseId(value) {
 
 export async function list(req, res, next) {
   try {
-    const level = String(req.query.level || '').trim();
     const sections = await prisma.section.findMany({
-      where: level && level !== 'all' ? { level } : undefined,
       orderBy: { sortOrder: 'asc' },
       include: {
         _count: {

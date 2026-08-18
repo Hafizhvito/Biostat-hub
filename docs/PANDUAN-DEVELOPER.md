@@ -1,6 +1,6 @@
-# Panduan Developer — Biostat Hub
+# Panduan Developer — Riset Hub
 
-Platform pembelajaran biostatistik/SPSS untuk Fakultas Kedokteran YARSI.  
+Platform pembelajaran riset/SPSS.  
 Monorepo: **Next.js (frontend)** + **Express + Prisma + SQLite (backend)**.
 
 ## Arsitektur singkat

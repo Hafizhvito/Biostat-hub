@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookText, Calculator, Download, LibraryBig, Table2, Workflow } from "lucide-react";
+import { BookText, Calculator, Download, Workflow } from "lucide-react";
 
 import { Card } from "@/components/ui/Card";
 
@@ -27,18 +27,6 @@ const features = [
     title: "Glosarium Istilah",
     description: "Kamus istilah biostatistik yang bisa dicari cepat.",
     icon: BookText,
-  },
-  {
-    href: "/tabel-uji",
-    title: "Tabel Ringkasan Uji",
-    description: "Lihat ringkasan uji statistik beserta pembahasan dan gambar.",
-    icon: Table2,
-  },
-  {
-    href: "/materi",
-    title: "Filter Level Materi",
-    description: "Jelajahi materi berdasarkan level pembelajaran.",
-    icon: LibraryBig,
   },
 ] as const;
 

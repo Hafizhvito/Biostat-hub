@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Biostat Hub",
-  description: "Portal pembelajaran biostatistika FK YARSI",
+  title: "Riset Hub",
+  description: "Portal pembelajaran riset dan SPSS",
 };
 
 /* ==========================================================================

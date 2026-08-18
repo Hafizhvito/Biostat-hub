@@ -12,7 +12,6 @@ import { getById as getVideoById } from '../controllers/public/videoController.j
 import { list as listGlossary, getById as getGlossaryById } from '../controllers/public/glossaryController.js';
 import { list as listDownloads, downloadFile } from '../controllers/public/downloadController.js';
 import { list as listWizard } from '../controllers/public/wizardController.js';
-import { list as listStatTests } from '../controllers/public/statTestController.js';
 import { list as listCalculatorLinks } from '../controllers/public/calculatorLinkController.js';
 import {
   list as listQuizzes,
@@ -36,7 +35,6 @@ router.get('/glossary/:id', getGlossaryById);
 router.get('/downloads', listDownloads);
 router.get('/downloads/:id/file', downloadFile);
 router.get('/wizard', listWizard);
-router.get('/stat-tests', listStatTests);
 router.get('/calculator-links', listCalculatorLinks);
 
 export default router;

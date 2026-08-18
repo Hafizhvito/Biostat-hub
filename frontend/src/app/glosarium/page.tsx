@@ -48,7 +48,7 @@ export default function GlosariumPage() {
     <div className="space-y-6">
       <header className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-lemon">Glosarium</p>
-        <h1 className="text-3xl font-bold text-brand-navy">Kamus Istilah Biostatistik</h1>
+        <h1 className="text-3xl font-bold text-brand-navy">Kamus Istilah Riset</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-gray-600">
           Cari istilah secara cepat, lalu jelajahi per huruf awal.
         </p>

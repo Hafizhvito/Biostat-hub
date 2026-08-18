@@ -42,7 +42,6 @@ export async function create(req, res, next) {
       data: {
         name: payload.name,
         description: payload.description,
-        level: payload.level ?? null,
         sortOrder: nextSortOrder,
       },
     });
@@ -63,7 +62,6 @@ export async function update(req, res, next) {
       data: {
         name: payload.name,
         description: payload.description,
-        level: payload.level ?? null,
       },
     });
 
