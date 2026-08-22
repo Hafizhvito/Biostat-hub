@@ -1,26 +1,43 @@
-import path from 'path';
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
 import { isNotFoundError } from '../../utils/prismaErrors.js';
 import {
   downloadUploadDir,
   removeStoredFile,
-  toPublicUploadUrl,
   createUploader,
 } from '../../utils/upload.js';
 import { validateDownloadIdParam, validateDownloadMeta } from '../../validators/download.js';
 
 const upload = createUploader(downloadUploadDir, {
   maxFileSize: 100 * 1024 * 1024,
+  allowedExtensions: [
+    '.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.csv', '.txt',
+    '.jpg', '.jpeg', '.png', '.webp', '.gif', '.zip',
+  ],
+  allowedMimeTypes: [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/csv',
+    'text/plain',
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/gif',
+    'application/zip',
+    'application/x-zip-compressed',
+  ],
 });
 
 export const uploadSingle = upload.single('file');
 
 function toResponse(download) {
-  return {
-    ...download,
-    fileUrl: toPublicUploadUrl('downloads', download.filename),
-  };
+  const { filename, ...response } = download;
+  return response;
 }
 
 export async function list(req, res, next) {
@@ -36,6 +53,8 @@ export async function list(req, res, next) {
 }
 
 export async function create(req, res, next) {
+  let savedToDatabase = false;
+
   try {
     if (!req.file) {
       throw createError(422, 'File wajib diunggah.');
@@ -54,14 +73,22 @@ export async function create(req, res, next) {
         fileSize,
       },
     });
+    savedToDatabase = true;
 
     res.status(201).json(toResponse(download));
   } catch (error) {
+    if (req.file && !savedToDatabase) {
+      await removeStoredFile(downloadUploadDir, req.file.filename).catch((cleanupError) => {
+        console.error('Gagal membersihkan file upload:', cleanupError);
+      });
+    }
     next(error);
   }
 }
 
 export async function update(req, res, next) {
+  let savedToDatabase = false;
+
   try {
     const { id } = validateDownloadIdParam(req.params);
     const payload = validateDownloadMeta(req.body ?? {});
@@ -85,13 +112,21 @@ export async function update(req, res, next) {
       where: { id },
       data,
     });
+    savedToDatabase = true;
 
     if (req.file) {
-      await removeStoredFile(downloadUploadDir, current.filename);
+      await removeStoredFile(downloadUploadDir, current.filename).catch((cleanupError) => {
+        console.error('Gagal menghapus file lama:', cleanupError);
+      });
     }
 
     res.json(toResponse(download));
   } catch (error) {
+    if (req.file && !savedToDatabase) {
+      await removeStoredFile(downloadUploadDir, req.file.filename).catch((cleanupError) => {
+        console.error('Gagal membersihkan file pengganti:', cleanupError);
+      });
+    }
     if (isNotFoundError(error)) {
       return next(createError(404, 'File unduhan tidak ditemukan.'));
     }
@@ -108,7 +143,9 @@ export async function remove(req, res, next) {
     }
 
     await prisma.download.delete({ where: { id } });
-    await removeStoredFile(downloadUploadDir, download.filename);
+    await removeStoredFile(downloadUploadDir, download.filename).catch((cleanupError) => {
+      console.error('Gagal menghapus file unduhan:', cleanupError);
+    });
     res.status(204).send();
   } catch (error) {
     next(error);

@@ -1,21 +1,41 @@
-﻿# Dependensi & build
+# Dependensi
 node_modules/
+
+# Hasil build, coverage, dan TypeScript
 dist/
+build/
 .next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Log
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# File sistem dan editor
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
 
 # Rahasia & environment (JANGAN commit file ini)
 .env
-.env.local
-.env.*.local
-backend/.env
-frontend/.env.local
+.env.*
 
-# Template env boleh di-commit (tanpa password asli)
-!.env.example
+# Template environment boleh di-commit (tanpa password asli)
 !**/.env.example
 !**/.env.local.example
 
 # Database lokal
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
+
+# File runtime hasil upload admin
+backend/uploads/

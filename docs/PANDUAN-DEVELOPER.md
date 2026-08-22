@@ -1,164 +1,122 @@
 # Panduan Developer — Riset Hub
 
-Platform pembelajaran riset/SPSS.  
-Monorepo: **Next.js (frontend)** + **Express + Prisma + SQLite (backend)**.
+Riset Hub adalah monorepo dengan frontend Next.js dan REST API Express. Data aplikasi disimpan di MySQL melalui Prisma, sedangkan file upload disimpan pada filesystem yang ditentukan oleh `UPLOAD_DIR`.
 
-## Arsitektur singkat
+## Arsitektur
 
-```
+```text
 Browser
-   │
-   ├─► localhost:3000  →  frontend/   (halaman publik + admin)
-   │
-   └─► localhost:3001  →  backend/    (REST API /api/...)
-                              │
-                              └─► SQLite (prisma/dev.db)
+├── frontend Next.js (:3000)
+└── backend Express (:3001/api)
+    ├── Prisma → MySQL
+    └── UPLOAD_DIR → file unduhan dan gambar wizard
 ```
 
-- **Publik:** tanpa login — baca materi, video, kerjakan kuis.
-- **Admin:** JWT di `localStorage` — CRUD materi, video, kuis, teks beranda.
-- **Konten:** 100% dari database; ubah lewat admin tanpa deploy ulang (kecuali ubah kode).
+- Route publik dapat dibaca tanpa login.
+- Route `/api/admin/*`, selain login, dilindungi JWT.
+- Konten dikelola melalui panel admin tanpa deploy ulang.
+- File unduhan hanya dikirim melalui endpoint download agar counter tercatat.
+- Gambar wizard disajikan dari `/uploads/wizard`.
 
 ## Menjalankan project
 
-Lihat [README.md](../README.md). Ringkas:
+Nyalakan MySQL Laragon terlebih dahulu, kemudian:
 
 ```bash
 # Terminal 1
-cd backend && npm run dev    # :3001
+cd backend
+npm run dev
 
 # Terminal 2
-cd frontend && npm run dev   # :3000
+cd frontend
+npm run dev
 ```
 
-Login admin: kredensial di `backend/.env` (`ADMIN_USERNAME`, `ADMIN_PASSWORD`).
+Konfigurasi lokal berada di `backend/.env` dan `frontend/.env.local`. Kedua file tersebut tidak boleh masuk Git.
 
----
+## Struktur backend
 
-## Struktur folder
+- `src/server.js`: entry point server.
+- `src/app.js`: middleware Express, rate limiter, static wizard, dan routes.
+- `src/config/env.js`: environment serta validasi production.
+- `src/lib/prisma.js`: singleton Prisma Client.
+- `src/routes/public.js`: endpoint publik.
+- `src/routes/admin.js`: login dan endpoint admin.
+- `src/controllers/`: logika request publik/admin.
+- `src/validators/`: validasi payload dengan Zod.
+- `src/utils/upload.js`: lokasi, validasi, penamaan, dan penghapusan upload.
+- `prisma/schema.prisma`: schema MySQL.
+- `prisma/migrations/`: histori migration MySQL aktif.
+- `prisma/seed.js`: akun admin dan pengaturan awal.
 
-### `backend/`
+## Struktur frontend
 
-| Path | Fungsi |
-|------|--------|
-| `src/server.js` | Entry point — bind port & jalankan app |
-| `src/app.js` | Konfigurasi Express (CORS, JSON, routes, error handler) |
-| `src/config/env.js` | Variabel lingkungan (port, JWT, CORS) |
-| `src/lib/prisma.js` | Instance Prisma Client (akses database) |
-| `src/routes/index.js` | Router utama `/api` |
-| `src/routes/public.js` | Route API **tanpa auth** |
-| `src/routes/admin.js` | Route API **admin** (login + JWT) |
-| `src/middleware/auth.js` | `requireAdmin` — validasi Bearer token |
-| `src/middleware/errorHandler.js` | Response error JSON + helper `createError` |
-| `src/controllers/public/*` | Logic baca data untuk pengunjung |
-| `src/controllers/admin/*` | Logic CRUD untuk panel admin |
-| `src/validators/*` | Validasi input (Zod) sebelum simpan |
-| `src/services/quizGrading.js` | Hitung skor kuis (unit tested) |
-| `src/utils/youtube.js` | Ekstrak ID video dari URL YouTube |
-| `prisma/schema.prisma` | Skema database |
-| `prisma/seed.js` | Data awal: akun admin + pengaturan beranda |
-| `scripts/reset-admin-password.js` | Reset password admin manual |
+- `src/app/`: halaman publik dan admin.
+- `src/components/`: layout, editor, fitur, dan komponen UI.
+- `src/lib/api.ts`: URL API serta wrapper `fetch`.
+- `src/lib/auth.ts`: pengelolaan token admin di browser.
+- `next.config.ts`: rewrite upload wizard dan security headers.
 
-### `frontend/`
+## Model utama
 
-| Path | Fungsi |
-|------|--------|
-| `src/app/page.tsx` | Beranda — hero + grid materi |
-| `src/app/section/[id]/page.tsx` | Daftar video per materi |
-| `src/app/video/[id]/page.tsx` | Pemutar YouTube + link kuis |
-| `src/app/quiz/[videoId]/page.tsx` | Halaman kuis + hasil |
-| `src/app/admin/*` | Panel admin (login, CRUD, pengaturan) |
-| `src/lib/api.ts` | Wrapper `fetch` ke backend |
-| `src/lib/auth.ts` | Simpan/baca JWT admin di localStorage |
-| `src/lib/youtube.ts` | Parser URL YouTube (frontend) |
-| `src/lib/image.ts` | Konversi link Google Drive → URL gambar |
-| `src/components/layout/*` | Header, footer, layout admin |
-| `src/components/ui/*` | Komponen form & tampilan dasar |
-| `src/components/home/*` | Hero & grid materi |
-| `src/components/quiz/*` | Form kuis, hasil, gambar + lightbox zoom |
-| `src/components/admin/*` | Tombol urutan ↑↓ |
+- `Section` dan `Video`: materi serta video YouTube.
+- `Quiz`, `QuizQuestion`, dan `QuizOption`: kuis pilihan ganda.
+- `AdminUser`: akun administrator.
+- `SiteSettings`: teks beranda dan URL kalkulator.
+- `Glossary`: istilah dan definisi.
+- `Download`: metadata file unduhan dan counter.
+- `WizardImage`: metadata gambar wizard.
+- `CalculatorLink`: daftar kalkulator eksternal.
 
----
+## Perintah database
 
-## Model database (inti)
+Development, ketika schema berubah:
 
-| Model | Keterangan |
-|-------|------------|
-| `Section` | Materi/topik (nama, deskripsi, urutan) |
-| `Video` | Video YouTube per materi |
-| `Quiz` | Satu kuis per video (opsional) |
-| `QuizQuestion` | Soal (+ `imageUrl` opsional, link eksternal) |
-| `QuizOption` | Pilihan jawaban + flag `isCorrect` |
-| `SiteSettings` | Judul & deskripsi hero beranda (1 baris) |
-| `AdminUser` | Satu akun admin |
-
-**Aturan bisnis penting:**
-- Hapus materi ditolak jika masih ada video di dalamnya.
-- Hapus video ikut hapus kuis terkait.
-- `is_correct` tidak dikirim ke klien sebelum submit kuis.
-
----
-
-## API endpoints
-
-### Publik (`/api/...`)
-
-| Method | Path | Fungsi |
-|--------|------|--------|
-| GET | `/settings` | Teks hero beranda |
-| GET | `/sections` | Semua materi + statistik |
-| GET | `/sections/:id` | Detail materi + video |
-| GET | `/videos/:id` | Detail video |
-| GET | `/videos/:id/quiz` | Soal kuis (tanpa jawaban benar) |
-| POST | `/videos/:id/quiz/submit` | Kirim jawaban → skor |
-
-### Admin (`/api/admin/...`, header `Authorization: Bearer <token>`)
-
-| Method | Path | Fungsi |
-|--------|------|--------|
-| POST | `/login` | Dapatkan JWT |
-| GET/PUT | `/settings` | Pengaturan beranda |
-| CRUD | `/sections` | Kelola materi |
-| PATCH | `/sections/:id/reorder` | Urutan materi ↑↓ |
-| CRUD | `/videos` | Kelola video |
-| PATCH | `/videos/:id/reorder` | Urutan video ↑↓ |
-| GET/PUT/DELETE | `/videos/:videoId/quiz` | Kelola kuis |
-
----
-
-## Alur halaman publik
-
-```
-/  →  /section/[id]  →  /video/[id]  →  /quiz/[videoId]
+```bash
+npx prisma migrate dev --name nama_perubahan
 ```
 
-Empty state ditangani di setiap level (0 materi, 0 video, tidak ada kuis).
+Production:
 
----
+```bash
+npx prisma migrate deploy
+npx prisma generate
+```
 
-## Gambar di soal kuis
+Jangan menjalankan `migrate reset` pada database production.
 
-- Admin paste **link eksternal** (Google Drive, ImgBB direct link, dll.).
-- `lib/image.ts` mencoba beberapa format URL Drive.
-- `QuizQuestionImage` menampilkan gambar + lightbox zoom (klik untuk perbesar).
-- **ImgBB direct link** paling andal; Drive kadang tidak bisa di-embed.
+## Upload
 
----
+Format unduhan yang didukung: PDF, Word, PowerPoint, Excel, CSV, TXT, JPG/JPEG, PNG, WebP, GIF, dan ZIP. Batas aplikasi adalah 100 MB; batas cPanel/web server dapat lebih kecil.
 
-## Deploy (rencana)
+Pada production, gunakan path absolut di luar folder source bila memungkinkan:
 
-| Bagian | Hosting |
-|--------|---------|
-| Frontend | Vercel / Netlify — set `NEXT_PUBLIC_API_URL` |
-| Backend | VPS — set `CORS_ORIGIN` ke domain frontend |
+```env
+UPLOAD_DIR="/home/username/biostat-storage"
+```
 
----
+Folder upload harus writable, persisten setelah redeploy, dan masuk backup.
 
-## Spesifikasi & rencana
+## Pemeriksaan
 
-- Desain: `docs/superpowers/specs/2026-06-30-biostat-hub-design.md`
-- Rencana implementasi: `docs/superpowers/plans/2026-06-30-biostat-hub.md`
+```bash
+cd backend
+npm test
+npx prisma validate
 
-## Backlog (belum dibuat)
+cd ../frontend
+npm run lint
+npm run build
+```
 
-- Search di beranda (opsional, saat konten > ~20 video)
+Health check backend tersedia di `/api/health`.
+
+## Deployment Nimbus Plus
+
+- Gunakan Node.js 20.9 atau lebih baru.
+- Jalankan frontend dan backend sebagai aplikasi Node.js terpisah.
+- Gunakan domain utama untuk frontend dan subdomain `api` untuk backend.
+- Buat database/user MySQL melalui cPanel dan berikan privilege yang diperlukan.
+- Simpan environment production hanya di cPanel atau file rahasia server.
+- Jalankan `prisma migrate deploy`, seed satu kali, lalu uji login, CRUD, upload, download, restart, dan persistence.
+- Aktifkan HTTPS, backup MySQL, dan backup `UPLOAD_DIR` sebelum go-live.

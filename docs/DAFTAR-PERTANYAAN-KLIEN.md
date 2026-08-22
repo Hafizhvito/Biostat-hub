@@ -1,7 +1,7 @@
-# Daftar Pertanyaan untuk Klien — Biostat Hub
+# Daftar Pertanyaan untuk Klien — Riset Hub
 
 **Klien:** Bu Rifqatussaadah  
-**Platform:** Biostat Hub (video pembelajaran biostatistik & SPSS)  
+**Platform:** Riset Hub (video pembelajaran riset, biostatistik & SPSS)
 **Tujuan dokumen:** Kumpulkan semua kebutuhan sekaligus agar pengisian konten & peluncuran lancar.
 
 > **Cara pakai:** Bawa dokumen ini saat meeting / kirim ke klien. Isi kolom **Jawaban** atau centang opsi. Yang sudah pasti bisa dilewati.
@@ -64,9 +64,9 @@ Saat ini materi **kosong** di admin — klien yang susun urutan final (bukan per
 
 | No | Pertanyaan | Jawaban |
 |----|------------|---------|
-| 22 | **Judul beranda** final — tetap "Biostat Hub" atau diganti? | |
+| 22 | **Judul beranda** final — tetap "Riset Hub" atau diganti? | |
 | 23 | **Deskripsi singkat** di beranda (1–2 kalimat) — teks final? | |
-| 24 | Apakah perlu **logo** (FK YARSI / Biostat Hub)? *(saat ini: teks saja, belum upload logo di admin)* | |
+| 24 | Apakah perlu **logo** (FK YARSI / Riset Hub)? *(saat ini: teks saja, belum upload logo di admin)* | |
 | 25 | Apakah perlu **nama institusi** di footer? (contoh: Fakultas Kedokteran Universitas YARSI) | |
 | 26 | Apakah perlu **kontak** di footer? (email, WhatsApp, link grup, dll.) | |
 | 27 | Apakah ada **panduan singkat** untuk pengunjung? (cara pakai website) — perlu ditambah atau tidak? | |
@@ -93,7 +93,7 @@ Saat ini materi **kosong** di admin — klien yang susun urutan final (bukan per
 |----|------------|---------|
 | 35 | **Target tanggal** website live / bisa dibagikan ke mahasiswa? | |
 | 36 | Apakah sudah ada **nama domain**? (contoh: `biostathub.yarsi.ac.id`) | |
-| 37 | Siapa di pihak kampus yang urus **hosting / VPS / DNS**? (IT kampus / mandiri) | |
+| 37 | Siapa di pihak kampus yang mengurus **hosting Nimbus Plus / DNS**? (IT kampus / mandiri) | |
 | 38 | Apakah website harus **HTTPS** dengan sertifikat kampus? | |
 | 39 | Apakah ada **pembatasan akses** (hanya IP kampus / VPN)? *(sistem saat ini: publik terbuka)* | |
 | 40 | Siapa yang **membayar** biaya hosting/domain jika ada? | |
@@ -168,7 +168,7 @@ Agar klien tidak bingung, jelaskan bahwa ini **sudah jadi**:
 ## J. Template pesan singkat ke klien (copy-paste)
 
 ```
-Bu, untuk melengkapi website Biostat Hub, mohon bantuannya menjawab/melampirkan:
+Bu, untuk melengkapi website Riset Hub, mohon bantuannya menjawab/melampirkan:
 
 1. Daftar materi (nama + urutan + deskripsi singkat)
 2. Daftar video (judul + link YouTube unlisted + masuk materi mana + urutan)
@@ -187,7 +187,7 @@ sesi singkat demo panel admin supaya Bu bisa langsung coba isi konten.
 
 - Isi konten = lewat admin, **tanpa ubah kode** (kecuali fitur baru)
 - Password admin saat ini di `.env` server — serahkan ke klien dengan aman setelah ganti username/password final
-- Deploy: frontend Vercel/Netlify + backend VPS — butuh jawaban D35–D40 sebelum go-live
+- Deploy: frontend dan backend Node.js di Nimbus Plus + MySQL cPanel — butuh jawaban D35–D40 sebelum go-live
 - Pertanyaan 20, 21, 44, 45 = **belum ada** di v1 — catat sebagai permintaan v2 jika klien jawab "ya"
 
-**Terakhir diperbarui:** 2026-06-30
+**Terakhir diperbarui:** 2026-08-22

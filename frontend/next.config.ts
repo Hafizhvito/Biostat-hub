@@ -4,6 +4,15 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 const backendOrigin = apiUrl.replace(/\/api\/?$/, "");
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+        pathname: "/vi/**",
+      },
+    ],
+  },
   async rewrites() {
     return [
       {

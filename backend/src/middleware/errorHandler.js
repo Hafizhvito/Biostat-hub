@@ -4,8 +4,12 @@
  */
 
 export function errorHandler(err, req, res, next) {
-  const status = err.status || 500;
-  const message = err.message || 'Terjadi kesalahan. Silakan coba lagi.';
+  const isUploadError = err?.name === 'MulterError';
+  const isFileTooLarge = err?.code === 'LIMIT_FILE_SIZE';
+  const status = err.status || (isFileTooLarge ? 413 : isUploadError ? 422 : 500);
+  const message = isFileTooLarge
+    ? 'Ukuran file melebihi batas 100 MB.'
+    : err.message || 'Terjadi kesalahan. Silakan coba lagi.';
   if (status >= 500) console.error(err);
   res.status(status).json({ error: message });
 }

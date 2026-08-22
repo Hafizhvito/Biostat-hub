@@ -1,6 +1,5 @@
 /** Blok hero beranda: judul, deskripsi, statistik jumlah materi/video. */
 
-import { ArrowRight, Play } from "lucide-react";
 import { SearchBar } from "./SearchBar";
 
 interface HeroSectionProps {

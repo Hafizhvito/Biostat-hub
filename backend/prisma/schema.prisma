@@ -1,11 +1,11 @@
-// Skema database Biostat Hub — lihat docs/PANDUAN-DEVELOPER.md
+// Skema database Riset Hub — lihat docs/PANDUAN-DEVELOPER.md
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 

@@ -1,7 +1,7 @@
 /** Grid daftar kuis di halaman /kuis — terpisah dari deskripsi materi. */
 
 import Link from "next/link";
-import { ArrowUpRight, ClipboardList } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 
 export interface KuisListItem {
@@ -13,14 +13,6 @@ export interface KuisListItem {
 interface KuisListProps {
   quizzes: KuisListItem[];
 }
-
-const DOT_COLORS_D2 = [
-  "bg-violet-500",
-  "bg-indigo-500",
-  "bg-blue-500",
-  "bg-sky-500",
-  "bg-purple-500",
-] as const;
 
 /* ==========================================================================
  * DESIGN 1 (aktif) — grid kartu teal

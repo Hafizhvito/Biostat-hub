@@ -1,89 +1,102 @@
-﻿# Biostat Hub
+# Riset Hub
 
-Platform pembelajaran mandiri **Biostatistik & SPSS** — materi video, kuis interaktif, dan alat bantu statistik. Konten dikelola sepenuhnya lewat panel admin tanpa perlu deploy ulang.
+Platform pembelajaran mandiri Biostatistik dan SPSS. Materi, video, kuis, glosarium, kalkulator, wizard uji, dan file unduhan dikelola melalui panel admin.
 
-## Fitur
+## Stack
 
-| Area | Keterangan |
-|------|------------|
-| **Materi** | Topik video YouTube per section |
-| **Kuis** | Soal pilihan ganda per video, dengan dukungan gambar |
-| **Glosarium** | Kamus istilah biostatistik yang bisa dicari |
-| **Unduhan** | File pendukung (PDF, template, panduan) |
-| **Kalkulator** | Beberapa link kalkulator eksternal (atur dari admin) |
-| **Wizard Uji** | Flowchart pemilihan uji statistik + zoom |
-| **Admin** | CRUD konten, pengaturan beranda, upload file & gambar |
+- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS
+- Backend: Node.js, Express, Prisma, Zod, JWT
+- Database: MySQL 8
+- Penyimpanan file: filesystem melalui `UPLOAD_DIR`
 
-## Struktur Project
+## Struktur proyek
 
-```
-Biostat-Hub/
-├── backend/    # Node.js + Express API  →  http://localhost:3001
-├── frontend/   # Next.js               →  http://localhost:3000
-└── docs/       # Panduan developer & deploy
+```text
+Riset-Hub/
+├── backend/    # REST API, Prisma, migration, upload
+├── frontend/   # aplikasi publik dan panel admin
+└── docs/       # panduan developer dan kebutuhan klien
 ```
 
-## Prasyarat
+## Prasyarat lokal
 
-- Node.js 20+
+- Node.js 20.9 atau lebih baru
 - npm
+- MySQL 8 (development menggunakan MySQL dari Laragon)
 
-## Menjalankan di Lokal
+## Setup lokal
 
-Buka **dua terminal** — backend dulu, lalu frontend.
-
-### 1. Backend (`backend/`)
+1. Nyalakan MySQL Laragon dan buat database `biostat_hub`.
+2. Siapkan backend:
 
 ```bash
 cd backend
 npm install
-cp .env.example .env          # Windows: copy .env.example .env
-npm run db:migrate
+copy .env.example .env
+npx prisma migrate deploy
 npm run db:seed
 npm run dev
 ```
 
-Backend berjalan di [http://localhost:3001](http://localhost:3001).
-
-### 2. Frontend (`frontend/`)
+3. Pada terminal lain, siapkan frontend:
 
 ```bash
 cd frontend
 npm install
+copy .env.local.example .env.local
 npm run dev
 ```
 
-Frontend berjalan di [http://localhost:3000](http://localhost:3000).
+Frontend berjalan di `http://localhost:3000` dan API di `http://localhost:3001/api`.
 
-> Frontend otomatis terhubung ke `http://localhost:3001/api`. Untuk environment lain, buat `.env.local` dengan `NEXT_PUBLIC_API_URL=<url-backend>/api`.
+## Environment
 
-## Login Admin
+Backend (`backend/.env`):
 
-Kredensial di `backend/.env`:
+```env
+NODE_ENV="development"
+DATABASE_URL="mysql://root@localhost:3306/biostat_hub"
+JWT_SECRET="gunakan-string-random-yang-kuat"
+JWT_EXPIRES_IN="7d"
+ADMIN_USERNAME="admin"
+ADMIN_PASSWORD="gunakan-password-yang-kuat"
+CORS_ORIGIN="http://localhost:3000"
+PORT=3001
+UPLOAD_DIR="./uploads"
+```
 
-| Variabel | Keterangan |
-|----------|------------|
-| `ADMIN_USERNAME` | Username admin (default: `admin`) |
-| `ADMIN_PASSWORD` | Password — **wajib diisi** sebelum `db:seed` |
+Frontend (`frontend/.env.local`):
 
-Panel admin: [http://localhost:3000/admin](http://localhost:3000/admin)
+```env
+NEXT_PUBLIC_API_URL="http://localhost:3001/api"
+```
 
-## Deploy
+File environment, database lokal, build output, dan hasil upload tidak boleh masuk Git.
 
-| Bagian | Rekomendasi |
-|--------|-------------|
-| Frontend | Vercel / Netlify — set `NEXT_PUBLIC_API_URL` |
-| Backend | VPS / server Node.js — set `CORS_ORIGIN` ke domain frontend |
+## Pemeriksaan sebelum commit
 
-Panduan lengkap: [docs/PANDUAN-DEPLOY-VPS.md](docs/PANDUAN-DEPLOY-VPS.md)
+```bash
+cd backend
+npm test
+npx prisma validate
+
+cd ../frontend
+npm run lint
+npm run build
+```
+
+## Production
+
+Target deployment adalah DomaiNesia Nimbus Plus:
+
+- Domain utama menjalankan frontend Next.js.
+- Subdomain `api` menjalankan backend Express melalui Node.js App/Passenger.
+- Database dibuat melalui MySQL Database Wizard cPanel.
+- Gunakan `NODE_ENV="production"` dan secret production.
+- Terapkan schema dengan `npx prisma migrate deploy`; jangan gunakan `migrate dev` atau `migrate reset` di production.
+- Gunakan path `UPLOAD_DIR` yang persisten dan sertakan folder tersebut dalam backup.
 
 ## Dokumentasi
 
-- [Panduan Developer](docs/PANDUAN-DEVELOPER.md) — arsitektur, struktur folder, API, dan penjelasan tiap file
-- [Panduan Deploy VPS](docs/PANDUAN-DEPLOY-VPS.md) — step-by-step deployment
-- [Domain & Onboarding](docs/PANDUAN-DOMAIN-VPS-ONBOARDING-KLIEN.md) — setup domain untuk klien non-IT
-
-## Catatan
-
-- Jangan commit file `.env` atau `.env.local`.
-- Upload file disimpan di `backend/uploads/` (wizard, downloads).
+- [Panduan Developer](docs/PANDUAN-DEVELOPER.md)
+- [Daftar Pertanyaan Klien](docs/DAFTAR-PERTANYAAN-KLIEN.md)

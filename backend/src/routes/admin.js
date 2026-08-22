@@ -55,7 +55,7 @@ router.delete('/glossary/:id', removeGlossary);
 
 router.get('/downloads', listDownloads);
 router.post('/downloads', uploadDownload, createDownload);
-router.put('/downloads/:id', updateDownload);
+router.put('/downloads/:id', uploadDownload, updateDownload);
 router.delete('/downloads/:id', removeDownload);
 
 router.get('/wizard', listWizard);

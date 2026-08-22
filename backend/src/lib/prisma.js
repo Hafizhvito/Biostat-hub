@@ -1,5 +1,5 @@
 /**
- * Singleton Prisma Client — satu pintu akses ke database SQLite.
+ * Singleton Prisma Client — satu pintu akses ke database MySQL.
  */
 
 import { PrismaClient } from '@prisma/client';

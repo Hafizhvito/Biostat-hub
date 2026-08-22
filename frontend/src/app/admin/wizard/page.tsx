@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { Download } from "lucide-react";
 
 import { ReorderButtons } from "@/components/admin/ReorderButtons";
@@ -174,7 +175,7 @@ export default function AdminWizardPage() {
                   Download
                 </a>
               </div>
-              <img src={item.imageUrl} alt={item.title} className="max-h-56 w-full rounded-xl border border-gray-100 object-contain" loading="lazy" />
+              <Image src={item.imageUrl} alt={item.title} width={1200} height={800} className="max-h-56 w-full rounded-xl border border-gray-100 object-contain" unoptimized />
             </div>
           </Card>
         ))}

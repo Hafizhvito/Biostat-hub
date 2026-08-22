@@ -1,7 +1,8 @@
+import fs from 'fs';
 import path from 'path';
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
-import { downloadUploadDir, toPublicUploadUrl } from '../../utils/upload.js';
+import { downloadUploadDir } from '../../utils/upload.js';
 
 function parseId(value) {
   const id = Number.parseInt(value, 10);
@@ -12,10 +13,8 @@ function parseId(value) {
 }
 
 function toResponse(download) {
-  return {
-    ...download,
-    fileUrl: toPublicUploadUrl('downloads', download.filename),
-  };
+  const { filename, ...response } = download;
+  return response;
 }
 
 export async function list(req, res, next) {
@@ -51,12 +50,27 @@ export async function downloadFile(req, res, next) {
       throw createError(404, 'File unduhan tidak ditemukan.');
     }
 
-    await prisma.download.update({
-      where: { id },
-      data: { downloadCount: { increment: 1 } },
-    });
+    const filePath = path.join(downloadUploadDir, download.filename);
+    try {
+      await fs.promises.access(filePath, fs.constants.R_OK);
+    } catch {
+      throw createError(404, 'File unduhan tidak tersedia.');
+    }
 
-    res.download(path.join(downloadUploadDir, download.filename), download.originalName);
+    res.download(filePath, download.originalName, (error) => {
+      if (error) {
+        if (!res.headersSent) next(error);
+        else console.error('Pengiriman file unduhan gagal:', error);
+        return;
+      }
+
+      prisma.download.update({
+        where: { id },
+        data: { downloadCount: { increment: 1 } },
+      }).catch((updateError) => {
+        console.error('Gagal memperbarui jumlah unduhan:', updateError);
+      });
+    });
   } catch (error) {
     next(error);
   }

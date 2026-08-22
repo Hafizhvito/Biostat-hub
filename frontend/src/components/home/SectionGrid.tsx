@@ -1,7 +1,6 @@
 /** Grid kartu materi di beranda — klik menuju /section/[id]. */
 
 import Link from "next/link";
-import { ArrowUpRight, Play } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { truncateRichText } from "@/lib/rich-text";
 
@@ -18,18 +17,6 @@ interface SectionItem {
 interface SectionGridProps {
   sections: SectionItem[];
 }
-
-const DOT_COLORS_D2 = [
-  "bg-blue-500",
-  "bg-emerald-500",
-  "bg-amber-400",
-  "bg-violet-500",
-  "bg-rose-500",
-  "bg-teal-500",
-  "bg-sky-500",
-  "bg-orange-500",
-  "bg-indigo-500",
-] as const;
 
 function getVideoCount(section: SectionItem) {
   if (typeof section._count?.videos === "number") return section._count.videos;

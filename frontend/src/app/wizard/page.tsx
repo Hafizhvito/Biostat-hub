@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { Download, ZoomIn, ZoomOut, X } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -49,7 +50,7 @@ export default function WizardPage() {
             <article key={item.id} className="rounded-2xl border border-brand-peach bg-white p-5 shadow-sm">
               <h2 className="text-xl font-semibold text-brand-navy">{item.title}</h2>
               <button type="button" onClick={() => { setSelected(item); setScale(1); }} className="mt-4 block w-full overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
-                <img src={item.imageUrl} alt={item.title} className="max-h-[32rem] w-full object-contain" loading="lazy" />
+                <Image src={item.imageUrl} alt={item.title} width={1200} height={800} className="max-h-[32rem] w-full object-contain" unoptimized />
               </button>
               <div className="mt-4 flex flex-wrap gap-2">
                 <a href={item.imageUrl} download className="inline-flex items-center gap-2 rounded-xl bg-brand-warm px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy">
@@ -78,7 +79,7 @@ export default function WizardPage() {
               </div>
             </div>
             <div className="max-h-[calc(90vh-56px)] overflow-auto bg-gray-50 p-4">
-              <img src={selected.imageUrl} alt={selected.title} style={{ transform: `scale(${scale})`, transformOrigin: "center top" }} className="mx-auto max-w-full rounded-xl bg-white object-contain" />
+              <Image src={selected.imageUrl} alt={selected.title} width={1600} height={1200} style={{ transform: `scale(${scale})`, transformOrigin: "center top" }} className="mx-auto max-w-full rounded-xl bg-white object-contain" unoptimized />
             </div>
           </div>
         </div>

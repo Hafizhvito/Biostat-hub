@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import multer from 'multer';
 
-const uploadsRoot = path.join(process.cwd(), 'uploads');
+const uploadsRoot = path.resolve(process.env.UPLOAD_DIR || path.join(process.cwd(), 'uploads'));
 
 export const downloadUploadDir = path.join(uploadsRoot, 'downloads');
 export const wizardUploadDir = path.join(uploadsRoot, 'wizard');
@@ -30,6 +30,7 @@ function buildStoredFilename(originalName) {
 
 export function createUploader(targetDir, options = {}) {
   const allowedMimeTypes = options.allowedMimeTypes || null;
+  const allowedExtensions = options.allowedExtensions || null;
   const maxFileSize = options.maxFileSize || 50 * 1024 * 1024;
 
   return multer({
@@ -44,8 +45,14 @@ export function createUploader(targetDir, options = {}) {
     }),
     limits: { fileSize: maxFileSize },
     fileFilter(req, file, callback) {
-      if (allowedMimeTypes && !allowedMimeTypes.includes(file.mimetype)) {
-        callback(new Error('Tipe file tidak didukung.'));
+      const extension = path.extname(file.originalname || '').toLowerCase();
+      const invalidMimeType = allowedMimeTypes && !allowedMimeTypes.includes(file.mimetype);
+      const invalidExtension = allowedExtensions && !allowedExtensions.includes(extension);
+
+      if (invalidMimeType || invalidExtension) {
+        const error = new Error('Tipe file tidak didukung.');
+        error.status = 415;
+        callback(error);
         return;
       }
       callback(null, true);

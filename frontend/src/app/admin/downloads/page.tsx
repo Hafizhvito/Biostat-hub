@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Download, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -20,7 +20,6 @@ interface DownloadItem {
   originalName: string;
   fileSize: number;
   downloadCount: number;
-  fileUrl: string;
 }
 
 interface FormState {
@@ -148,7 +147,15 @@ export default function AdminDownloadsPage() {
           <Select label="Kategori" options={categoryOptions} value={form.category} onChange={(event) => setForm((prev) => ({ ...prev, category: event.target.value }))} />
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-brand-navy">File {editingId ? "(opsional untuk ganti file)" : ""}</label>
-            <input type="file" onChange={(event) => setFile(event.target.files?.[0] ?? null)} className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm" />
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,.jpg,.jpeg,.png,.webp,.gif,.zip"
+              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+              className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"
+            />
+            <p className="text-xs text-gray-500">
+              PDF, Word, PowerPoint, Excel, CSV, TXT, JPG, PNG, WebP, GIF, atau ZIP. Maksimal 100 MB.
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button type="submit" disabled={saving}>{saving ? "Menyimpan..." : editingId ? "Update Metadata" : "Upload File"}</Button>

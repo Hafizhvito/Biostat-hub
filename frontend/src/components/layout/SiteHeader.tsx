@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, BookOpen, GraduationCap, Menu, X } from "lucide-react";
+import { GraduationCap, Menu, X } from "lucide-react";
 
 function isPublicPath(pathname: string) {
   return !pathname.startsWith("/admin");
@@ -82,7 +82,7 @@ function SiteHeaderDesign1() {
         <div className="flex items-center justify-between py-4">
           <Link href="/" className="inline-flex min-w-0 items-center gap-2 text-lg font-bold text-brand-navy">
             <GraduationCap className="h-5 w-5 shrink-0 text-brand-warm" />
-            <span className="truncate">Biostat Hub</span>
+            <span className="truncate">Riset Hub</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
@@ -141,7 +141,7 @@ function SiteHeaderDesign2() {
       <div className="site-container flex items-center justify-between py-4">
         <Link href="/" className="inline-flex items-center gap-2 text-lg font-bold text-gray-900">
           <BarChart3 className="h-6 w-6 text-d2-blue" strokeWidth={2.25} />
-          <span>Biostat Hub</span>
+          <span>Riset Hub</span>
         </Link>
         <nav className="flex items-center gap-6">
           <Link href="/" className={navLinkClass(isHome, 2)}>
@@ -170,7 +170,7 @@ function SiteHeaderDesign3() {
       <div className="site-container flex items-center justify-between py-4">
         <Link href="/" className="inline-flex items-center gap-2 text-lg font-bold">
           <BookOpen className="h-5 w-5 text-d3-coral" />
-          <span>Biostat Hub</span>
+          <span>Riset Hub</span>
         </Link>
         <nav className="flex items-center gap-6">
           <Link href="/" className={navLinkClass(isHome, 3)}>

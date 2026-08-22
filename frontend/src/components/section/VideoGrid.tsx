@@ -1,7 +1,7 @@
 /** Grid kartu video + thumbnail YouTube. */
 
 import Link from "next/link";
-import { ArrowUpRight, Play } from "lucide-react";
+import Image from "next/image";
 import { Card } from "@/components/ui/Card";
 import { truncateRichText } from "@/lib/rich-text";
 import { extractYouTubeId } from "@/lib/youtube";
@@ -34,11 +34,13 @@ export function VideoCard({ video }: { video: VideoItem }) {
     <Link href={`/video/${video.id}`} className="group">
       <Card className="h-full overflow-hidden border-brand-warm/25 p-0 group-hover:border-brand-warm">
         {videoId ? (
-          <img
+          <Image
             src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
             alt={`Thumbnail ${video.title}`}
+            width={320}
+            height={180}
             className="h-44 w-full object-cover"
-            loading="lazy"
+            unoptimized
           />
         ) : (
           <div className="flex h-44 w-full items-center justify-center bg-gray-100 text-sm text-gray-500">

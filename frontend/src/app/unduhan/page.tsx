@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Download, FileText } from "lucide-react";
 
-import { api } from "@/lib/api";
+import { api, apiUrl } from "@/lib/api";
 
 interface DownloadItem {
   id: number;
@@ -14,7 +13,6 @@ interface DownloadItem {
   originalName: string;
   fileSize: number;
   downloadCount: number;
-  fileUrl: string;
 }
 
 const categories = ["all", "Materi", "Template", "Panduan SPSS", "Lainnya"];
@@ -114,7 +112,7 @@ export default function UnduhanPage() {
                 ) : null}
               </div>
               <a
-                href={`${process.env.NEXT_PUBLIC_API_URL}/downloads/${item.id}/file`}
+                href={apiUrl(`/downloads/${item.id}/file`)}
                 className="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand-warm px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
               >
                 <Download className="h-4 w-4" />
