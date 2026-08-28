@@ -5,7 +5,7 @@
 import { usePathname } from "next/navigation";
 import { GraduationCap, Mail } from "lucide-react";
 
-const CONTACT_EMAIL = "contoh@gmail.com";
+const CONTACT_EMAIL = "belajarrisetssupport@gmail.com";
 
 function isPublicPath(pathname: string) {
   return !pathname.startsWith("/admin");

@@ -60,8 +60,8 @@ router.delete('/downloads/:id', removeDownload);
 
 router.get('/wizard', listWizard);
 router.post('/wizard', uploadWizard, createWizard);
-router.put('/wizard/:id', uploadWizard, updateWizard);
 router.put('/wizard/reorder', reorderWizard);
+router.put('/wizard/:id', uploadWizard, updateWizard);
 router.delete('/wizard/:id', removeWizard);
 
 router.get('/calculator-links', listCalculatorLinks);
