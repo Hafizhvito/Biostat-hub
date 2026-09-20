@@ -12,6 +12,7 @@ export async function get(req, res, next) {
         select: {
           heroTitle: true,
           heroDescription: true,
+          contactEmail: true,
           calculatorUrl: true,
         },
       }),
@@ -22,6 +23,7 @@ export async function get(req, res, next) {
     res.json({
       hero_title: settings?.heroTitle ?? '',
       hero_description: settings?.heroDescription ?? '',
+      contact_email: settings?.contactEmail ?? 'risethub.support@gmail.com',
       calculator_url: settings?.calculatorUrl ?? '',
       glossary_count: glossaryCount,
       download_count: downloadCount,

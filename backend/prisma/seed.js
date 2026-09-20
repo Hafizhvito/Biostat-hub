@@ -36,6 +36,7 @@ async function main() {
       heroTitle: 'Riset Hub',
       heroDescription:
         'Platform pembelajaran mandiri Riset dan Pengolahan Data Penelitian Kesehatan dengan SPSS',
+      contactEmail: 'risethub.support@gmail.com',
     },
   });
 

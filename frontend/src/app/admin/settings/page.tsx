@@ -14,11 +14,13 @@ import { apiWithAuth } from "@/lib/api";
 interface AdminSettings {
   heroTitle: string;
   heroDescription: string;
+  contactEmail: string;
 }
 
 const initialSettings: AdminSettings = {
   heroTitle: "",
   heroDescription: "",
+  contactEmail: "risethub.support@gmail.com",
 };
 
 export default function AdminSettingsPage() {
@@ -84,7 +86,7 @@ export default function AdminSettingsPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold text-brand-navy">Pengaturan Beranda</h1>
-        <p className="text-sm text-gray-600">Kelola judul dan deskripsi yang tampil di halaman beranda.</p>
+        <p className="text-sm text-gray-600">Kelola tampilan beranda dan alamat email dukungan.</p>
       </div>
 
       <Card>
@@ -99,6 +101,13 @@ export default function AdminSettingsPage() {
             label="Deskripsi Beranda"
             value={settings.heroDescription}
             onChange={(event) => setSettings((prev) => ({ ...prev, heroDescription: event.target.value }))}
+            required
+          />
+          <Input
+            label="Email Dukungan"
+            type="email"
+            value={settings.contactEmail}
+            onChange={(event) => setSettings((prev) => ({ ...prev, contactEmail: event.target.value }))}
             required
           />
           {successMessage ? <p className="text-sm text-green-700">{successMessage}</p> : null}

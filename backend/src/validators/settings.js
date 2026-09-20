@@ -6,6 +6,7 @@ import { createError } from '../middleware/errorHandler.js';
 const settingsUpdateSchema = z.object({
   heroTitle: z.string().trim().min(1, 'heroTitle wajib diisi.'),
   heroDescription: z.string().trim().min(1, 'heroDescription wajib diisi.'),
+  contactEmail: z.string().trim().email('Email dukungan tidak valid.'),
 });
 
 const calculatorUrlSchema = z.object({

@@ -2,10 +2,13 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { GraduationCap, Mail } from "lucide-react";
 
-const CONTACT_EMAIL = "belajarrisetssupport@gmail.com";
+import { api } from "@/lib/api";
+
+const DEFAULT_CONTACT_EMAIL = "risethub.support@gmail.com";
 
 function isPublicPath(pathname: string) {
   return !pathname.startsWith("/admin");
@@ -14,7 +17,7 @@ function isPublicPath(pathname: string) {
 /* ==========================================================================
  * DESIGN 1 (aktif)
  * ========================================================================== */
-function SiteFooterDesign1() {
+function SiteFooterDesign1({ contactEmail }: { contactEmail: string }) {
   return (
     <footer className="border-t border-brand-peach bg-brand-peach/40">
       <div className="site-container py-8">
@@ -25,9 +28,9 @@ function SiteFooterDesign1() {
         <p className="mt-4 flex items-center justify-center gap-2 text-center text-sm text-gray-600">
           <Mail className="h-4 w-4 shrink-0 text-brand-warm" />
           <span>
-            Hubungi dosen:{" "}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-brand-warm hover:underline">
-              {CONTACT_EMAIL}
+            Butuh bantuan? Hubungi kami:{" "}
+            <a href={`mailto:${contactEmail}`} className="font-medium text-brand-warm hover:underline">
+              {contactEmail}
             </a>
           </span>
         </p>
@@ -81,12 +84,27 @@ function SiteFooterDesign3() {
 
 export function SiteFooter() {
   const pathname = usePathname();
+  const [contactEmail, setContactEmail] = useState(DEFAULT_CONTACT_EMAIL);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    api<{ contact_email?: string }>("/settings")
+      .then((settings) => {
+        if (!cancelled && settings.contact_email) setContactEmail(settings.contact_email);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   if (!isPublicPath(pathname)) {
     return null;
   }
 
-  return <SiteFooterDesign1 />;
+  return <SiteFooterDesign1 contactEmail={contactEmail} />;
   // return <SiteFooterDesign2 />;
   // return <SiteFooterDesign3 />;
 }

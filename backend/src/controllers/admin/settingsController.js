@@ -12,6 +12,7 @@ export async function get(req, res, next) {
       select: {
         heroTitle: true,
         heroDescription: true,
+        contactEmail: true,
         calculatorUrl: true,
       },
     });
@@ -19,6 +20,7 @@ export async function get(req, res, next) {
     res.json({
       heroTitle: settings?.heroTitle ?? '',
       heroDescription: settings?.heroDescription ?? '',
+      contactEmail: settings?.contactEmail ?? 'risethub.support@gmail.com',
       calculatorUrl: settings?.calculatorUrl ?? '',
     });
   } catch (err) {
@@ -35,16 +37,19 @@ export async function update(req, res, next) {
       update: {
         heroTitle: payload.heroTitle,
         heroDescription: payload.heroDescription,
+        contactEmail: payload.contactEmail,
       },
       create: {
         id: 1,
         heroTitle: payload.heroTitle,
         heroDescription: payload.heroDescription,
+        contactEmail: payload.contactEmail,
         calculatorUrl: '',
       },
       select: {
         heroTitle: true,
         heroDescription: true,
+        contactEmail: true,
         calculatorUrl: true,
       },
     });
@@ -79,6 +84,7 @@ export async function updateCalculatorUrl(req, res, next) {
         id: 1,
         heroTitle: '',
         heroDescription: '',
+        contactEmail: 'risethub.support@gmail.com',
         calculatorUrl: payload.calculatorUrl,
       },
       select: { calculatorUrl: true },

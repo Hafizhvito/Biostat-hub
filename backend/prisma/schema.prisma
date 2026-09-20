@@ -84,6 +84,7 @@ model SiteSettings {
   id              Int      @id @default(1)
   heroTitle       String   @map("hero_title")
   heroDescription String   @map("hero_description")
+  contactEmail    String   @default("risethub.support@gmail.com") @map("contact_email")
   calculatorUrl   String   @default("") @map("calculator_url")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
