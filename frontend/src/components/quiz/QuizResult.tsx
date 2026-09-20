@@ -26,7 +26,17 @@ function getOptionLabel(question: QuizQuestion | undefined, optionId: number) {
   return question.options.find((option) => option.id === optionId)?.optionText ?? "-";
 }
 
+function getScoreLabel(percentage: number) {
+  if (percentage >= 80) return "Sangat Baik";
+  if (percentage >= 70) return "Baik";
+  if (percentage >= 60) return "Cukup";
+  return "Perlu Belajar Lagi";
+}
+
 export function QuizResult({ result, questions }: QuizResultProps) {
+  const percentage = result.total > 0 ? Math.round((result.score / result.total) * 100) : 0;
+  const scoreLabel = getScoreLabel(percentage);
+
   return (
     <section className="space-y-4 rounded-xl border border-gray-200 bg-white p-5">
       <div>
@@ -34,6 +44,9 @@ export function QuizResult({ result, questions }: QuizResultProps) {
         <h2 className="mt-1 text-2xl font-bold text-brand-navy">
           Skor {result.score} / {result.total}
         </h2>
+        <p className="mt-1 text-lg font-semibold text-gray-700">
+          Nilai {percentage} · {scoreLabel}
+        </p>
       </div>
 
       <div className="space-y-3">
