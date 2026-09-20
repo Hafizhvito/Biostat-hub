@@ -1,12 +1,10 @@
 import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 
 if (process.env.NODE_ENV === 'production') {
-  const npmCli = process.env.npm_execpath;
-  if (!npmCli) {
-    throw new Error('npm_execpath is unavailable during production install.');
-  }
-
-  const result = spawnSync(process.execPath, [npmCli, 'run', 'build'], {
+  const require = createRequire(import.meta.url);
+  const nextCli = require.resolve('next/dist/bin/next');
+  const result = spawnSync(process.execPath, [nextCli, 'build'], {
     stdio: 'inherit',
     env: process.env,
   });
