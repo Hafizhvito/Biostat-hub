@@ -11,7 +11,7 @@ if (!existsSync(".next/BUILD_ID")) {
   console.log("Build produksi belum tersedia; menjalankan Next.js build...");
   const require = createRequire(import.meta.url);
   const nextCli = require.resolve("next/dist/bin/next");
-  const build = spawnSync(process.execPath, [nextCli, "build"], {
+  const build = spawnSync(process.execPath, [nextCli, "build", "--webpack"], {
     stdio: "inherit",
     env: process.env,
   });
