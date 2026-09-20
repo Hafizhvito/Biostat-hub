@@ -87,9 +87,15 @@ function SiteHeaderDesign1() {
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
             {NAV_ITEMS.map(({ href, label, isActive }) => (
-              <Link key={href} href={href} className={navLinkClass(isActive(pathname), 1)}>
-                {label}
-              </Link>
+              href.includes("#") ? (
+                <a key={href} href={href} className={navLinkClass(isActive(pathname), 1)}>
+                  {label}
+                </a>
+              ) : (
+                <Link key={href} href={href} className={navLinkClass(isActive(pathname), 1)}>
+                  {label}
+                </Link>
+              )
             ))}
           </nav>
 
@@ -112,14 +118,25 @@ function SiteHeaderDesign1() {
             aria-label="Navigasi mobile"
           >
             {NAV_ITEMS.map(({ href, label, isActive }) => (
-              <Link
-                key={href}
-                href={href}
-                className={navLinkClass(isActive(pathname), 1, true)}
-                onClick={() => setMobileOpen(false)}
-              >
-                {label}
-              </Link>
+              href.includes("#") ? (
+                <a
+                  key={href}
+                  href={href}
+                  className={navLinkClass(isActive(pathname), 1, true)}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={href}
+                  href={href}
+                  className={navLinkClass(isActive(pathname), 1, true)}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {label}
+                </Link>
+              )
             ))}
           </nav>
         ) : null}
