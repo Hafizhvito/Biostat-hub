@@ -1,13 +1,10 @@
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
 
 function runPrisma(args) {
-  const prismaCli = fileURLToPath(
-    new URL('../node_modules/prisma/build/index.js', import.meta.url),
-  );
-  const result = spawnSync(process.execPath, [prismaCli, ...args], {
+  const result = spawnSync('npx', ['prisma', ...args], {
     stdio: 'inherit',
     env: process.env,
+    shell: true,
   });
 
   if (result.error) {
