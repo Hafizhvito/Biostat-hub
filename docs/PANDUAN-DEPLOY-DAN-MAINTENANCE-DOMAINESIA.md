@@ -216,6 +216,7 @@ Node.js version     : sama dengan backend
 Application mode   : Production
 Application root   : lokasi folder frontend
 Application URL    : https://DOMAIN-UTAMA
+Startup file       : server.mjs
 ```
 
 Lalu jalankan melalui virtual environment aplikasi frontend:
@@ -232,7 +233,7 @@ Perintah runtime project saat ini adalah:
 npm start
 ```
 
-> Tampilan cPanel dapat meminta **startup file**, bukan perintah npm. Pada tahap konfigurasi aktual, cocokkan field yang tersedia dengan Application Manager DomaiNesia. Jangan menebak nama startup file frontend. Bila panel mewajibkan file JavaScript, buat entry point Next.js yang sesuai lalu uji sebelum mengarahkan domain utama.
+Startup file `server.mjs` menjalankan Next.js menggunakan `PORT` yang diberikan cPanel/Passenger.
 
 Setelah konfigurasi benar, restart aplikasi frontend dan buka domain utama.
 
@@ -439,4 +440,3 @@ Login admin berhasil      : Ya / Tidak
 Upload persistence diuji  : Ya / Tidak
 Nama pelaksana            : ______________________________
 ```
-
