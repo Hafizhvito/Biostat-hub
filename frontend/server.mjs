@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, rmSync } from "node:fs";
+import { existsSync, readdirSync, rmSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import next from "next";
@@ -9,7 +9,27 @@ const port = Number(process.env.PORT) || 3000;
 
 const requiredBuildFiles = [".next/BUILD_ID", ".next/prerender-manifest.json"];
 
-if (!requiredBuildFiles.every((file) => existsSync(file))) {
+function getNewestModifiedTime(target) {
+  if (!existsSync(target)) return 0;
+  const stats = statSync(target);
+  if (!stats.isDirectory()) return stats.mtimeMs;
+  return readdirSync(target, { withFileTypes: true }).reduce(
+    (newest, entry) =>
+      Math.max(newest, getNewestModifiedTime(`${target}/${entry.name}`)),
+    stats.mtimeMs,
+  );
+}
+
+const buildTime = existsSync(".next/BUILD_ID") ? statSync(".next/BUILD_ID").mtimeMs : 0;
+const sourceTime = Math.max(
+  getNewestModifiedTime("src"),
+  getNewestModifiedTime("public"),
+  getNewestModifiedTime("package.json"),
+  getNewestModifiedTime("next.config.ts"),
+);
+const buildIsStale = sourceTime > buildTime;
+
+if (!requiredBuildFiles.every((file) => existsSync(file)) || buildIsStale) {
   console.log("Build produksi belum tersedia; menjalankan Next.js build...");
   rmSync(".next", { recursive: true, force: true });
   const require = createRequire(import.meta.url);
