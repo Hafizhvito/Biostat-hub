@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import next from "next";
@@ -7,8 +7,11 @@ import next from "next";
 const hostname = "0.0.0.0";
 const port = Number(process.env.PORT) || 3000;
 
-if (!existsSync(".next/BUILD_ID")) {
+const requiredBuildFiles = [".next/BUILD_ID", ".next/prerender-manifest.json"];
+
+if (!requiredBuildFiles.every((file) => existsSync(file))) {
   console.log("Build produksi belum tersedia; menjalankan Next.js build...");
+  rmSync(".next", { recursive: true, force: true });
   const require = createRequire(import.meta.url);
   const nextCli = require.resolve("next/dist/bin/next");
   const build = spawnSync(process.execPath, [nextCli, "build", "--webpack"], {
