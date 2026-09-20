@@ -99,4 +99,5 @@ Target deployment adalah DomaiNesia Nimbus Plus:
 ## Dokumentasi
 
 - [Panduan Developer](docs/PANDUAN-DEVELOPER.md)
+- [Panduan Deployment & Maintenance DomaiNesia](docs/PANDUAN-DEPLOY-DAN-MAINTENANCE-DOMAINESIA.md)
 - [Daftar Pertanyaan Klien](docs/DAFTAR-PERTANYAAN-KLIEN.md)
