@@ -12,7 +12,7 @@ datasource db {
 model Section {
   id          Int      @id @default(autoincrement())
   name        String
-  description String   @default("")
+  description String   @default("") @db.Text
   sortOrder   Int      @default(0) @map("sort_order")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -26,7 +26,7 @@ model Video {
   sectionId   Int      @map("section_id")
   title       String
   youtubeUrl  String   @map("youtube_url")
-  description String   @default("")
+  description String   @default("") @db.Text
   sortOrder   Int      @default(0) @map("sort_order")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -83,7 +83,7 @@ model AdminUser {
 model SiteSettings {
   id              Int      @id @default(1)
   heroTitle       String   @map("hero_title")
-  heroDescription String   @map("hero_description")
+  heroDescription String   @db.Text @map("hero_description")
   contactEmail    String   @default("risethub.support@gmail.com") @map("contact_email")
   calculatorUrl   String   @default("") @map("calculator_url")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -94,8 +94,8 @@ model SiteSettings {
 model Glossary {
   id         Int      @id @default(autoincrement())
   term       String
-  definition String
-  example    String?  
+  definition String  @db.Text
+  example    String? @db.Text
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@map("glossary")
@@ -104,7 +104,7 @@ model Glossary {
 model Download {
   id            Int      @id @default(autoincrement())
   title         String
-  description   String   @default("")
+  description   String   @default("") @db.Text
   category      String
   filename      String
   originalName  String   @map("original_name")
@@ -118,7 +118,7 @@ model Download {
 model WizardImage {
   id          Int      @id @default(autoincrement())
   title       String
-  description String   @default("")
+  description String   @default("") @db.Text
   filename    String
   sortOrder   Int      @default(0) @map("order")
   createdAt   DateTime @default(now()) @map("created_at")
