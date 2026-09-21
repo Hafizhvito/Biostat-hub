@@ -12,8 +12,12 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://biostatresearch.com"),
   title: "Riset Hub",
   description: "Portal pembelajaran riset dan SPSS",
+  verification: {
+    google: "ZXbGNsTF4SrNHc4zlUlzJotxy1iB0ckjqoNDET9jpxw",
+  },
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
