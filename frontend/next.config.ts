@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/uploads/:path*",
+        destination: `${backendOrigin}/uploads/:path*`,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
         source: "/",
         headers: [
           { key: "Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" },
@@ -27,14 +35,6 @@ const nextConfig: NextConfig = {
           { key: "Expires", value: "0" },
         ],
       },
-      {
-        source: "/uploads/:path*",
-        destination: `${backendOrigin}/uploads/:path*`,
-      },
-    ];
-  },
-  async headers() {
-    return [
       {
         source: "/(.*)",
         headers: [
