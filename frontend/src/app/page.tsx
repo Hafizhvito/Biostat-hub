@@ -8,6 +8,8 @@ import { KuisListItem } from "@/components/kuis/KuisList";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { api } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
+
 interface PublicSettingsResponse {
   hero_title: string;
   hero_description: string;
