@@ -62,7 +62,16 @@ const handle = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
-    createServer((request, response) => handle(request, response)).listen(port, hostname, () => {
+    createServer((request, response) => {
+      const pathname = new URL(request.url || "/", `http://${request.headers.host || hostname}`).pathname;
+      if (pathname === "/") {
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        response.setHeader("Surrogate-Control", "no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+      }
+      return handle(request, response);
+    }).listen(port, hostname, () => {
       console.log(`Frontend berjalan di http://${hostname}:${port}`);
     });
   })
