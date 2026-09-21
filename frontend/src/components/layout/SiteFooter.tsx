@@ -3,8 +3,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { GraduationCap, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 
 import { api } from "@/lib/api";
 
@@ -22,7 +23,13 @@ function SiteFooterDesign1({ contactEmail }: { contactEmail: string }) {
     <footer className="border-t border-brand-peach bg-brand-peach/40">
       <div className="site-container py-8">
         <p className="flex items-center justify-center gap-2 text-center text-sm text-gray-700">
-          <GraduationCap className="h-4 w-4 shrink-0 text-brand-warm" />
+          <Image
+            src="/brand-logo.png"
+            alt=""
+            width={24}
+            height={24}
+            className="h-6 w-6 shrink-0 object-contain"
+          />
           Materi disusun ringkas, terstruktur, dan mudah dipahami.
         </p>
         <p className="mt-4 flex items-center justify-center gap-2 text-center text-sm text-gray-600">

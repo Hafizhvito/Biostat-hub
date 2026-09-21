@@ -3,9 +3,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 function isPublicPath(pathname: string) {
   return !pathname.startsWith("/admin");
@@ -81,7 +82,14 @@ function SiteHeaderDesign1() {
       <div className="site-container">
         <div className="flex items-center justify-between py-4">
           <Link href="/" className="inline-flex min-w-0 items-center gap-2 text-lg font-bold text-brand-navy">
-            <GraduationCap className="h-5 w-5 shrink-0 text-brand-warm" />
+            <Image
+              src="/brand-logo.png"
+              alt="Logo Riset Hub"
+              width={36}
+              height={36}
+              priority
+              className="h-9 w-9 shrink-0 object-contain"
+            />
             <span className="truncate">Riset Hub</span>
           </Link>
 
