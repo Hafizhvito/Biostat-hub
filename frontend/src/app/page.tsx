@@ -7,6 +7,11 @@ import { SectionGrid } from "@/components/home/SectionGrid";
 import { KuisListItem } from "@/components/kuis/KuisList";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { api } from "@/lib/api";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export const revalidate = 30;
 

@@ -5,6 +5,8 @@ import { RichTextContent } from "@/components/editor/RichTextContent";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { VideoGrid } from "@/components/section/VideoGrid";
 import { api } from "@/lib/api";
+import { stripHtml } from "@/lib/rich-text";
+import type { Metadata } from "next";
 
 interface SectionVideo {
   id: number;
@@ -22,6 +24,23 @@ interface SectionDetail {
 
 interface PageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const section = await api<SectionDetail>(`/sections/${id}`);
+    const description = stripHtml(section.description ?? "").slice(0, 160)
+      || `Pelajari materi ${section.name} di Riset Hub.`;
+    return {
+      title: section.name,
+      description,
+      alternates: { canonical: `/section/${id}` },
+      openGraph: { title: section.name, description, url: `/section/${id}` },
+    };
+  } catch {
+    return { title: "Materi", robots: { index: false, follow: false } };
+  }
 }
 
 /* ==========================================================================

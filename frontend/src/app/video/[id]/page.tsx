@@ -5,6 +5,8 @@ import { RichTextContent } from "@/components/editor/RichTextContent";
 import { YouTubePlayer } from "@/components/video/YouTubePlayer";
 import { api } from "@/lib/api";
 import { extractYouTubeId } from "@/lib/youtube";
+import { stripHtml } from "@/lib/rich-text";
+import type { Metadata } from "next";
 
 interface VideoDetail {
   id: number;
@@ -21,6 +23,30 @@ interface VideoDetail {
 
 interface PageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const video = await api<VideoDetail>(`/videos/${id}`);
+    const description = stripHtml(video.description ?? "").slice(0, 160)
+      || `Video pembelajaran ${video.title} dalam materi ${video.section.name}.`;
+    const youtubeId = video.youtube_id ?? extractYouTubeId(video.youtube_url ?? video.youtubeUrl ?? "");
+    return {
+      title: video.title,
+      description,
+      alternates: { canonical: `/video/${id}` },
+      openGraph: {
+        title: video.title,
+        description,
+        type: "video.other",
+        url: `/video/${id}`,
+        images: youtubeId ? [`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`] : undefined,
+      },
+    };
+  } catch {
+    return { title: "Video", robots: { index: false, follow: false } };
+  }
 }
 
 /* ==========================================================================

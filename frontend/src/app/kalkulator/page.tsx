@@ -2,6 +2,13 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 
 import { api } from "@/lib/api";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Kalkulator Statistik",
+  description: "Kumpulan tautan kalkulator statistik untuk mendukung analisis dan perencanaan penelitian kesehatan.",
+  alternates: { canonical: "/kalkulator" },
+};
 
 interface CalculatorLinkItem {
   id: number;

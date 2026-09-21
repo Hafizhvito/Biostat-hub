@@ -13,8 +13,44 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://biostatresearch.com"),
-  title: "Riset Hub",
-  description: "Portal pembelajaran riset dan SPSS",
+  title: {
+    default: "Riset Hub — Pembelajaran Biostatistik dan SPSS",
+    template: "%s | Riset Hub",
+  },
+  description:
+    "Platform pembelajaran mandiri biostatistik, riset kesehatan, pemilihan uji statistik, dan pengolahan data dengan SPSS.",
+  applicationName: "Riset Hub",
+  authors: [{ name: "Riset Hub" }],
+  creator: "Riset Hub",
+  publisher: "Riset Hub",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    siteName: "Riset Hub",
+    title: "Riset Hub — Pembelajaran Biostatistik dan SPSS",
+    description:
+      "Pelajari biostatistik, riset kesehatan, pemilihan uji statistik, dan pengolahan data dengan SPSS.",
+    url: "/",
+    images: [{ url: "/icon.png", width: 512, height: 512, alt: "Logo Riset Hub" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Riset Hub — Pembelajaran Biostatistik dan SPSS",
+    description:
+      "Pelajari biostatistik, riset kesehatan, pemilihan uji statistik, dan pengolahan data dengan SPSS.",
+    images: ["/icon.png"],
+  },
   verification: {
     google: "ZXbGNsTF4SrNHc4zlUlzJotxy1iB0ckjqoNDET9jpxw",
   },
