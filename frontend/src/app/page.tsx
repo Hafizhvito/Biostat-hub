@@ -10,7 +10,10 @@ import { api } from "@/lib/api";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  title: { absolute: "Riset Hub" },
   alternates: { canonical: "/" },
+  openGraph: { title: "Riset Hub" },
+  twitter: { title: "Riset Hub" },
 };
 
 export const revalidate = 30;
