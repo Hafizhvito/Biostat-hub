@@ -8,7 +8,12 @@ import { KuisListItem } from "@/components/kuis/KuisList";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { api } from "@/lib/api";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
+
+const HOME_FETCH_OPTIONS = {
+  cache: "force-cache" as RequestCache,
+  next: { revalidate: 30 },
+};
 
 interface PublicSettingsResponse {
   hero_title: string;
@@ -38,9 +43,9 @@ const HERO_DESCRIPTION =
  * ========================================================================== */
 export default async function HomePage() {
   const [settings, sectionResponse, quizzes] = await Promise.all([
-    api<PublicSettingsResponse>("/settings"),
-    api<SectionsResponse>("/sections"),
-    api<KuisListItem[]>("/quizzes").catch(() => [] as KuisListItem[]),
+    api<PublicSettingsResponse>("/settings", HOME_FETCH_OPTIONS),
+    api<SectionsResponse>("/sections", HOME_FETCH_OPTIONS),
+    api<KuisListItem[]>("/quizzes", HOME_FETCH_OPTIONS).catch(() => [] as KuisListItem[]),
   ]);
 
   return (
