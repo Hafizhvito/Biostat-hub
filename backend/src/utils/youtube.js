@@ -4,21 +4,29 @@
 
 export function extractYouTubeId(url) {
   if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    const isValidId = (value) => /^[a-zA-Z0-9_-]{11}$/.test(value ?? '');
 
-  const patterns = [
-    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
-    /[?&]v=([a-zA-Z0-9_-]{11})/,
-  ];
+    if (hostname === 'youtu.be') {
+      const id = parsed.pathname.split('/').filter(Boolean)[0];
+      return isValidId(id) ? id : null;
+    }
 
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
+    if (hostname !== 'youtube.com' && !hostname.endsWith('.youtube.com')) return null;
+
+    if (parsed.pathname === '/watch') {
+      const id = parsed.searchParams.get('v');
+      return isValidId(id) ? id : null;
+    }
+
+    const [kind, id] = parsed.pathname.split('/').filter(Boolean);
+    if ((kind === 'embed' || kind === 'shorts') && isValidId(id)) return id;
+    return null;
+  } catch {
+    return null;
   }
-
-  return null;
 }
 
 export function toYouTubeWatchUrl(videoId) {

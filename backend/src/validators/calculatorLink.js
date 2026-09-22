@@ -1,9 +1,22 @@
 import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
 
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 const calculatorLinkSchema = z.object({
   title: z.string().trim().min(1, 'Judul wajib diisi.'),
-  url: z.string().trim().url('URL harus valid.'),
+  url: z
+    .string()
+    .trim()
+    .url('URL harus valid.')
+    .refine(isHttpUrl, 'URL harus menggunakan http:// atau https://.'),
 });
 
 const calculatorLinkIdSchema = z.object({

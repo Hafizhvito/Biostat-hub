@@ -3,6 +3,15 @@
 import { z } from 'zod';
 import { createError } from '../middleware/errorHandler.js';
 
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 const settingsUpdateSchema = z.object({
   heroTitle: z.string().trim().min(1, 'heroTitle wajib diisi.'),
   heroDescription: z.string().trim().min(1, 'heroDescription wajib diisi.'),
@@ -14,6 +23,7 @@ const calculatorUrlSchema = z.object({
     .string()
     .trim()
     .url('calculatorUrl harus berupa URL yang valid.')
+    .refine((value) => value === '' || isHttpUrl(value), 'calculatorUrl harus menggunakan http:// atau https://.')
     .or(z.literal('')),
 });
 

@@ -8,7 +8,7 @@
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset",
-    "test": "node --test tests/quizGrading.test.js"
+    "test": "node --test tests/quizGrading.test.js tests/contentValidation.test.js tests/youtube.test.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
