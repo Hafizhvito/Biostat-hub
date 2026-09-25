@@ -14,6 +14,7 @@ export async function get(req, res, next) {
           heroDescription: true,
           contactEmail: true,
           calculatorUrl: true,
+          materialDisplayMode: true,
         },
       }),
       prisma.glossary.count(),
@@ -25,6 +26,7 @@ export async function get(req, res, next) {
       hero_description: settings?.heroDescription ?? '',
       contact_email: settings?.contactEmail ?? 'risethub.support@gmail.com',
       calculator_url: settings?.calculatorUrl ?? '',
+      material_display_mode: settings?.materialDisplayMode ?? 'flat',
       glossary_count: glossaryCount,
       download_count: downloadCount,
     });

@@ -18,6 +18,16 @@ export async function list(req, res, next) {
     const sections = await prisma.section.findMany({
       orderBy: { sortOrder: 'asc' },
       include: {
+        videos: {
+          orderBy: { sortOrder: 'asc' },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            youtubeUrl: true,
+            sortOrder: true,
+          },
+        },
         _count: {
           select: { videos: true },
         },

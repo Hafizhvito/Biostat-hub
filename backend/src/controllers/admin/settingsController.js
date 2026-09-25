@@ -14,6 +14,7 @@ export async function get(req, res, next) {
         heroDescription: true,
         contactEmail: true,
         calculatorUrl: true,
+        materialDisplayMode: true,
       },
     });
 
@@ -22,6 +23,7 @@ export async function get(req, res, next) {
       heroDescription: settings?.heroDescription ?? '',
       contactEmail: settings?.contactEmail ?? 'risethub.support@gmail.com',
       calculatorUrl: settings?.calculatorUrl ?? '',
+      materialDisplayMode: settings?.materialDisplayMode ?? 'flat',
     });
   } catch (err) {
     next(err);
@@ -38,6 +40,7 @@ export async function update(req, res, next) {
         heroTitle: payload.heroTitle,
         heroDescription: payload.heroDescription,
         contactEmail: payload.contactEmail,
+        materialDisplayMode: payload.materialDisplayMode,
       },
       create: {
         id: 1,
@@ -45,12 +48,14 @@ export async function update(req, res, next) {
         heroDescription: payload.heroDescription,
         contactEmail: payload.contactEmail,
         calculatorUrl: '',
+        materialDisplayMode: payload.materialDisplayMode,
       },
       select: {
         heroTitle: true,
         heroDescription: true,
         contactEmail: true,
         calculatorUrl: true,
+        materialDisplayMode: true,
       },
     });
 

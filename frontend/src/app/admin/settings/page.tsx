@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { getToken } from "@/lib/auth";
 import { apiWithAuth } from "@/lib/api";
@@ -15,12 +16,14 @@ interface AdminSettings {
   heroTitle: string;
   heroDescription: string;
   contactEmail: string;
+  materialDisplayMode: "flat" | "grouped";
 }
 
 const initialSettings: AdminSettings = {
   heroTitle: "",
   heroDescription: "",
   contactEmail: "risethub.support@gmail.com",
+  materialDisplayMode: "flat",
 };
 
 export default function AdminSettingsPage() {
@@ -110,6 +113,23 @@ export default function AdminSettingsPage() {
             onChange={(event) => setSettings((prev) => ({ ...prev, contactEmail: event.target.value }))}
             required
           />
+          <Select
+            label="Tampilan Daftar Materi"
+            value={settings.materialDisplayMode}
+            onChange={(event) =>
+              setSettings((prev) => ({
+                ...prev,
+                materialDisplayMode: event.target.value as "flat" | "grouped",
+              }))
+            }
+            options={[
+              { value: "flat", label: "Semua materi langsung (tanpa kelompok)" },
+              { value: "grouped", label: "Dikelompokkan berdasarkan kategori" },
+            ]}
+          />
+          <p className="text-xs leading-relaxed text-gray-500">
+            Pengaturan ini mengubah susunan halaman Materi. Carousel di Beranda tetap menampilkan materi secara langsung.
+          </p>
           {successMessage ? <p className="text-sm text-green-700">{successMessage}</p> : null}
           <Button type="submit" disabled={isSaving}>
             {isSaving ? "Menyimpan..." : "Simpan Perubahan"}

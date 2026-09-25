@@ -86,6 +86,7 @@ model SiteSettings {
   heroDescription String   @db.Text @map("hero_description")
   contactEmail    String   @default("risethub.support@gmail.com") @map("contact_email")
   calculatorUrl   String   @default("") @map("calculator_url")
+  materialDisplayMode String @default("flat") @map("material_display_mode")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@map("site_settings")

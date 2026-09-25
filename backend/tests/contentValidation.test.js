@@ -49,6 +49,7 @@ test('teks panjang pada pengaturan dan glosarium tidak dipotong', () => {
     heroTitle: 'Riset Hub',
     heroDescription: LONG_TEXT,
     contactEmail: 'support@example.com',
+    materialDisplayMode: 'flat',
   });
   const glossary = validateGlossaryCreate({
     term: 'Regresi',
@@ -56,8 +57,19 @@ test('teks panjang pada pengaturan dan glosarium tidak dipotong', () => {
     example: LONG_TEXT,
   });
   assert.equal(settings.heroDescription, LONG_TEXT.trim());
+  assert.equal(settings.materialDisplayMode, 'flat');
   assert.equal(glossary.definition, LONG_TEXT.trim());
   assert.equal(glossary.example, LONG_TEXT.trim());
+});
+
+test('mode tampilan materi hanya menerima flat atau grouped', () => {
+  const base = {
+    heroTitle: 'Riset Hub',
+    heroDescription: 'Belajar statistik',
+    contactEmail: 'support@example.com',
+  };
+  assert.equal(validateSettingsUpdate({ ...base, materialDisplayMode: 'grouped' }).materialDisplayMode, 'grouped');
+  assert.throws(() => validateSettingsUpdate({ ...base, materialDisplayMode: 'acak' }), /flat atau grouped/);
 });
 
 test('tautan kalkulator hanya menerima http dan https', () => {

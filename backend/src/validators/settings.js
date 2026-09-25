@@ -16,6 +16,9 @@ const settingsUpdateSchema = z.object({
   heroTitle: z.string().trim().min(1, 'heroTitle wajib diisi.'),
   heroDescription: z.string().trim().min(1, 'heroDescription wajib diisi.'),
   contactEmail: z.string().trim().email('Email dukungan tidak valid.'),
+  materialDisplayMode: z.enum(['flat', 'grouped'], {
+    errorMap: () => ({ message: 'Tampilan materi harus flat atau grouped.' }),
+  }),
 });
 
 const calculatorUrlSchema = z.object({

@@ -44,7 +44,7 @@ check('health API', async () => {
 });
 
 check('halaman publik utama', async () => {
-  const routes = ['/', '/kuis', '/glosarium', '/unduhan', '/wizard', '/kalkulator'];
+  const routes = ['/', '/materi', '/kuis', '/glosarium', '/unduhan', '/wizard', '/kalkulator'];
   for (const route of routes) {
     const response = await expectStatus(`${SITE_URL}${route}`);
     assert.match(response.headers.get('content-type') || '', /text\/html/i);

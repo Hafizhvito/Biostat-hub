@@ -53,8 +53,8 @@ export default async function SectionPage({ params }: PageProps) {
   return (
     <div className="space-y-6">
       <nav className="text-sm text-gray-600">
-        <Link href="/" className="hover:text-brand-teal">
-          Beranda
+        <Link href="/materi" className="hover:text-brand-teal">
+          Materi
         </Link>
         <span className="mx-2">›</span>
         <span className="font-medium text-brand-navy">{section.name}</span>

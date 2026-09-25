@@ -46,9 +46,10 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Beranda", isActive: (pathname) => pathname === "/" },
   {
-    href: "/#jelajahi-materi",
+    href: "/materi",
     label: "Materi",
-    isActive: (pathname) => pathname.startsWith("/section/"),
+    isActive: (pathname) =>
+      pathname === "/materi" || pathname.startsWith("/section/") || pathname.startsWith("/video/"),
   },
   {
     href: "/kuis",

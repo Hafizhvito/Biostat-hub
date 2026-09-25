@@ -3,10 +3,11 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeatureGrid } from "@/components/home/FeatureGrid";
 import { HomeKuisSection } from "@/components/home/HomeKuisSection";
-import { SectionGrid } from "@/components/home/SectionGrid";
+import { MaterialCarousel } from "@/components/home/MaterialCarousel";
 import { KuisListItem } from "@/components/kuis/KuisList";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { api } from "@/lib/api";
+import { getSectionsWithVideos } from "@/lib/materials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,18 +32,6 @@ interface PublicSettingsResponse {
   download_count: number;
 }
 
-interface SectionItem {
-  id: number;
-  name: string;
-  description: string | null;
-  _count?: { videos: number };
-}
-
-interface SectionsResponse {
-  sections: SectionItem[];
-  stats: { total_sections: number; total_videos: number };
-}
-
 const HERO_DESCRIPTION =
   "Platform pembelajaran mandiri Riset dan Pengolahan Data Penelitian Kesehatan dengan SPSS";
 
@@ -52,7 +41,7 @@ const HERO_DESCRIPTION =
 export default async function HomePage() {
   const [settings, sectionResponse, quizzes] = await Promise.all([
     api<PublicSettingsResponse>("/settings", HOME_FETCH_OPTIONS),
-    api<SectionsResponse>("/sections", HOME_FETCH_OPTIONS),
+    getSectionsWithVideos(HOME_FETCH_OPTIONS),
     api<KuisListItem[]>("/quizzes", HOME_FETCH_OPTIONS).catch(() => [] as KuisListItem[]),
   ]);
 
@@ -66,22 +55,14 @@ export default async function HomePage() {
         totalGlossary={settings.glossary_count || 0}
         totalDownloads={settings.download_count || 0}
       />
-      <FeatureGrid />
-      {sectionResponse.sections.length === 0 ? (
+      {sectionResponse.stats.total_videos === 0 ? (
         <div id="jelajahi-materi">
           <EmptyState message="Belum ada materi. Materi akan segera ditambahkan." />
         </div>
       ) : (
-        <section id="jelajahi-materi" className="space-y-4">
-          <header>
-            <h2 className="text-2xl font-bold text-brand-navy">Jelajahi Materi</h2>
-            <p className="mt-1 text-sm text-gray-600">
-              Pilih topik untuk mulai belajar sesuai kebutuhanmu.
-            </p>
-          </header>
-          <SectionGrid sections={sectionResponse.sections} />
-        </section>
+        <MaterialCarousel sections={sectionResponse.sections} />
       )}
+      <FeatureGrid />
       <HomeKuisSection quizzes={quizzes} />
     </div>
   );
