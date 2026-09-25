@@ -13,14 +13,19 @@ export const metadata: Metadata = {
 
 export const revalidate = 30;
 
+const MATERIAL_FETCH_OPTIONS = {
+  cache: "force-cache" as RequestCache,
+  next: { revalidate: 30 },
+};
+
 interface SettingsResponse {
   material_display_mode?: "flat" | "grouped";
 }
 
 export default async function MateriPage() {
   const [response, settings] = await Promise.all([
-    getSectionsWithVideos({ next: { revalidate: 30 } }),
-    api<SettingsResponse>("/settings", { next: { revalidate: 30 } }),
+    getSectionsWithVideos(MATERIAL_FETCH_OPTIONS),
+    api<SettingsResponse>("/settings", MATERIAL_FETCH_OPTIONS),
   ]);
 
   return (
