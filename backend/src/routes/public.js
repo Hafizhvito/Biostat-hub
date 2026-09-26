@@ -10,7 +10,12 @@ import { search } from '../controllers/public/searchController.js';
 import { list as listSections, getById as getSectionById } from '../controllers/public/sectionController.js';
 import { getById as getVideoById } from '../controllers/public/videoController.js';
 import { list as listGlossary, getById as getGlossaryById } from '../controllers/public/glossaryController.js';
-import { list as listDownloads, downloadFile } from '../controllers/public/downloadController.js';
+import {
+  list as listDownloads,
+  downloadFile,
+  getMaterialResource,
+  previewMaterialResource,
+} from '../controllers/public/downloadController.js';
 import { list as listWizard } from '../controllers/public/wizardController.js';
 import { list as listCalculatorLinks } from '../controllers/public/calculatorLinkController.js';
 import {
@@ -34,6 +39,8 @@ router.get('/glossary', listGlossary);
 router.get('/glossary/:id', getGlossaryById);
 router.get('/downloads', listDownloads);
 router.get('/downloads/:id/file', downloadFile);
+router.get('/material-resources/:id', getMaterialResource);
+router.get('/material-resources/:id/preview', previewMaterialResource);
 router.get('/wizard', listWizard);
 router.get('/calculator-links', listCalculatorLinks);
 

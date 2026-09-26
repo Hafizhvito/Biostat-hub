@@ -1,3 +1,4 @@
+import path from 'path';
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
 import { isNotFoundError } from '../../utils/prismaErrors.js';
@@ -69,6 +70,9 @@ export async function create(req, res, next) {
     }
 
     const payload = validateDownloadMeta(req.body ?? {});
+    if (payload.sectionId && path.extname(req.file.originalname).toLowerCase() !== '.pdf') {
+      throw createError(422, 'Materi presentasi wajib diunggah dalam format PDF agar dapat dibaca di website.');
+    }
     const fileSize = req.file.size;
 
     const download = await prisma.download.create({
@@ -105,6 +109,11 @@ export async function update(req, res, next) {
 
     if (!current) {
       throw createError(404, 'File unduhan tidak ditemukan.');
+    }
+
+    const effectiveOriginalName = req.file?.originalname ?? current.originalName;
+    if (payload.sectionId && path.extname(effectiveOriginalName).toLowerCase() !== '.pdf') {
+      throw createError(422, 'Materi presentasi wajib diunggah dalam format PDF agar dapat dibaca di website.');
     }
 
     const data = {

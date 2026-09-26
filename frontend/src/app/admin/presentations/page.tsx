@@ -103,7 +103,7 @@ export default function AdminPresentationsPage() {
       return;
     }
     if (!editingId && !file) {
-      setErrorMessage("File PPT, PPTX, atau PDF wajib dipilih.");
+      setErrorMessage("File PDF hasil ekspor PPT wajib dipilih.");
       return;
     }
 
@@ -153,7 +153,7 @@ export default function AdminPresentationsPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold text-brand-navy">Kelola PPT Materi</h1>
-        <p className="text-sm text-gray-600">Unggah PPT atau PDF dan hubungkan langsung ke materi yang sesuai.</p>
+        <p className="text-sm text-gray-600">Unggah PDF hasil ekspor PPT dan hubungkan langsung ke materi yang sesuai.</p>
       </div>
 
       <Card>
@@ -163,16 +163,16 @@ export default function AdminPresentationsPage() {
           <Textarea label="Deskripsi" value={form.description} onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))} />
           <div className="space-y-1.5">
             <label htmlFor="presentation-file" className="text-sm font-medium text-brand-navy">
-              File PPT/PDF {editingId ? "(opsional jika tidak diganti)" : ""}
+              File PDF dari PPT {editingId ? "(opsional jika tidak diganti)" : ""}
             </label>
             <input
               id="presentation-file"
               type="file"
-              accept=".ppt,.pptx,.pdf"
+              accept=".pdf"
               onChange={(event) => setFile(event.target.files?.[0] ?? null)}
               className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"
             />
-            <p className="text-xs text-gray-500">Format PPT, PPTX, atau PDF. Maksimal 100 MB.</p>
+            <p className="text-xs text-gray-500">Simpan atau ekspor PPT sebagai PDF terlebih dahulu. Format PDF, maksimal 100 MB.</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button type="submit" disabled={saving}>{saving ? "Menyimpan..." : editingId ? "Simpan Perubahan" : "Tambah PPT"}</Button>

@@ -17,6 +17,65 @@ function toResponse(download) {
   return response;
 }
 
+export async function getMaterialResource(req, res, next) {
+  try {
+    const id = parseId(req.params.id);
+    const resource = await prisma.download.findFirst({
+      where: { id, sectionId: { not: null } },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        originalName: true,
+        fileSize: true,
+        section: { select: { id: true, name: true } },
+      },
+    });
+
+    if (!resource) {
+      throw createError(404, 'Materi presentasi tidak ditemukan.');
+    }
+
+    res.json(resource);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function previewMaterialResource(req, res, next) {
+  try {
+    const id = parseId(req.params.id);
+    const resource = await prisma.download.findFirst({
+      where: { id, sectionId: { not: null } },
+    });
+
+    if (!resource) {
+      throw createError(404, 'Materi presentasi tidak ditemukan.');
+    }
+
+    if (path.extname(resource.originalName).toLowerCase() !== '.pdf') {
+      throw createError(415, 'Materi harus berformat PDF agar dapat dibaca di website.');
+    }
+
+    const filePath = path.join(downloadUploadDir, resource.filename);
+    try {
+      await fs.promises.access(filePath, fs.constants.R_OK);
+    } catch {
+      throw createError(404, 'File materi tidak tersedia.');
+    }
+
+    res.removeHeader('X-Frame-Options');
+    res.removeHeader('Content-Security-Policy');
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename*=UTF-8''${encodeURIComponent(resource.originalName)}`);
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('Content-Security-Policy', "frame-ancestors 'self' https://biostatresearch.com");
+    res.sendFile(filePath);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function list(req, res, next) {
   try {
     const q = String(req.query.q || '').trim();

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { RichTextContent } from "@/components/editor/RichTextContent";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { VideoGrid } from "@/components/section/VideoGrid";
-import { api, apiUrl } from "@/lib/api";
+import { api } from "@/lib/api";
 import { stripHtml } from "@/lib/rich-text";
-import { FileDown } from "lucide-react";
+import { Presentation } from "lucide-react";
 import type { Metadata } from "next";
 
 interface SectionVideo {
@@ -88,9 +88,9 @@ export default async function SectionPage({ params }: PageProps) {
           <h2 className="text-xl font-bold text-brand-navy">PPT dan PDF Materi</h2>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {(section.resources ?? []).map((resource) => (
-              <a
+              <Link
                 key={resource.id}
-                href={apiUrl(`/downloads/${resource.id}/file`)}
+                href={`/presentation/${resource.id}`}
                 className="group flex flex-col rounded-xl border border-brand-warm/25 bg-white p-5 transition hover:-translate-y-0.5 hover:border-brand-warm hover:shadow-sm"
               >
                 <span className="w-fit rounded-full bg-brand-teal-soft px-3 py-1 text-xs font-semibold text-brand-teal">PPT/PDF</span>
@@ -99,9 +99,9 @@ export default async function SectionPage({ params }: PageProps) {
                   {resource.description || "Unduh file presentasi untuk mempelajari materi ini."}
                 </p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-warm">
-                  <FileDown className="h-4 w-4" /> Unduh materi
+                  <Presentation className="h-4 w-4" /> Baca materi
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </section>

@@ -1,11 +1,10 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, FileDown, PlayCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, PlayCircle, Presentation } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { MaterialSection } from "@/components/material/types";
-import { apiUrl } from "@/lib/api";
 import { truncateRichText } from "@/lib/rich-text";
 
 export function MaterialCarousel({ sections }: { sections: MaterialSection[] }) {
@@ -99,8 +98,8 @@ export function MaterialCarousel({ sections }: { sections: MaterialSection[] }) 
                   : item.description || "Unduh file presentasi untuk mempelajari materi ini."}
               </p>
               <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-warm">
-                {item.type === "video" ? <PlayCircle className="h-4 w-4" /> : <FileDown className="h-4 w-4" />}
-                {item.type === "video" ? "Buka materi" : "Unduh materi"}
+                {item.type === "video" ? <PlayCircle className="h-4 w-4" /> : <Presentation className="h-4 w-4" />}
+                {item.type === "video" ? "Buka materi" : "Baca materi"}
               </span>
             </>
           );
@@ -110,9 +109,9 @@ export function MaterialCarousel({ sections }: { sections: MaterialSection[] }) 
               {content}
             </Link>
           ) : (
-            <a key={`resource-${item.id}`} href={apiUrl(`/downloads/${item.id}/file`)} className={cardClass}>
+            <Link key={`resource-${item.id}`} href={`/presentation/${item.id}`} className={cardClass}>
               {content}
-            </a>
+            </Link>
           );
         })}
       </div>

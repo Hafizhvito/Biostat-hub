@@ -1,8 +1,7 @@
-import { BookOpen, FileDown } from "lucide-react";
+import { BookOpen, Presentation } from "lucide-react";
 import Link from "next/link";
 
 import type { MaterialResource, MaterialSection, MaterialVideo } from "@/components/material/types";
-import { apiUrl } from "@/lib/api";
 import { truncateRichText } from "@/lib/rich-text";
 
 function MaterialCard({ video, sectionName }: { video: MaterialVideo; sectionName: string }) {
@@ -29,8 +28,8 @@ function MaterialCard({ video, sectionName }: { video: MaterialVideo; sectionNam
 
 function ResourceCard({ resource, sectionName }: { resource: MaterialResource; sectionName: string }) {
   return (
-    <a
-      href={apiUrl(`/downloads/${resource.id}/file`)}
+    <Link
+      href={`/presentation/${resource.id}`}
       className="group flex h-full flex-col rounded-xl border border-brand-warm/25 bg-white p-5 transition hover:-translate-y-0.5 hover:border-brand-warm hover:shadow-sm"
     >
       <div className="flex items-center justify-between gap-3">
@@ -46,9 +45,9 @@ function ResourceCard({ resource, sectionName }: { resource: MaterialResource; s
         {resource.description || "Unduh file presentasi untuk mempelajari materi ini."}
       </p>
       <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-warm">
-        <FileDown className="h-4 w-4" /> Unduh materi
+        <Presentation className="h-4 w-4" /> Baca materi
       </span>
-    </a>
+    </Link>
   );
 }
 
