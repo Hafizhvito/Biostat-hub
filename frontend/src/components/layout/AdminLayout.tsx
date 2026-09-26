@@ -24,7 +24,7 @@ const adminLinks = [
   },
   {
     href: "/admin/presentations",
-    label: "Kelola PPT",
+    label: "Kelola Presentasi",
     icon: Presentation,
   },
   {

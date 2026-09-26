@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import prisma from '../../lib/prisma.js';
 import { createError } from '../../middleware/errorHandler.js';
@@ -36,6 +37,21 @@ const upload = createUploader(downloadUploadDir, {
 
 export const uploadSingle = upload.single('file');
 
+async function ensureReadablePdf(file) {
+  if (!file || path.extname(file.originalname).toLowerCase() !== '.pdf') return;
+  const filePath = path.join(downloadUploadDir, file.filename);
+  const handle = await fs.promises.open(filePath, 'r');
+  try {
+    const header = Buffer.alloc(5);
+    const { bytesRead } = await handle.read(header, 0, header.length, 0);
+    if (bytesRead < 5 || header.toString('ascii') !== '%PDF-') {
+      throw createError(422, 'File PDF tidak valid atau rusak. Ekspor ulang dari PowerPoint, lalu coba unggah kembali.');
+    }
+  } finally {
+    await handle.close();
+  }
+}
+
 function toResponse(download) {
   const { filename, ...response } = download;
   return response;
@@ -73,6 +89,7 @@ export async function create(req, res, next) {
     if (payload.sectionId && path.extname(req.file.originalname).toLowerCase() !== '.pdf') {
       throw createError(422, 'Materi presentasi wajib diunggah dalam format PDF agar dapat dibaca di website.');
     }
+    await ensureReadablePdf(req.file);
     const fileSize = req.file.size;
 
     const download = await prisma.download.create({
@@ -116,6 +133,7 @@ export async function update(req, res, next) {
     if (payload.sectionId && path.extname(effectiveOriginalName).toLowerCase() !== '.pdf') {
       throw createError(422, 'Materi presentasi wajib diunggah dalam format PDF agar dapat dibaca di website.');
     }
+    await ensureReadablePdf(req.file);
 
     const data = {
       ...payload,
