@@ -10,6 +10,7 @@ interface MaterialResourceDetail {
   description: string | null;
   originalName: string;
   fileSize: number;
+  allowDownload: boolean;
   section: {
     id: number;
     name: string;
@@ -54,7 +55,11 @@ export default async function PresentationPage({ params }: PageProps) {
         {resource.description ? <p className="max-w-3xl leading-relaxed text-gray-600">{resource.description}</p> : null}
       </header>
 
-      <PdfReader url={apiUrl(`/material-resources/${resource.id}/preview`)} title={resource.title} />
+      <PdfReader
+        url={apiUrl(`/material-resources/${resource.id}/preview`)}
+        downloadUrl={resource.allowDownload ? apiUrl(`/downloads/${resource.id}/file`) : undefined}
+        title={resource.title}
+      />
 
       <p className="text-sm text-gray-500">
         Materi ditampilkan untuk dibaca di dalam website. Tampilan viewer dapat berbeda mengikuti perangkat dan browser.

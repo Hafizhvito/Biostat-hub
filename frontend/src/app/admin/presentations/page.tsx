@@ -26,15 +26,17 @@ interface PresentationItem {
   downloadCount: number;
   sectionId: number;
   section: SectionItem;
+  allowDownload: boolean;
 }
 
 interface FormState {
   title: string;
   description: string;
   sectionId: string;
+  allowDownload: boolean;
 }
 
-const emptyForm: FormState = { title: "", description: "", sectionId: "" };
+const emptyForm: FormState = { title: "", description: "", sectionId: "", allowDownload: false };
 
 function formatFileSize(bytes: number) {
   if (!bytes) return "0 KB";
@@ -91,7 +93,7 @@ export default function AdminPresentationsPage() {
 
   function handleEdit(item: PresentationItem) {
     setEditingId(item.id);
-    setForm({ title: item.title, description: item.description, sectionId: String(item.sectionId) });
+    setForm({ title: item.title, description: item.description, sectionId: String(item.sectionId), allowDownload: item.allowDownload });
     setFile(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -121,6 +123,7 @@ export default function AdminPresentationsPage() {
         formData.append("description", form.description);
         formData.append("category", "Materi");
         formData.append("sectionId", form.sectionId);
+        formData.append("allowDownload", String(form.allowDownload));
         if (file) formData.append("file", file);
         await authApi(editingId ? `/admin/downloads/${editingId}` : "/admin/downloads", {
           method: editingId ? "PUT" : "POST",
@@ -161,6 +164,18 @@ export default function AdminPresentationsPage() {
           <Input label="Judul PPT" value={form.title} onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))} required />
           <Select label="Pilih Materi" options={sectionOptions} value={form.sectionId} onChange={(event) => setForm((prev) => ({ ...prev, sectionId: event.target.value }))} placeholder="Pilih materi" required />
           <Textarea label="Deskripsi" value={form.description} onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))} />
+          <label className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-brand-navy">
+            <input
+              type="checkbox"
+              checked={form.allowDownload}
+              onChange={(event) => setForm((prev) => ({ ...prev, allowDownload: event.target.checked }))}
+              className="mt-0.5 h-4 w-4 accent-brand-warm"
+            />
+            <span>
+              <span className="block font-medium">Izinkan pengguna mengunduh PDF</span>
+              <span className="mt-0.5 block text-xs text-gray-500">Jika dimatikan, materi hanya dapat dibaca melalui viewer website.</span>
+            </span>
+          </label>
           <div className="space-y-1.5">
             <label htmlFor="presentation-file" className="text-sm font-medium text-brand-navy">
               File PDF dari PPT {editingId ? "(opsional jika tidak diganti)" : ""}
@@ -194,7 +209,7 @@ export default function AdminPresentationsPage() {
                   <p className="mt-1 text-sm text-gray-600">{item.description || "Deskripsi belum tersedia."}</p>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">{item.originalName} · {formatFileSize(item.fileSize)} · {item.downloadCount} unduhan</p>
+              <p className="text-xs text-gray-500">{item.originalName} · {formatFileSize(item.fileSize)} · {item.downloadCount} unduhan · Download {item.allowDownload ? "aktif" : "nonaktif"}</p>
               <div className="flex gap-2">
                 <Button variant="secondary" onClick={() => handleEdit(item)}>Edit</Button>
                 <Button variant="danger" onClick={() => setDeleteId(item.id)}>Hapus</Button>

@@ -113,6 +113,7 @@ model Download {
   originalName  String   @map("original_name")
   fileSize      Int      @map("file_size")
   downloadCount Int      @default(0) @map("download_count")
+  allowDownload Boolean  @default(false) @map("allow_download")
   createdAt     DateTime @default(now()) @map("created_at")
   section       Section? @relation(fields: [sectionId], references: [id], onDelete: Restrict)
 

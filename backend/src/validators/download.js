@@ -9,6 +9,10 @@ const downloadMetaSchema = z.object({
     (value) => (value === '' || value === undefined || value === null ? null : value),
     z.coerce.number().int().positive('Materi wajib dipilih.').nullable(),
   ),
+  allowDownload: z.preprocess(
+    (value) => value === true || value === 'true' || value === '1' || value === 'on',
+    z.boolean(),
+  ).default(false),
 });
 
 const downloadIdSchema = z.object({

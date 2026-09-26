@@ -57,7 +57,21 @@ test('file materi dapat dihubungkan ke kategori, sedangkan unduhan umum tetap ta
     category: 'Template',
   });
   assert.equal(materialFile.sectionId, 3);
+  assert.equal(materialFile.allowDownload, false);
   assert.equal(generalFile.sectionId, null);
+});
+
+test('opsi unduh materi menerima nilai dari formulir dan aman secara default', () => {
+  const enabled = validateDownloadMeta({
+    title: 'PPT Uji T',
+    description: '',
+    category: 'Materi',
+    sectionId: '3',
+    allowDownload: 'true',
+  });
+  const disabled = validateDownloadMeta({ title: 'Panduan', description: '', category: 'Panduan SPSS' });
+  assert.equal(enabled.allowDownload, true);
+  assert.equal(disabled.allowDownload, false);
 });
 
 test('teks panjang pada pengaturan dan glosarium tidak dipotong', () => {

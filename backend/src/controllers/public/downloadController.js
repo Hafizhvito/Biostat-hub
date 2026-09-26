@@ -28,6 +28,7 @@ export async function getMaterialResource(req, res, next) {
         description: true,
         originalName: true,
         fileSize: true,
+        allowDownload: true,
         section: { select: { id: true, name: true } },
       },
     });
@@ -114,6 +115,10 @@ export async function downloadFile(req, res, next) {
       await fs.promises.access(filePath, fs.constants.R_OK);
     } catch {
       throw createError(404, 'File unduhan tidak tersedia.');
+    }
+
+    if (download.sectionId && !download.allowDownload) {
+      throw createError(403, 'Pengunduhan materi ini tidak diaktifkan.');
     }
 
     res.download(filePath, download.originalName, (error) => {

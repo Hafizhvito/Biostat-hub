@@ -81,6 +81,7 @@ export async function create(req, res, next) {
         description: payload.description,
         category: payload.category,
         sectionId: payload.sectionId,
+        allowDownload: payload.allowDownload,
         filename: req.file.filename,
         originalName: req.file.originalname,
         fileSize,
