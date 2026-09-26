@@ -42,8 +42,16 @@ function toResponse(download) {
 
 export async function list(req, res, next) {
   try {
+    const scope = String(req.query.scope || '').trim();
+    const where = scope === 'material'
+      ? { sectionId: { not: null } }
+      : scope === 'general'
+        ? { sectionId: null }
+        : {};
     const downloads = await prisma.download.findMany({
+      where,
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      include: { section: { select: { id: true, name: true } } },
     });
 
     res.json(downloads.map(toResponse));
@@ -68,6 +76,7 @@ export async function create(req, res, next) {
         title: payload.title,
         description: payload.description,
         category: payload.category,
+        sectionId: payload.sectionId,
         filename: req.file.filename,
         originalName: req.file.originalname,
         fileSize,

@@ -6,15 +6,25 @@ export interface MaterialVideo {
   sortOrder?: number;
 }
 
+export interface MaterialResource {
+  id: number;
+  title: string;
+  description: string | null;
+  originalName: string;
+  fileSize: number;
+  createdAt?: string;
+}
+
 export interface MaterialSection {
   id: number;
   name: string;
   description: string | null;
   videos?: MaterialVideo[];
-  _count?: { videos: number };
+  resources?: MaterialResource[];
+  _count?: { videos: number; resources?: number };
 }
 
 export interface SectionsResponse {
   sections: MaterialSection[];
-  stats: { total_sections: number; total_videos: number };
+  stats: { total_sections: number; total_videos: number; total_resources?: number };
 }

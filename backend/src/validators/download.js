@@ -5,6 +5,10 @@ const downloadMetaSchema = z.object({
   title: z.string().trim().min(1, 'Judul wajib diisi.'),
   description: z.string().default('').transform((value) => value.trim()),
   category: z.enum(['Materi', 'Template', 'Panduan SPSS', 'Lainnya']),
+  sectionId: z.preprocess(
+    (value) => (value === '' || value === undefined || value === null ? null : value),
+    z.coerce.number().int().positive('Materi wajib dipilih.').nullable(),
+  ),
 });
 
 const downloadIdSchema = z.object({

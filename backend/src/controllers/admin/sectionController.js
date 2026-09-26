@@ -19,7 +19,7 @@ export async function list(req, res, next) {
       orderBy: { sortOrder: 'asc' },
       include: {
         _count: {
-          select: { videos: true },
+          select: { videos: true, resources: true },
         },
       },
     });
@@ -81,8 +81,15 @@ export async function remove(req, res, next) {
       where: { sectionId: id },
     });
 
-    if (videoCount > 0) {
-      throw createError(409, `Section tidak bisa dihapus karena masih memiliki ${videoCount} video.`);
+    const resourceCount = await prisma.download.count({
+      where: { sectionId: id },
+    });
+
+    if (videoCount > 0 || resourceCount > 0) {
+      throw createError(
+        409,
+        `Materi tidak bisa dihapus karena masih memiliki ${videoCount} video dan ${resourceCount} file PPT/PDF.`,
+      );
     }
 
     await prisma.section.delete({

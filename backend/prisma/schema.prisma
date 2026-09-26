@@ -17,6 +17,7 @@ model Section {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   videos      Video[]
+  resources   Download[]
 
   @@map("sections")
 }
@@ -104,6 +105,7 @@ model Glossary {
 
 model Download {
   id            Int      @id @default(autoincrement())
+  sectionId     Int?     @map("section_id")
   title         String
   description   String   @default("") @db.Text
   category      String
@@ -112,7 +114,9 @@ model Download {
   fileSize      Int      @map("file_size")
   downloadCount Int      @default(0) @map("download_count")
   createdAt     DateTime @default(now()) @map("created_at")
+  section       Section? @relation(fields: [sectionId], references: [id], onDelete: Restrict)
 
+  @@index([sectionId])
   @@map("downloads")
 }
 

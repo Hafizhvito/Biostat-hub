@@ -34,11 +34,11 @@ export default async function MateriPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand-warm">Materi</p>
         <h1 className="mt-1 text-3xl font-bold text-brand-navy">Jelajahi Materi</h1>
         <p className="mt-2 max-w-3xl text-gray-600">
-          Semua judul materi langsung tersedia. Pilih materi yang ingin dipelajari untuk membuka video dan penjelasannya.
+          Semua judul materi langsung tersedia. Pilih video untuk belajar atau unduh PPT dan PDF yang disediakan.
         </p>
       </header>
 
-      {response.stats.total_videos === 0 ? (
+      {response.stats.total_videos + (response.stats.total_resources ?? 0) === 0 ? (
         <EmptyState message="Belum ada materi yang tersedia." />
       ) : (
         <MaterialCatalog

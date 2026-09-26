@@ -55,7 +55,7 @@ export default async function HomePage() {
         totalGlossary={settings.glossary_count || 0}
         totalDownloads={settings.download_count || 0}
       />
-      {sectionResponse.stats.total_videos === 0 ? (
+      {sectionResponse.stats.total_videos + (sectionResponse.stats.total_resources ?? 0) === 0 ? (
         <div id="jelajahi-materi">
           <EmptyState message="Belum ada materi. Materi akan segera ditambahkan." />
         </div>

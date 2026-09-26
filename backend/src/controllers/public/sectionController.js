@@ -28,19 +28,32 @@ export async function list(req, res, next) {
             sortOrder: true,
           },
         },
+        resources: {
+          orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            originalName: true,
+            fileSize: true,
+            createdAt: true,
+          },
+        },
         _count: {
-          select: { videos: true },
+          select: { videos: true, resources: true },
         },
       },
     });
 
     const totalVideos = sections.reduce((acc, section) => acc + section._count.videos, 0);
+    const totalResources = sections.reduce((acc, section) => acc + section._count.resources, 0);
 
     res.json({
       sections,
       stats: {
         total_sections: sections.length,
         total_videos: totalVideos,
+        total_resources: totalResources,
       },
     });
   } catch (err) {
@@ -56,6 +69,17 @@ export async function getById(req, res, next) {
       include: {
         videos: {
           orderBy: { sortOrder: 'asc' },
+        },
+        resources: {
+          orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            originalName: true,
+            fileSize: true,
+            createdAt: true,
+          },
         },
       },
     });

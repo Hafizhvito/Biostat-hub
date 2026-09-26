@@ -22,6 +22,7 @@ interface SectionItem {
   description: string;
   _count?: {
     videos: number;
+    resources?: number;
   };
 }
 
@@ -236,7 +237,9 @@ export default function AdminSectionsPage() {
                           {stripHtml(section.description) || "Belum ada deskripsi."}
                         </p>
                         {section._count ? (
-                          <p className="mt-1 text-xs text-gray-500">Total video: {section._count.videos}</p>
+                          <p className="mt-1 text-xs text-gray-500">
+                            {section._count.videos} video · {section._count.resources ?? 0} PPT/PDF
+                          </p>
                         ) : null}
                       </div>
                       <ReorderButtons onReorder={(direction) => handleReorder(section.id, direction)} />

@@ -44,6 +44,22 @@ test('deskripsi panjang pada wizard dan unduhan tidak dipotong', () => {
   );
 });
 
+test('file materi dapat dihubungkan ke kategori, sedangkan unduhan umum tetap tanpa kategori materi', () => {
+  const materialFile = validateDownloadMeta({
+    title: 'PPT Uji T',
+    description: 'Slide pembelajaran',
+    category: 'Materi',
+    sectionId: '3',
+  });
+  const generalFile = validateDownloadMeta({
+    title: 'Template',
+    description: '',
+    category: 'Template',
+  });
+  assert.equal(materialFile.sectionId, 3);
+  assert.equal(generalFile.sectionId, null);
+});
+
 test('teks panjang pada pengaturan dan glosarium tidak dipotong', () => {
   const settings = validateSettingsUpdate({
     heroTitle: 'Riset Hub',
